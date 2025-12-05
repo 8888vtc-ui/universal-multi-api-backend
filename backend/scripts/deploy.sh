@@ -5,7 +5,7 @@
 set -e  # Arrêter en cas d'erreur
 
 ENVIRONMENT=${1:-production}
-REPO_URL="${REPO_URL:-https://github.com/votre-repo/universal-api.git}"
+REPO_URL="${REPO_URL:-https://github.com/8888vtc-ui/universal-multi-api-backend.git}"
 APP_DIR="/opt/universal-api"
 BACKEND_DIR="$APP_DIR/backend"
 SERVICE_NAME="universal-api"
