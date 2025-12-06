@@ -50,11 +50,11 @@ export default function AISearchPage() {
 
         {results && (
           <div className="space-y-6">
-            {results.ai_summary && (
-              <AISummary summary={results.ai_summary} />
+            {results.ai_synthesis && (
+              <AISummary summary={results.ai_synthesis} />
             )}
-            {results.results && (
-              <SearchResults results={results.results} query={query} />
+            {results.data && (
+              <SearchResults results={results.data} query={query} />
             )}
           </div>
         )}
