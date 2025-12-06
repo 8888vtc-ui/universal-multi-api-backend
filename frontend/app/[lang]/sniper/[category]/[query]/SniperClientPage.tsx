@@ -42,7 +42,7 @@ export default function SniperClientPage({ params }: SniperClientPageProps) {
                 ? `&categories=${config.backendCategories.join(',')}`
                 : ''
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL || 'https://universal-api-hub.fly.dev'}/api/search/quick?q=${encodeURIComponent(q)}${categoryParam}`
+                `${process.env.NEXT_PUBLIC_API_URL || ''}/api/search/quick?q=${encodeURIComponent(q)}${categoryParam}`
             )
             const data = await response.json()
             setResults(data)

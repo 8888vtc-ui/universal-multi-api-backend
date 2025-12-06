@@ -19,7 +19,7 @@ export default function APITester({ apiId }: APITesterProps) {
 
     try {
       // TODO: Implement actual API test
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://universal-api-hub.fly.dev'}/api/${apiId}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/${apiId}`)
       const data = await response.json()
       setResult(data)
     } catch (err) {

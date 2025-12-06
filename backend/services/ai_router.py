@@ -81,7 +81,7 @@ class GroqProvider(AIProvider):
             
             completion = self.client.chat.completions.create(
                 messages=messages,
-                model="llama-3.1-70b-versatile",
+                model="llama3-70b-8192",
                 temperature=0.7,
                 max_tokens=1024,
             )
@@ -174,7 +174,7 @@ class GeminiProvider(AIProvider):
                 full_prompt = f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
                 
                 response = await client.post(
-                    f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key={self.api_key}",
+                    f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={self.api_key}",
                     json={
                         "contents": [{"parts": [{"text": full_prompt}]}],
                         "generationConfig": {
@@ -185,7 +185,7 @@ class GeminiProvider(AIProvider):
                 )
                 
                 if response.status_code == 200:
-                    self.requests_today += 1
+                    self.increment_usage()
                     return response.json()["candidates"][0]["content"]["parts"][0]["text"]
                 else:
                     raise Exception(f"Gemini returned status {response.status_code}")

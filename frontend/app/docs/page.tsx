@@ -39,7 +39,7 @@ export default function DocsPage() {
           <h2 className="text-2xl font-bold mb-4">API Base URL</h2>
           <div className="bg-dark-800 rounded-lg p-4 mb-4">
             <code className="text-indigo-400">
-              {process.env.NEXT_PUBLIC_API_URL || 'https://universal-api-hub.fly.dev'}
+              {process.env.NEXT_PUBLIC_API_URL || '/api (proxy vers Fly.io)'}
             </code>
           </div>
           <p className="text-dark-400 mb-6">

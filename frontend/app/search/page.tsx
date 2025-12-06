@@ -20,7 +20,7 @@ export default function SearchPage() {
     setLoading(true)
     try {
       // TODO: Implement search API call
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://universal-api-hub.fly.dev'}/api/search?q=${encodeURIComponent(searchQuery)}`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/search?q=${encodeURIComponent(searchQuery)}`)
       const data = await response.json()
       setResults(data)
     } catch (error) {

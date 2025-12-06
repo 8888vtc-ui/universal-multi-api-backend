@@ -69,9 +69,9 @@ from routers import (
     github, worldtime, coincap, tinyurl,
     # New APIs (December 2024 - Extended)
     jokes, trivia, bored, numbers, animals, exchange, export, openlibrary,
-    nameanalysis, history
+    nameanalysis, history, blog
 )
-from routers import health_deep, metrics, search_optimized, ai_search
+from routers import health_deep, metrics, search_optimized, ai_search, expert_chat
 
 # Video router optionnel (dépendances lourdes)
 try:
@@ -211,6 +211,7 @@ app.include_router(chat.router)
 app.include_router(embeddings.router)
 app.include_router(boltai.router)
 app.include_router(assistant.router)
+app.include_router(expert_chat.router)  # Expert AI specialists
 
 # Search & Aggregation
 app.include_router(search.router)
@@ -281,7 +282,9 @@ app.include_router(exchange.router)   # Exchange Rate API
 app.include_router(export.router)     # Export (JSON, CSV, Markdown)
 app.include_router(openlibrary.router)  # Open Library (free books)
 app.include_router(nameanalysis.router)  # Agify/Genderize/Nationalize
+app.include_router(nameanalysis.router)  # Agify/Genderize/Nationalize
 app.include_router(history.router)    # Search History
+app.include_router(blog.router)       # Blog Articles (JSON file-based)
 
 
 # ============================================

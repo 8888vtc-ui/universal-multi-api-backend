@@ -15,7 +15,7 @@ class ChatRequest(BaseModel):
     """Chat API request"""
     message: str = Field(..., min_length=1, max_length=2000)
     conversation_history: Optional[List[ChatMessage]] = None
-    language: Literal["he", "en"] = "he"
+    language: Literal["he", "en", "fr", "es", "de"] = "en"
     context: Optional[str] = None
 
 

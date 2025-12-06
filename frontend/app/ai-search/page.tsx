@@ -15,7 +15,7 @@ export default function AISearchPage() {
     setQuery(searchQuery)
     setLoading(true)
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://universal-api-hub.fly.dev'}/api/ai-search/search`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/ai-search/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: searchQuery }),

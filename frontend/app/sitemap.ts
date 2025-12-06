@@ -4,6 +4,7 @@ import cities from '@/data/cities-fr.json'
 import drugs from '@/data/drugs-top500.json'
 import cryptos from '@/data/cryptos-top200.json'
 import books from '@/data/books-classics.json'
+import { getArticleSlugs, ARTICLES } from '@/data/articles'
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://wikiask.net'
@@ -14,11 +15,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/search',
         '/pricing',
         '/ai-search',
+        '/blog',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),
         changeFrequency: 'daily' as const,
         priority: 1,
+    }))
+
+    // Blog article routes
+    const blogRoutes: MetadataRoute.Sitemap = getArticleSlugs().map((slug) => ({
+        url: `${baseUrl}/blog/${slug}`,
+        lastModified: new Date(ARTICLES[slug].date),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
     }))
 
     const languages = ['fr', 'en']
@@ -83,5 +93,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         })
     })
 
-    return [...routes, ...sniperRoutes]
+    return [...routes, ...blogRoutes, ...sniperRoutes]
 }
+

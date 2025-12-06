@@ -1,0 +1,1616 @@
+{
+    "metadata": {
+        "version": "1.0",
+        "lastUpdated": "2024-12-06",
+        "totalKeywords": 310,
+        "languages": [
+            "fr",
+            "en"
+        ]
+    },
+    "experts": {
+        "health": {
+            "name": "Recherche Santé",
+            "emoji": "🔬",
+            "dataSources": [
+                "PubMed",
+                "OpenFDA",
+                "ANSM"
+            ],
+            "keywords": [
+                {
+                    "fr": "effets secondaires doliprane",
+                    "en": "doliprane side effects",
+                    "volume": "high",
+                    "slug": "effets-secondaires-doliprane"
+                },
+                {
+                    "fr": "ibuprofène et paracétamol ensemble",
+                    "en": "can you take ibuprofen with paracetamol",
+                    "volume": "high",
+                    "slug": "ibuprofen-paracetamol-ensemble"
+                },
+                {
+                    "fr": "metformine perte de poids avis",
+                    "en": "metformin weight loss reviews",
+                    "volume": "medium",
+                    "slug": "metformine-perte-poids"
+                },
+                {
+                    "fr": "recherche article scientifique gratuit",
+                    "en": "free scientific article search",
+                    "volume": "medium",
+                    "slug": "recherche-article-scientifique"
+                },
+                {
+                    "fr": "comment utiliser pubmed en français",
+                    "en": "how to use pubmed for research",
+                    "volume": "medium",
+                    "slug": "utiliser-pubmed-francais"
+                },
+                {
+                    "fr": "interactions médicamenteuses vérifier",
+                    "en": "check drug interactions online",
+                    "volume": "medium",
+                    "slug": "verifier-interactions-medicaments"
+                },
+                {
+                    "fr": "vitamine D carence symptômes",
+                    "en": "vitamin D deficiency symptoms",
+                    "volume": "high",
+                    "slug": "carence-vitamine-d-symptomes"
+                },
+                {
+                    "fr": "différence générique et princeps",
+                    "en": "generic vs brand name medication",
+                    "volume": "medium",
+                    "slug": "generique-vs-princeps"
+                },
+                {
+                    "fr": "pourquoi prendre magnésium le soir",
+                    "en": "why take magnesium at night",
+                    "volume": "medium",
+                    "slug": "magnesium-le-soir"
+                },
+                {
+                    "fr": "omega 3 bienfaits cerveau",
+                    "en": "omega 3 brain benefits",
+                    "volume": "medium",
+                    "slug": "omega-3-bienfaits-cerveau"
+                },
+                {
+                    "fr": "quelle est la meilleure vitamine pour le stress",
+                    "en": "what is the best vitamin for stress",
+                    "volume": "high",
+                    "slug": "quelle-est-la-meilleure-vitamine-pour-le-stress"
+                },
+                {
+                    "fr": "comment savoir si j'ai une carence en fer sans prise de sang",
+                    "en": "how to know if i have iron deficiency without blood test",
+                    "volume": "medium",
+                    "slug": "comment-savoir-si-j-ai-une-carence-en-fer-sans-prise-de-sang"
+                },
+                {
+                    "fr": "quels sont les effets secondaires de l'aspirine à long terme",
+                    "en": "what are the long-term side effects of aspirin",
+                    "volume": "high",
+                    "slug": "quels-sont-les-effets-secondaires-de-l-aspirine-long-terme"
+                },
+                {
+                    "fr": "quelle est la différence entre probiotiques et prébiotiques",
+                    "en": "what is the difference between probiotics and prebiotics",
+                    "volume": "medium",
+                    "slug": "quelle-est-la-diff-rence-entre-probiotiques-et-pr-biotiques"
+                },
+                {
+                    "fr": "comment choisir un complément alimentaire fiable",
+                    "en": "how to choose a reliable dietary supplement",
+                    "volume": "medium",
+                    "slug": "comment-choisir-un-compl-ment-alimentaire-fiable"
+                },
+                {
+                    "fr": "Analyse IA effets secondaires médicaments en temps réel",
+                    "en": "AI analysis of drug side effects in real-time",
+                    "volume": "medium",
+                    "slug": "analyse-ia-effets-secondaires-m-dicaments-en-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif interactions médicamenteuses IA vs bases de données",
+                    "en": "Drug interaction comparison: AI vs databases",
+                    "volume": "medium",
+                    "slug": "comparatif-interactions-m-dicamenteuses-ia-vs-bases-de-donn-es"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour vérifier la fiabilité des études médicales",
+                    "en": "Why use AI to verify medical study reliability",
+                    "volume": "low",
+                    "slug": "pourquoi-utiliser-l-ia-pour-v-rifier-la-fiabilit-des-tudes-m-dicales"
+                },
+                {
+                    "fr": "Précision des prévisions d'épidémies par IA en temps réel",
+                    "en": "Accuracy of real-time epidemic forecasts by AI",
+                    "volume": "medium",
+                    "slug": "pr-cision-des-pr-visions-d-pid-mies-par-ia-en-temps-r-el"
+                },
+                {
+                    "fr": "Analyse IA carences nutritionnelles avec données actualisées",
+                    "en": "AI analysis of nutritional deficiencies with updated data",
+                    "volume": "low",
+                    "slug": "analyse-ia-carences-nutritionnelles-avec-donn-es-actualis-es"
+                },
+                {
+                    "fr": "Comparatif efficacité probiotiques vs prébiotiques avec IA",
+                    "en": "Probiotics vs prebiotics effectiveness comparison with AI",
+                    "volume": "medium",
+                    "slug": "comparatif-efficacit-probiotiques-vs-pr-biotiques-avec-ia"
+                },
+                {
+                    "fr": "Comment l'IA améliore la recherche de compléments alimentaires fiables",
+                    "en": "How AI improves finding reliable dietary supplements",
+                    "volume": "low",
+                    "slug": "comment-l-ia-am-liore-la-recherche-de-compl-ments-alimentaires-fiables"
+                },
+                {
+                    "fr": "Suivi temps réel des effets du magnésium avec analyse IA",
+                    "en": "Real-time magnesium effects tracking with AI analysis",
+                    "volume": "low",
+                    "slug": "suivi-temps-r-el-des-effets-du-magn-sium-avec-analyse-ia"
+                },
+                {
+                    "fr": "Différence entre génériques et princeps expliquée par l'IA",
+                    "en": "Generic vs brand-name drugs explained by AI",
+                    "volume": "medium",
+                    "slug": "diff-rence-entre-g-n-riques-et-princeps-expliqu-e-par-l-ia"
+                },
+                {
+                    "fr": "Analyse IA des interactions entre vitamines et médicaments",
+                    "en": "AI analysis of vitamin-drug interactions",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-interactions-entre-vitamines-et-m-dicaments"
+                }
+            ]
+        },
+        "finance": {
+            "name": "Guide Finance",
+            "emoji": "📊",
+            "dataSources": [
+                "CoinGecko",
+                "Yahoo Finance"
+            ],
+            "keywords": [
+                {
+                    "fr": "bitcoin cours temps réel euro",
+                    "en": "bitcoin live price eur",
+                    "volume": "high",
+                    "slug": "bitcoin-cours-euro-temps-reel"
+                },
+                {
+                    "fr": "faut-il acheter ethereum maintenant",
+                    "en": "should I buy ethereum now",
+                    "volume": "high",
+                    "slug": "acheter-ethereum-maintenant"
+                },
+                {
+                    "fr": "crypto monnaie débutant guide",
+                    "en": "cryptocurrency beginner guide",
+                    "volume": "high",
+                    "slug": "crypto-monnaie-debutant-guide"
+                },
+                {
+                    "fr": "convertir bitcoin en euro",
+                    "en": "convert bitcoin to euro",
+                    "volume": "high",
+                    "slug": "convertir-bitcoin-euro"
+                },
+                {
+                    "fr": "solana vs ethereum comparaison",
+                    "en": "solana vs ethereum comparison",
+                    "volume": "medium",
+                    "slug": "solana-vs-ethereum"
+                },
+                {
+                    "fr": "meilleure crypto investir 2024",
+                    "en": "best crypto to invest 2024",
+                    "volume": "high",
+                    "slug": "meilleure-crypto-2024"
+                },
+                {
+                    "fr": "portefeuille crypto sécurisé",
+                    "en": "secure crypto wallet",
+                    "volume": "medium",
+                    "slug": "portefeuille-crypto-securise"
+                },
+                {
+                    "fr": "qu'est-ce qu'un stablecoin",
+                    "en": "what is a stablecoin",
+                    "volume": "medium",
+                    "slug": "stablecoin-explication"
+                },
+                {
+                    "fr": "halving bitcoin explication",
+                    "en": "bitcoin halving explained",
+                    "volume": "medium",
+                    "slug": "halving-bitcoin-explication"
+                },
+                {
+                    "fr": "DeFi finance décentralisée",
+                    "en": "DeFi decentralized finance explained",
+                    "volume": "medium",
+                    "slug": "defi-finance-decentralisee"
+                },
+                {
+                    "fr": "comment investir dans les cryptos sans risque en 2024",
+                    "en": "how to invest in crypto without risk in 2024",
+                    "volume": "medium",
+                    "slug": "comment-investir-dans-les-cryptos-sans-risque-en-2024"
+                },
+                {
+                    "fr": "meilleure stratégie pour trader les altcoins volatils",
+                    "en": "best strategy for trading volatile altcoins",
+                    "volume": "medium",
+                    "slug": "meilleure-strat-gie-pour-trader-les-altcoins-volatils"
+                },
+                {
+                    "fr": "fiscalité crypto france 2024 impôts déclarer",
+                    "en": "crypto tax france 2024 how to declare",
+                    "volume": "high",
+                    "slug": "fiscalit-crypto-france-2024-imp-ts-d-clarer"
+                },
+                {
+                    "fr": "crypto à long terme 2024 prédictions experts",
+                    "en": "long term crypto predictions 2024 expert opinions",
+                    "volume": "medium",
+                    "slug": "crypto-long-terme-2024-pr-dictions-experts"
+                },
+                {
+                    "fr": "comment protéger son portefeuille crypto des hackers",
+                    "en": "how to protect your crypto wallet from hackers",
+                    "volume": "high",
+                    "slug": "comment-prot-ger-son-portefeuille-crypto-des-hackers"
+                },
+                {
+                    "fr": "Analyse IA des tendances crypto en temps réel",
+                    "en": "AI analysis of real-time crypto trends",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-tendances-crypto-en-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif prévisions marché crypto IA vs humains",
+                    "en": "Crypto market forecast comparison: AI vs human analysts",
+                    "volume": "medium",
+                    "slug": "comparatif-pr-visions-march-crypto-ia-vs-humains"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour trader les altcoins volatils",
+                    "en": "Why use AI for trading volatile altcoins",
+                    "volume": "high",
+                    "slug": "pourquoi-utiliser-l-ia-pour-trader-les-altcoins-volatils"
+                },
+                {
+                    "fr": "Bitcoin en temps réel avec analyse IA des indicateurs",
+                    "en": "Bitcoin in real-time with AI indicator analysis",
+                    "volume": "high",
+                    "slug": "bitcoin-en-temps-r-el-avec-analyse-ia-des-indicateurs"
+                },
+                {
+                    "fr": "Précision des prévisions Ethereum par algorithmes IA",
+                    "en": "Accuracy of Ethereum predictions by AI algorithms",
+                    "volume": "medium",
+                    "slug": "pr-cision-des-pr-visions-ethereum-par-algorithmes-ia"
+                },
+                {
+                    "fr": "Analyse IA des risques de portefeuille crypto",
+                    "en": "AI analysis of crypto portfolio risks",
+                    "volume": "low",
+                    "slug": "analyse-ia-des-risques-de-portefeuille-crypto"
+                },
+                {
+                    "fr": "Comment l'IA détecte les opportunités crypto en temps réel",
+                    "en": "How AI detects real-time crypto opportunities",
+                    "volume": "medium",
+                    "slug": "comment-l-ia-d-tecte-les-opportunit-s-crypto-en-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif des stablecoins avec analyse IA des stabilités",
+                    "en": "Stablecoin comparison with AI stability analysis",
+                    "volume": "low",
+                    "slug": "comparatif-des-stablecoins-avec-analyse-ia-des-stabilit-s"
+                },
+                {
+                    "fr": "Pourquoi l'IA est plus fiable pour suivre le halving Bitcoin",
+                    "en": "Why AI is more reliable for tracking Bitcoin halving",
+                    "volume": "medium",
+                    "slug": "pourquoi-l-ia-est-plus-fiable-pour-suivre-le-halving-bitcoin"
+                },
+                {
+                    "fr": "Analyse IA des corrélations entre marchés crypto et traditionnels",
+                    "en": "AI analysis of correlations between crypto and traditional markets",
+                    "volume": "low",
+                    "slug": "analyse-ia-des-corr-lations-entre-march-s-crypto-et-traditionnels"
+                }
+            ]
+        },
+        "weather": {
+            "name": "Météo Pro",
+            "emoji": "☀️",
+            "dataSources": [
+                "OpenWeatherMap",
+                "Weather APIs"
+            ],
+            "keywords": [
+                {
+                    "fr": "météo Paris 15 jours fiable",
+                    "en": "Paris weather 15 days accurate",
+                    "volume": "high",
+                    "slug": "meteo-paris-15-jours"
+                },
+                {
+                    "fr": "lever coucher soleil aujourd'hui",
+                    "en": "sunrise sunset today",
+                    "volume": "medium",
+                    "slug": "lever-coucher-soleil-aujourdhui"
+                },
+                {
+                    "fr": "prévision neige Alpes",
+                    "en": "Alps snow forecast",
+                    "volume": "medium",
+                    "slug": "prevision-neige-alpes"
+                },
+                {
+                    "fr": "indice UV aujourd'hui",
+                    "en": "UV index today",
+                    "volume": "medium",
+                    "slug": "indice-uv-aujourdhui"
+                },
+                {
+                    "fr": "température mer Méditerranée",
+                    "en": "Mediterranean sea temperature",
+                    "volume": "medium",
+                    "slug": "temperature-mer-mediterranee"
+                },
+                {
+                    "fr": "alerte météo temps réel",
+                    "en": "real-time weather alerts",
+                    "volume": "medium",
+                    "slug": "alerte-meteo-temps-reel"
+                },
+                {
+                    "fr": "pollen allergie prévision",
+                    "en": "pollen allergy forecast",
+                    "volume": "medium",
+                    "slug": "prevision-pollen-allergie"
+                },
+                {
+                    "fr": "météo montagne randonnée",
+                    "en": "mountain hiking weather",
+                    "volume": "medium",
+                    "slug": "meteo-montagne-randonnee"
+                },
+                {
+                    "fr": "quel temps ce week-end",
+                    "en": "weekend weather forecast",
+                    "volume": "high",
+                    "slug": "meteo-week-end"
+                },
+                {
+                    "fr": "quand va-t-il pleuvoir",
+                    "en": "when will it rain",
+                    "volume": "medium",
+                    "slug": "quand-va-t-il-pleuvoir"
+                },
+                {
+                    "fr": "météo détaillée pour voyage en famille",
+                    "en": "detailed weather for family travel",
+                    "volume": "medium",
+                    "slug": "m-t-o-d-taill-e-pour-voyage-en-famille"
+                },
+                {
+                    "fr": "prévisions météo pour festival en plein air",
+                    "en": "weather forecast for outdoor festivals",
+                    "volume": "medium",
+                    "slug": "pr-visions-m-t-o-pour-festival-en-plein-air"
+                },
+                {
+                    "fr": "quand partir en vacances pour éviter la pluie",
+                    "en": "when to travel to avoid rain",
+                    "volume": "high",
+                    "slug": "quand-partir-en-vacances-pour-viter-la-pluie"
+                },
+                {
+                    "fr": "météo pour événement sportif extérieur",
+                    "en": "weather for outdoor sports events",
+                    "volume": "medium",
+                    "slug": "m-t-o-pour-v-nement-sportif-ext-rieur"
+                },
+                {
+                    "fr": "prévisions météo pour road trip en Europe",
+                    "en": "weather forecast for European road trips",
+                    "volume": "high",
+                    "slug": "pr-visions-m-t-o-pour-road-trip-en-europe"
+                },
+                {
+                    "fr": "Analyse IA des prévisions météo en temps réel",
+                    "en": "AI analysis of real-time weather forecasts",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-pr-visions-m-t-o-en-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif météo traditionnelle vs IA pour les voyages",
+                    "en": "Traditional weather vs AI for travel comparison",
+                    "volume": "medium",
+                    "slug": "comparatif-m-t-o-traditionnelle-vs-ia-pour-les-voyages"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour des prévisions météo précises",
+                    "en": "Why use AI for accurate weather forecasts",
+                    "volume": "high",
+                    "slug": "pourquoi-utiliser-l-ia-pour-des-pr-visions-m-t-o-pr-cises"
+                },
+                {
+                    "fr": "Météo en temps réel avec explications IA",
+                    "en": "Real-time weather with AI explanations",
+                    "volume": "medium",
+                    "slug": "m-t-o-en-temps-r-el-avec-explications-ia"
+                },
+                {
+                    "fr": "Précision des prévisions météo par IA vs modèles classiques",
+                    "en": "Accuracy of AI weather forecasts vs traditional models",
+                    "volume": "low",
+                    "slug": "pr-cision-des-pr-visions-m-t-o-par-ia-vs-mod-les-classiques"
+                },
+                {
+                    "fr": "Analyse IA des risques météo pour événements extérieurs",
+                    "en": "AI analysis of weather risks for outdoor events",
+                    "volume": "low",
+                    "slug": "analyse-ia-des-risques-m-t-o-pour-v-nements-ext-rieurs"
+                },
+                {
+                    "fr": "Optimisation des voyages avec l'IA et la météo en direct",
+                    "en": "Travel optimization with AI and live weather",
+                    "volume": "medium",
+                    "slug": "optimisation-des-voyages-avec-l-ia-et-la-m-t-o-en-direct"
+                },
+                {
+                    "fr": "Comment l'IA améliore la fiabilité des prévisions météo",
+                    "en": "How AI improves weather forecast reliability",
+                    "volume": "high",
+                    "slug": "comment-l-ia-am-liore-la-fiabilit-des-pr-visions-m-t-o"
+                },
+                {
+                    "fr": "Météo temps réel avec analyse prédictive IA",
+                    "en": "Real-time weather with AI predictive analysis",
+                    "volume": "low",
+                    "slug": "m-t-o-temps-r-el-avec-analyse-pr-dictive-ia"
+                },
+                {
+                    "fr": "Comparatif des outils météo : IA vs services classiques",
+                    "en": "Weather tools comparison: AI vs traditional services",
+                    "volume": "medium",
+                    "slug": "comparatif-des-outils-m-t-o-ia-vs-services-classiques"
+                }
+            ]
+        },
+        "horoscope": {
+            "name": "Étoile",
+            "emoji": "🔮",
+            "dataSources": [
+                "Astrology APIs",
+                "Ephemeris"
+            ],
+            "keywords": [
+                {
+                    "fr": "horoscope du jour gratuit",
+                    "en": "free daily horoscope",
+                    "volume": "high",
+                    "slug": "horoscope-jour-gratuit"
+                },
+                {
+                    "fr": "compatibilité amoureuse signes",
+                    "en": "zodiac love compatibility",
+                    "volume": "high",
+                    "slug": "compatibilite-amoureuse-signes"
+                },
+                {
+                    "fr": "bélier caractère personnalité",
+                    "en": "aries personality traits",
+                    "volume": "medium",
+                    "slug": "belier-caractere-personnalite"
+                },
+                {
+                    "fr": "mercure rétrograde effets",
+                    "en": "mercury retrograde effects",
+                    "volume": "medium",
+                    "slug": "mercure-retrograde-effets"
+                },
+                {
+                    "fr": "thème astral gratuit calcul",
+                    "en": "free birth chart calculator",
+                    "volume": "medium",
+                    "slug": "theme-astral-gratuit"
+                },
+                {
+                    "fr": "horoscope 2024 prédictions",
+                    "en": "2024 horoscope predictions",
+                    "volume": "high",
+                    "slug": "horoscope-2024-predictions"
+                },
+                {
+                    "fr": "signe ascendant calcul",
+                    "en": "how to calculate rising sign",
+                    "volume": "medium",
+                    "slug": "calcul-signe-ascendant"
+                },
+                {
+                    "fr": "nouvelle lune rituel",
+                    "en": "new moon rituals",
+                    "volume": "medium",
+                    "slug": "nouvelle-lune-rituel"
+                },
+                {
+                    "fr": "compatibilité lion vierge",
+                    "en": "leo virgo compatibility",
+                    "volume": "medium",
+                    "slug": "compatibilite-lion-vierge"
+                },
+                {
+                    "fr": "maisons astrologiques signification",
+                    "en": "astrological houses meaning",
+                    "volume": "medium",
+                    "slug": "maisons-astrologiques"
+                },
+                {
+                    "fr": "quel est mon signe astrologique si je ne connais pas ma date exacte",
+                    "en": "what is my zodiac sign if i don't know my exact birth date",
+                    "volume": "medium",
+                    "slug": "quel-est-mon-signe-astrologique-si-je-ne-connais-pas-ma-date-exacte"
+                },
+                {
+                    "fr": "comment savoir si mon ascendant influence ma vie amoureuse",
+                    "en": "how to know if my ascendant affects my love life",
+                    "volume": "high",
+                    "slug": "comment-savoir-si-mon-ascendant-influence-ma-vie-amoureuse"
+                },
+                {
+                    "fr": "quels sont les signes astrologiques les plus compatibles pour un mariage durable",
+                    "en": "which zodiac signs are most compatible for a lasting marriage",
+                    "volume": "medium",
+                    "slug": "quels-sont-les-signes-astrologiques-les-plus-compatibles-pour-un-mariage-durable"
+                },
+                {
+                    "fr": "comment interpréter les transits planétaires dans mon thème astral",
+                    "en": "how to interpret planetary transits in my birth chart",
+                    "volume": "low",
+                    "slug": "comment-interpr-ter-les-transits-plan-taires-dans-mon-th-me-astral"
+                },
+                {
+                    "fr": "quel est le meilleur jour pour commencer un nouveau projet selon l'astrologie",
+                    "en": "what is the best day to start a new project according to astrology",
+                    "volume": "high",
+                    "slug": "quel-est-le-meilleur-jour-pour-commencer-un-nouveau-projet-selon-l-astrologie"
+                },
+                {
+                    "fr": "Analyse IA horoscope personnalisé en temps réel",
+                    "en": "AI analysis of real-time personalized horoscope",
+                    "volume": "medium",
+                    "slug": "analyse-ia-horoscope-personnalis-en-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif horoscope traditionnel vs prédictions IA",
+                    "en": "Comparison of traditional horoscope vs AI predictions",
+                    "volume": "high",
+                    "slug": "comparatif-horoscope-traditionnel-vs-pr-dictions-ia"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour interpréter les transits planétaires",
+                    "en": "Why use AI to interpret planetary transits",
+                    "volume": "medium",
+                    "slug": "pourquoi-utiliser-l-ia-pour-interpr-ter-les-transits-plan-taires"
+                },
+                {
+                    "fr": "Précision des prévisions astrologiques avec algorithmes IA",
+                    "en": "Accuracy of astrological predictions with AI algorithms",
+                    "volume": "medium",
+                    "slug": "pr-cision-des-pr-visions-astrologiques-avec-algorithmes-ia"
+                },
+                {
+                    "fr": "Compatibilité amoureuse analysée par IA en direct",
+                    "en": "Love compatibility analyzed by AI in real-time",
+                    "volume": "high",
+                    "slug": "compatibilit-amoureuse-analys-e-par-ia-en-direct"
+                },
+                {
+                    "fr": "Horoscope dynamique basé sur données astronomiques temps réel",
+                    "en": "Dynamic horoscope based on real-time astronomical data",
+                    "volume": "medium",
+                    "slug": "horoscope-dynamique-bas-sur-donn-es-astronomiques-temps-r-el"
+                },
+                {
+                    "fr": "Comment l'IA améliore l'interprétation des thèmes astraux",
+                    "en": "How AI improves astrological chart interpretation",
+                    "volume": "low",
+                    "slug": "comment-l-ia-am-liore-l-interpr-tation-des-th-mes-astraux"
+                },
+                {
+                    "fr": "Prévisions lunaires précises avec analyse IA",
+                    "en": "Precise lunar predictions with AI analysis",
+                    "volume": "medium",
+                    "slug": "pr-visions-lunaires-pr-cises-avec-analyse-ia"
+                },
+                {
+                    "fr": "Astrologie prédictive temps réel grâce à l'IA",
+                    "en": "Real-time predictive astrology thanks to AI",
+                    "volume": "high",
+                    "slug": "astrologie-pr-dictive-temps-r-el-gr-ce-l-ia"
+                },
+                {
+                    "fr": "Analyse des cycles planétaires en temps réel par intelligence artificielle",
+                    "en": "Real-time analysis of planetary cycles by artificial intelligence",
+                    "volume": "low",
+                    "slug": "analyse-des-cycles-plan-taires-en-temps-r-el-par-intelligence-artificielle"
+                }
+            ]
+        },
+        "prenom": {
+            "name": "Prénom Expert",
+            "emoji": "👶",
+            "dataSources": [
+                "French Civil Registry",
+                "Name Databases"
+            ],
+            "keywords": [
+                {
+                    "fr": "signification prénom Emma",
+                    "en": "Emma name meaning",
+                    "volume": "high",
+                    "slug": "signification-prenom-emma"
+                },
+                {
+                    "fr": "prénoms garçon 2024 tendance",
+                    "en": "trending boy names 2024",
+                    "volume": "high",
+                    "slug": "prenoms-garcon-2024"
+                },
+                {
+                    "fr": "prénom fille rare original",
+                    "en": "unique rare girl names",
+                    "volume": "high",
+                    "slug": "prenom-fille-rare-original"
+                },
+                {
+                    "fr": "origine prénom Gabriel",
+                    "en": "Gabriel name origin",
+                    "volume": "medium",
+                    "slug": "origine-prenom-gabriel"
+                },
+                {
+                    "fr": "prénom mixte épicène liste",
+                    "en": "gender neutral names",
+                    "volume": "medium",
+                    "slug": "prenoms-mixtes-epicenes"
+                },
+                {
+                    "fr": "prénom arabe garçon signification",
+                    "en": "arabic boy names meaning",
+                    "volume": "medium",
+                    "slug": "prenoms-arabes-garcon"
+                },
+                {
+                    "fr": "prénom japonais fille",
+                    "en": "japanese girl names",
+                    "volume": "medium",
+                    "slug": "prenoms-japonais-fille"
+                },
+                {
+                    "fr": "saint du jour fête prénom",
+                    "en": "name day saint calendar",
+                    "volume": "medium",
+                    "slug": "saint-jour-fete-prenom"
+                },
+                {
+                    "fr": "prénom biblique garçon",
+                    "en": "biblical boy names",
+                    "volume": "medium",
+                    "slug": "prenoms-bibliques-garcon"
+                },
+                {
+                    "fr": "popularité prénom France",
+                    "en": "name popularity France",
+                    "volume": "medium",
+                    "slug": "popularite-prenoms-france"
+                },
+                {
+                    "fr": "quelle est l'origine du prénom léo",
+                    "en": "what is the origin of the name leo",
+                    "volume": "medium",
+                    "slug": "quelle-est-l-origine-du-pr-nom-l-o"
+                },
+                {
+                    "fr": "signification prénom amélie et popularité",
+                    "en": "meaning of the name amélie and popularity",
+                    "volume": "high",
+                    "slug": "signification-pr-nom-am-lie-et-popularit"
+                },
+                {
+                    "fr": "prénoms anciens revenus à la mode 2024",
+                    "en": "old-fashioned names back in style 2024",
+                    "volume": "medium",
+                    "slug": "pr-noms-anciens-revenus-la-mode-2024"
+                },
+                {
+                    "fr": "prénom unique pour fille avec signification spirituelle",
+                    "en": "unique girl name with spiritual meaning",
+                    "volume": "low",
+                    "slug": "pr-nom-unique-pour-fille-avec-signification-spirituelle"
+                },
+                {
+                    "fr": "pourquoi le prénom noah est-il si populaire",
+                    "en": "why is the name noah so popular",
+                    "volume": "high",
+                    "slug": "pourquoi-le-pr-nom-noah-est-il-si-populaire"
+                },
+                {
+                    "fr": "Analyse IA signification prénom temps réel",
+                    "en": "Real-time AI analysis of name meanings",
+                    "volume": "medium",
+                    "slug": "analyse-ia-signification-pr-nom-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif origine prénom avec et sans IA",
+                    "en": "Comparing name origins with and without AI",
+                    "volume": "low",
+                    "slug": "comparatif-origine-pr-nom-avec-et-sans-ia"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour trouver un prénom rare",
+                    "en": "Why use AI to find rare names",
+                    "volume": "medium",
+                    "slug": "pourquoi-utiliser-l-ia-pour-trouver-un-pr-nom-rare"
+                },
+                {
+                    "fr": "Prénoms tendance 2024 en temps réel avec explications IA",
+                    "en": "2024 trending names in real-time with AI explanations",
+                    "volume": "high",
+                    "slug": "pr-noms-tendance-2024-en-temps-r-el-avec-explications-ia"
+                },
+                {
+                    "fr": "Précision des prévisions de popularité prénom par IA",
+                    "en": "AI accuracy in name popularity predictions",
+                    "volume": "medium",
+                    "slug": "pr-cision-des-pr-visions-de-popularit-pr-nom-par-ia"
+                },
+                {
+                    "fr": "Analyse IA prénoms bibliques vs prénoms modernes",
+                    "en": "AI analysis of biblical names vs modern names",
+                    "volume": "low",
+                    "slug": "analyse-ia-pr-noms-bibliques-vs-pr-noms-modernes"
+                },
+                {
+                    "fr": "Origine prénom en direct avec analyse IA",
+                    "en": "Live name origin with AI analysis",
+                    "volume": "medium",
+                    "slug": "origine-pr-nom-en-direct-avec-analyse-ia"
+                },
+                {
+                    "fr": "Comparatif prénom épicène avec et sans données IA",
+                    "en": "Comparing unisex names with and without AI data",
+                    "volume": "low",
+                    "slug": "comparatif-pr-nom-pic-ne-avec-et-sans-donn-es-ia"
+                },
+                {
+                    "fr": "Pourquoi l'IA améliore la recherche de prénom unique",
+                    "en": "Why AI improves unique name searches",
+                    "volume": "medium",
+                    "slug": "pourquoi-l-ia-am-liore-la-recherche-de-pr-nom-unique"
+                },
+                {
+                    "fr": "Prénoms rares en temps réel avec analyse sémantique IA",
+                    "en": "Rare names in real-time with AI semantic analysis",
+                    "volume": "high",
+                    "slug": "pr-noms-rares-en-temps-r-el-avec-analyse-s-mantique-ia"
+                }
+            ]
+        },
+        "history": {
+            "name": "Ce Jour",
+            "emoji": "📅",
+            "dataSources": [
+                "Wikipedia",
+                "On This Day APIs"
+            ],
+            "keywords": [
+                {
+                    "fr": "que s'est-il passé le 14 juillet",
+                    "en": "what happened on July 14",
+                    "volume": "high",
+                    "slug": "14-juillet-histoire"
+                },
+                {
+                    "fr": "événements historiques aujourd'hui",
+                    "en": "historical events today",
+                    "volume": "medium",
+                    "slug": "evenements-historiques-aujourdhui"
+                },
+                {
+                    "fr": "ce jour dans l'histoire",
+                    "en": "on this day in history",
+                    "volume": "medium",
+                    "slug": "ce-jour-dans-histoire"
+                },
+                {
+                    "fr": "qui est né aujourd'hui célèbre",
+                    "en": "famous birthdays today",
+                    "volume": "medium",
+                    "slug": "anniversaires-celebres-aujourdhui"
+                },
+                {
+                    "fr": "éphéméride du jour",
+                    "en": "today ephemeris",
+                    "volume": "medium",
+                    "slug": "ephemeride-jour"
+                },
+                {
+                    "fr": "inventions ce jour",
+                    "en": "inventions on this date",
+                    "volume": "low",
+                    "slug": "inventions-ce-jour"
+                },
+                {
+                    "fr": "révolution française dates clés",
+                    "en": "french revolution key dates",
+                    "volume": "medium",
+                    "slug": "revolution-francaise-dates"
+                },
+                {
+                    "fr": "seconde guerre mondiale chronologie",
+                    "en": "world war 2 timeline",
+                    "volume": "medium",
+                    "slug": "seconde-guerre-mondiale-chronologie"
+                },
+                {
+                    "fr": "découvertes scientifiques histoire",
+                    "en": "history of scientific discoveries",
+                    "volume": "medium",
+                    "slug": "decouvertes-scientifiques-histoire"
+                },
+                {
+                    "fr": "événements marquants 20ème siècle",
+                    "en": "major events 20th century",
+                    "volume": "medium",
+                    "slug": "evenements-20eme-siecle"
+                },
+                {
+                    "fr": "événements marquants du 15 août dans l'histoire",
+                    "en": "notable events that happened on august 15th in history",
+                    "volume": "medium",
+                    "slug": "v-nements-marquants-du-15-ao-t-dans-l-histoire"
+                },
+                {
+                    "fr": "ce qui s'est passé aujourd'hui en 1945",
+                    "en": "what happened today in 1945",
+                    "volume": "high",
+                    "slug": "ce-qui-s-est-pass-aujourd-hui-en-1945"
+                },
+                {
+                    "fr": "anniversaires importants aujourd'hui dans le monde",
+                    "en": "important birthdays today around the world",
+                    "volume": "medium",
+                    "slug": "anniversaires-importants-aujourd-hui-dans-le-monde"
+                },
+                {
+                    "fr": "faits historiques du jour pour enfants",
+                    "en": "historical facts of the day for kids",
+                    "volume": "low",
+                    "slug": "faits-historiques-du-jour-pour-enfants"
+                },
+                {
+                    "fr": "dates clés de l'histoire mondiale aujourd'hui",
+                    "en": "key historical dates around the world today",
+                    "volume": "medium",
+                    "slug": "dates-cl-s-de-l-histoire-mondiale-aujourd-hui"
+                },
+                {
+                    "fr": "Analyse IA des événements historiques du jour en temps réel",
+                    "en": "AI analysis of today's historical events in real-time",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-v-nements-historiques-du-jour-en-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif données historiques vs IA pour comprendre ce jour",
+                    "en": "Comparison of historical data vs AI to understand today's events",
+                    "volume": "low",
+                    "slug": "comparatif-donn-es-historiques-vs-ia-pour-comprendre-ce-jour"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour analyser les faits marquants du jour",
+                    "en": "Why use AI to analyze today's significant events",
+                    "volume": "medium",
+                    "slug": "pourquoi-utiliser-l-ia-pour-analyser-les-faits-marquants-du-jour"
+                },
+                {
+                    "fr": "Événements du jour en temps réel avec explications IA",
+                    "en": "Today's events in real-time with AI explanations",
+                    "volume": "high",
+                    "slug": "v-nements-du-jour-en-temps-r-el-avec-explications-ia"
+                },
+                {
+                    "fr": "Précision des prévisions historiques par IA pour ce jour",
+                    "en": "Accuracy of historical predictions by AI for today",
+                    "volume": "low",
+                    "slug": "pr-cision-des-pr-visions-historiques-par-ia-pour-ce-jour"
+                },
+                {
+                    "fr": "Analyse IA des anniversaires célèbres du jour",
+                    "en": "AI analysis of today's famous birthdays",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-anniversaires-c-l-bres-du-jour"
+                },
+                {
+                    "fr": "Données en temps réel sur les événements du jour avec IA",
+                    "en": "Real-time data on today's events with AI",
+                    "volume": "high",
+                    "slug": "donn-es-en-temps-r-el-sur-les-v-nements-du-jour-avec-ia"
+                },
+                {
+                    "fr": "Comparatif des calendriers historiques avec IA pour ce jour",
+                    "en": "Comparison of historical calendars with AI for today",
+                    "volume": "low",
+                    "slug": "comparatif-des-calendriers-historiques-avec-ia-pour-ce-jour"
+                },
+                {
+                    "fr": "Pourquoi l'IA améliore la compréhension des faits du jour",
+                    "en": "Why AI improves understanding of today's facts",
+                    "volume": "medium",
+                    "slug": "pourquoi-l-ia-am-liore-la-compr-hension-des-faits-du-jour"
+                },
+                {
+                    "fr": "Événements du jour expliqués par l'IA en direct",
+                    "en": "Today's events explained by AI live",
+                    "volume": "high",
+                    "slug": "v-nements-du-jour-expliqu-s-par-l-ia-en-direct"
+                }
+            ]
+        },
+        "cuisine": {
+            "name": "Chef Gourmand",
+            "emoji": "🍳",
+            "dataSources": [
+                "Spoonacular",
+                "Edamam"
+            ],
+            "keywords": [
+                {
+                    "fr": "recette avec ce que j'ai frigo",
+                    "en": "recipes with ingredients I have",
+                    "volume": "high",
+                    "slug": "recette-avec-ce-que-jai"
+                },
+                {
+                    "fr": "idée repas ce soir rapide",
+                    "en": "quick dinner ideas tonight",
+                    "volume": "high",
+                    "slug": "idee-repas-ce-soir"
+                },
+                {
+                    "fr": "recette batch cooking semaine",
+                    "en": "weekly meal prep recipes",
+                    "volume": "high",
+                    "slug": "batch-cooking-semaine"
+                },
+                {
+                    "fr": "calories pâtes complètes",
+                    "en": "whole wheat pasta calories",
+                    "volume": "medium",
+                    "slug": "calories-pates-completes"
+                },
+                {
+                    "fr": "substitut œuf pâtisserie",
+                    "en": "egg substitute for baking",
+                    "volume": "medium",
+                    "slug": "substitut-oeuf-patisserie"
+                },
+                {
+                    "fr": "temps cuisson poulet four",
+                    "en": "chicken oven cooking time",
+                    "volume": "medium",
+                    "slug": "temps-cuisson-poulet"
+                },
+                {
+                    "fr": "recette végétarienne protéines",
+                    "en": "high protein vegetarian recipes",
+                    "volume": "medium",
+                    "slug": "recettes-vegetariennes-proteines"
+                },
+                {
+                    "fr": "conversion grammes cups",
+                    "en": "grams to cups conversion",
+                    "volume": "medium",
+                    "slug": "conversion-grammes-cups"
+                },
+                {
+                    "fr": "recette sans gluten facile",
+                    "en": "easy gluten free recipes",
+                    "volume": "medium",
+                    "slug": "recettes-sans-gluten"
+                },
+                {
+                    "fr": "idée apéro facile rapide",
+                    "en": "easy quick appetizer ideas",
+                    "volume": "medium",
+                    "slug": "idees-apero-facile"
+                },
+                {
+                    "fr": "comment-reutiliser-les-restes-de-viande",
+                    "en": "how-to-reuse-leftover-meat",
+                    "volume": "medium",
+                    "slug": "comment-reutiliser-les-restes-de-viande"
+                },
+                {
+                    "fr": "recettes-rapides-avec-3-ingredients",
+                    "en": "quick-recipes-with-3-ingredients",
+                    "volume": "high",
+                    "slug": "recettes-rapides-avec-3-ingredients"
+                },
+                {
+                    "fr": "astuces-pour-cuisiner-sans-depenses",
+                    "en": "cooking-tips-with-no-budget",
+                    "volume": "medium",
+                    "slug": "astuces-pour-cuisiner-sans-depenses"
+                },
+                {
+                    "fr": "meilleures-recettes-pour-faire-pleuvoir",
+                    "en": "best-recipes-to-make-it-rain",
+                    "volume": "low",
+                    "slug": "meilleures-recettes-pour-faire-pleuvoir"
+                },
+                {
+                    "fr": "comment-conserver-les-herbes-fraiches",
+                    "en": "how-to-preserve-fresh-herbs",
+                    "volume": "high",
+                    "slug": "comment-conserver-les-herbes-fraiches"
+                },
+                {
+                    "fr": "Analyse IA des tendances culinaires en temps réel",
+                    "en": "Real-time AI analysis of culinary trends",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-tendances-culinaires-en-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif recettes classiques vs recettes IA optimisées",
+                    "en": "Comparison of traditional recipes vs AI-optimized recipes",
+                    "volume": "medium",
+                    "slug": "comparatif-recettes-classiques-vs-recettes-ia-optimis-es"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour adapter les recettes aux ingrédients disponibles",
+                    "en": "Why use AI to adapt recipes to available ingredients",
+                    "volume": "low",
+                    "slug": "pourquoi-utiliser-l-ia-pour-adapter-les-recettes-aux-ingr-dients-disponibles"
+                },
+                {
+                    "fr": "Précision des prévisions de cuisson par IA pour les plats complexes",
+                    "en": "Accuracy of AI cooking time predictions for complex dishes",
+                    "volume": "low",
+                    "slug": "pr-cision-des-pr-visions-de-cuisson-par-ia-pour-les-plats-complexes"
+                },
+                {
+                    "fr": "Optimisation des recettes en temps réel avec analyse nutritionnelle IA",
+                    "en": "Real-time recipe optimization with AI nutritional analysis",
+                    "volume": "medium",
+                    "slug": "optimisation-des-recettes-en-temps-r-el-avec-analyse-nutritionnelle-ia"
+                },
+                {
+                    "fr": "Comment l'IA améliore la conservation des aliments frais",
+                    "en": "How AI improves fresh food preservation",
+                    "volume": "low",
+                    "slug": "comment-l-ia-am-liore-la-conservation-des-aliments-frais"
+                },
+                {
+                    "fr": "Analyse IA des combinaisons d'épices pour plats exotiques",
+                    "en": "AI analysis of exotic spice combinations",
+                    "volume": "low",
+                    "slug": "analyse-ia-des-combinaisons-d-pices-pour-plats-exotiques"
+                },
+                {
+                    "fr": "Comparatif des substituts alimentaires traditionnels vs IA",
+                    "en": "Comparison of traditional vs AI food substitutes",
+                    "volume": "medium",
+                    "slug": "comparatif-des-substituts-alimentaires-traditionnels-vs-ia"
+                },
+                {
+                    "fr": "Pourquoi l'IA est meilleure pour le batch cooking personnalisé",
+                    "en": "Why AI is better for personalized batch cooking",
+                    "volume": "low",
+                    "slug": "pourquoi-l-ia-est-meilleure-pour-le-batch-cooking-personnalis"
+                },
+                {
+                    "fr": "Recettes adaptées aux allergies en temps réel avec vérification IA",
+                    "en": "Real-time allergy-friendly recipes with AI verification",
+                    "volume": "medium",
+                    "slug": "recettes-adapt-es-aux-allergies-en-temps-r-el-avec-v-rification-ia"
+                }
+            ]
+        },
+        "tech": {
+            "name": "Tech Insider",
+            "emoji": "💻",
+            "dataSources": [
+                "HackerNews",
+                "TechRadar",
+                "Product Hunt"
+            ],
+            "keywords": [
+                {
+                    "fr": "ChatGPT vs Claude comparaison",
+                    "en": "ChatGPT vs Claude comparison",
+                    "volume": "high",
+                    "slug": "chatgpt-vs-claude"
+                },
+                {
+                    "fr": "meilleure IA gratuite 2024",
+                    "en": "best free AI 2024",
+                    "volume": "high",
+                    "slug": "meilleure-ia-gratuite-2024"
+                },
+                {
+                    "fr": "iPhone 16 vs Samsung S24",
+                    "en": "iPhone 16 vs Samsung S24",
+                    "volume": "high",
+                    "slug": "iphone-16-vs-samsung-s24"
+                },
+                {
+                    "fr": "apprendre programmer gratuitement",
+                    "en": "learn programming for free",
+                    "volume": "high",
+                    "slug": "apprendre-programmer-gratuit"
+                },
+                {
+                    "fr": "IA générer images gratuit",
+                    "en": "AI image generator free",
+                    "volume": "high",
+                    "slug": "ia-generer-images-gratuit"
+                },
+                {
+                    "fr": "meilleur PC portable 2024",
+                    "en": "best laptop 2024",
+                    "volume": "high",
+                    "slug": "meilleur-pc-portable-2024"
+                },
+                {
+                    "fr": "comment utiliser GitHub",
+                    "en": "how to use GitHub",
+                    "volume": "medium",
+                    "slug": "comment-utiliser-github"
+                },
+                {
+                    "fr": "VPN gratuit fiable",
+                    "en": "reliable free VPN",
+                    "volume": "medium",
+                    "slug": "vpn-gratuit-fiable"
+                },
+                {
+                    "fr": "cybersécurité protection données",
+                    "en": "cybersecurity data protection",
+                    "volume": "medium",
+                    "slug": "cybersecurite-protection-donnees"
+                },
+                {
+                    "fr": "automatiser tâches IA",
+                    "en": "automate tasks with AI",
+                    "volume": "medium",
+                    "slug": "automatiser-taches-ia"
+                },
+                {
+                    "fr": "meilleure-ia-pour-automatiser-les-taches-administratives",
+                    "en": "best-ai-for-automating-administrative-tasks",
+                    "volume": "medium",
+                    "slug": "meilleure-ia-pour-automatiser-les-taches-administratives"
+                },
+                {
+                    "fr": "comparatif-ia-generative-2024-quelle-technologie-choisir",
+                    "en": "ai-generative-comparison-2024-which-technology-to-choose",
+                    "volume": "high",
+                    "slug": "comparatif-ia-generative-2024-quelle-technologie-choisir"
+                },
+                {
+                    "fr": "gadgets-tech-innovants-2024-pour-productivite",
+                    "en": "innovative-tech-gadgets-2024-for-productivity",
+                    "volume": "medium",
+                    "slug": "gadgets-tech-innovants-2024-pour-productivite"
+                },
+                {
+                    "fr": "comment-choisir-un-ordinateur-quantique-pour-les-particuliers",
+                    "en": "how-to-choose-a-quantum-computer-for-individuals",
+                    "volume": "low",
+                    "slug": "comment-choisir-un-ordinateur-quantique-pour-les-particuliers"
+                },
+                {
+                    "fr": "meilleures-applications-ia-pour-creer-du-contenu-video",
+                    "en": "best-ai-apps-for-video-content-creation",
+                    "volume": "high",
+                    "slug": "meilleures-applications-ia-pour-creer-du-contenu-video"
+                },
+                {
+                    "fr": "Analyse IA des tendances tech en temps réel avec explications",
+                    "en": "Real-time AI analysis of tech trends with explanations",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-tendances-tech-en-temps-r-el-avec-explications"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour suivre les innovations gadgets 2024",
+                    "en": "Why use AI to track 2024 gadget innovations",
+                    "volume": "medium",
+                    "slug": "pourquoi-utiliser-l-ia-pour-suivre-les-innovations-gadgets-2024"
+                },
+                {
+                    "fr": "Comparatif des IA génératives vs données temps réel pour la productivité",
+                    "en": "Comparing generative AI vs real-time data for productivity",
+                    "volume": "high",
+                    "slug": "comparatif-des-ia-g-n-ratives-vs-donn-es-temps-r-el-pour-la-productivit"
+                },
+                {
+                    "fr": "Précision des prévisions IA sur les sorties tech 2024",
+                    "en": "AI accuracy in predicting 2024 tech releases",
+                    "volume": "medium",
+                    "slug": "pr-cision-des-pr-visions-ia-sur-les-sorties-tech-2024"
+                },
+                {
+                    "fr": "Analyse IA des performances des smartphones en temps réel",
+                    "en": "Real-time AI analysis of smartphone performance",
+                    "volume": "high",
+                    "slug": "analyse-ia-des-performances-des-smartphones-en-temps-r-el"
+                },
+                {
+                    "fr": "Comment l'IA améliore la veille technologique avec données live",
+                    "en": "How AI enhances tech watch with live data",
+                    "volume": "low",
+                    "slug": "comment-l-ia-am-liore-la-veille-technologique-avec-donn-es-live"
+                },
+                {
+                    "fr": "Comparatif des IA pour automatiser la veille tech vs solutions classiques",
+                    "en": "AI vs traditional solutions for tech watch automation",
+                    "volume": "medium",
+                    "slug": "comparatif-des-ia-pour-automatiser-la-veille-tech-vs-solutions-classiques"
+                },
+                {
+                    "fr": "Pourquoi les données temps réel changent la donne dans l'analyse IA tech",
+                    "en": "Why real-time data transforms tech AI analysis",
+                    "volume": "low",
+                    "slug": "pourquoi-les-donn-es-temps-r-el-changent-la-donne-dans-l-analyse-ia-tech"
+                },
+                {
+                    "fr": "Analyse IA des tendances cybersecurity en direct avec explications",
+                    "en": "Live AI analysis of cybersecurity trends with explanations",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-tendances-cybersecurity-en-direct-avec-explications"
+                },
+                {
+                    "fr": "Comparatif des plateformes IA pour l'analyse de données tech en temps réel",
+                    "en": "Comparing AI platforms for real-time tech data analysis",
+                    "volume": "high",
+                    "slug": "comparatif-des-plateformes-ia-pour-l-analyse-de-donn-es-tech-en-temps-r-el"
+                }
+            ]
+        },
+        "cinema": {
+            "name": "Ciné Fan",
+            "emoji": "🎬",
+            "dataSources": [
+                "TMDB",
+                "IMDB"
+            ],
+            "keywords": [
+                {
+                    "fr": "meilleur film 2024 à voir",
+                    "en": "best movies 2024 to watch",
+                    "volume": "high",
+                    "slug": "meilleurs-films-2024"
+                },
+                {
+                    "fr": "série Netflix recommandation",
+                    "en": "Netflix series recommendation",
+                    "volume": "high",
+                    "slug": "series-netflix-recommandation"
+                },
+                {
+                    "fr": "ordre films Marvel",
+                    "en": "Marvel movies watching order",
+                    "volume": "high",
+                    "slug": "ordre-films-marvel"
+                },
+                {
+                    "fr": "films comme Interstellar",
+                    "en": "movies like Interstellar",
+                    "volume": "medium",
+                    "slug": "films-comme-interstellar"
+                },
+                {
+                    "fr": "meilleur film horreur récent",
+                    "en": "best recent horror movies",
+                    "volume": "medium",
+                    "slug": "meilleur-film-horreur-recent"
+                },
+                {
+                    "fr": "sortie cinéma cette semaine",
+                    "en": "movies releasing this week",
+                    "volume": "high",
+                    "slug": "sortie-cinema-semaine"
+                },
+                {
+                    "fr": "série coréenne romance",
+                    "en": "korean romance drama",
+                    "volume": "medium",
+                    "slug": "serie-coreenne-romance"
+                },
+                {
+                    "fr": "documentaire Netflix 2024",
+                    "en": "Netflix documentaries 2024",
+                    "volume": "medium",
+                    "slug": "documentaire-netflix-2024"
+                },
+                {
+                    "fr": "films récompensés oscars",
+                    "en": "oscar winning movies",
+                    "volume": "medium",
+                    "slug": "films-oscars-recompenses"
+                },
+                {
+                    "fr": "animation Disney récente",
+                    "en": "recent Disney animation",
+                    "volume": "medium",
+                    "slug": "animation-disney-recente"
+                },
+                {
+                    "fr": "quels films regarder quand on aime inception",
+                    "en": "what movies to watch if you like inception",
+                    "volume": "medium",
+                    "slug": "quels-films-regarder-quand-on-aime-inception"
+                },
+                {
+                    "fr": "meilleures séries pour fans de science-fiction",
+                    "en": "best series for sci-fi fans",
+                    "volume": "high",
+                    "slug": "meilleures-s-ries-pour-fans-de-science-fiction"
+                },
+                {
+                    "fr": "films cultes des années 90 à voir absolument",
+                    "en": "must-watch cult films from the 90s",
+                    "volume": "medium",
+                    "slug": "films-cultes-des-ann-es-90-voir-absolument"
+                },
+                {
+                    "fr": "comment choisir un film selon son humeur",
+                    "en": "how to choose a movie based on your mood",
+                    "volume": "low",
+                    "slug": "comment-choisir-un-film-selon-son-humeur"
+                },
+                {
+                    "fr": "meilleurs films d'animation non disney",
+                    "en": "best non-disney animated movies",
+                    "volume": "high",
+                    "slug": "meilleurs-films-d-animation-non-disney"
+                },
+                {
+                    "fr": "Analyse IA des tendances cinéma en temps réel",
+                    "en": "AI analysis of real-time cinema trends",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-tendances-cin-ma-en-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif films Netflix vs IA de recommandation",
+                    "en": "Netflix movies vs AI recommendation comparison",
+                    "volume": "medium",
+                    "slug": "comparatif-films-netflix-vs-ia-de-recommandation"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour choisir un film selon son humeur",
+                    "en": "Why use AI to choose movies based on your mood",
+                    "volume": "high",
+                    "slug": "pourquoi-utiliser-l-ia-pour-choisir-un-film-selon-son-humeur"
+                },
+                {
+                    "fr": "Films cultes des années 90 analysés par IA",
+                    "en": "90s cult movies analyzed by AI",
+                    "volume": "medium",
+                    "slug": "films-cultes-des-ann-es-90-analys-s-par-ia"
+                },
+                {
+                    "fr": "Précision des prévisions sorties cinéma par IA",
+                    "en": "Accuracy of AI movie release predictions",
+                    "volume": "low",
+                    "slug": "pr-cision-des-pr-visions-sorties-cin-ma-par-ia"
+                },
+                {
+                    "fr": "Recommandations séries Netflix en temps réel avec explications IA",
+                    "en": "Real-time Netflix series recommendations with AI explanations",
+                    "volume": "high",
+                    "slug": "recommandations-s-ries-netflix-en-temps-r-el-avec-explications-ia"
+                },
+                {
+                    "fr": "Analyse IA des Oscars 2024 avec données en direct",
+                    "en": "2024 Oscars AI analysis with real-time data",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-oscars-2024-avec-donn-es-en-direct"
+                },
+                {
+                    "fr": "Comparatif films Marvel vs algorithmes IA de recommandation",
+                    "en": "Marvel movies vs AI recommendation algorithms comparison",
+                    "volume": "medium",
+                    "slug": "comparatif-films-marvel-vs-algorithmes-ia-de-recommandation"
+                },
+                {
+                    "fr": "Pourquoi l'IA comprend mieux vos goûts cinématographiques",
+                    "en": "Why AI understands your movie tastes better",
+                    "volume": "high",
+                    "slug": "pourquoi-l-ia-comprend-mieux-vos-go-ts-cin-matographiques"
+                },
+                {
+                    "fr": "Films comme Interstellar analysés par IA avec données actualisées",
+                    "en": "Movies like Interstellar analyzed by AI with updated data",
+                    "volume": "low",
+                    "slug": "films-comme-interstellar-analys-s-par-ia-avec-donn-es-actualis-es"
+                }
+            ]
+        },
+        "news": {
+            "name": "Actu Live",
+            "emoji": "📰",
+            "dataSources": [
+                "NewsAPI",
+                "MediaStack",
+                "RSS Feeds"
+            ],
+            "keywords": [
+                {
+                    "fr": "actualités France aujourd'hui",
+                    "en": "France news today",
+                    "volume": "high",
+                    "slug": "actualites-france-aujourdhui"
+                },
+                {
+                    "fr": "dernières nouvelles monde",
+                    "en": "latest world news",
+                    "volume": "high",
+                    "slug": "dernieres-nouvelles-monde"
+                },
+                {
+                    "fr": "résumé actualité semaine",
+                    "en": "weekly news summary",
+                    "volume": "medium",
+                    "slug": "resume-actualite-semaine"
+                },
+                {
+                    "fr": "actualités IA intelligence artificielle",
+                    "en": "AI artificial intelligence news",
+                    "volume": "high",
+                    "slug": "actualites-ia"
+                },
+                {
+                    "fr": "breaking news temps réel",
+                    "en": "real-time breaking news",
+                    "volume": "high",
+                    "slug": "breaking-news-temps-reel"
+                },
+                {
+                    "fr": "fake news comment vérifier",
+                    "en": "how to verify fake news",
+                    "volume": "medium",
+                    "slug": "verifier-fake-news"
+                },
+                {
+                    "fr": "agrégateur news personnalisé",
+                    "en": "personalized news aggregator",
+                    "volume": "medium",
+                    "slug": "agregateur-news-personnalise"
+                },
+                {
+                    "fr": "actualités tech cette semaine",
+                    "en": "tech news this week",
+                    "volume": "medium",
+                    "slug": "actualites-tech-semaine"
+                },
+                {
+                    "fr": "résumé infos IA synthèse",
+                    "en": "AI news summary synthesis",
+                    "volume": "medium",
+                    "slug": "resume-infos-ia"
+                },
+                {
+                    "fr": "où trouver infos fiables",
+                    "en": "where to find reliable news",
+                    "volume": "medium",
+                    "slug": "trouver-infos-fiables"
+                },
+                {
+                    "fr": "actualités en direct sur les catastrophes naturelles",
+                    "en": "live news on natural disasters",
+                    "volume": "medium",
+                    "slug": "actualit-s-en-direct-sur-les-catastrophes-naturelles"
+                },
+                {
+                    "fr": "où trouver des infos en direct sur les conflits internationaux",
+                    "en": "where to find live updates on international conflicts",
+                    "volume": "high",
+                    "slug": "o-trouver-des-infos-en-direct-sur-les-conflits-internationaux"
+                },
+                {
+                    "fr": "comment suivre l'actualité sportive en temps réel gratuitement",
+                    "en": "how to follow live sports news for free",
+                    "volume": "medium",
+                    "slug": "comment-suivre-l-actualit-sportive-en-temps-r-el-gratuitement"
+                },
+                {
+                    "fr": "actualités économiques en direct pour les investisseurs",
+                    "en": "live economic news for investors",
+                    "volume": "high",
+                    "slug": "actualit-s-conomiques-en-direct-pour-les-investisseurs"
+                },
+                {
+                    "fr": "comment vérifier l'actualité politique en direct sans biais",
+                    "en": "how to check live political news without bias",
+                    "volume": "medium",
+                    "slug": "comment-v-rifier-l-actualit-politique-en-direct-sans-biais"
+                },
+                {
+                    "fr": "Analyse IA des tendances économiques en temps réel",
+                    "en": "AI analysis of real-time economic trends",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-tendances-conomiques-en-temps-r-el"
+                },
+                {
+                    "fr": "Comparatif actualités IA vs médias traditionnels",
+                    "en": "AI news vs traditional media comparison",
+                    "volume": "medium",
+                    "slug": "comparatif-actualit-s-ia-vs-m-dias-traditionnels"
+                },
+                {
+                    "fr": "Pourquoi utiliser l'IA pour suivre les catastrophes naturelles en direct",
+                    "en": "Why use AI to track natural disasters in real-time",
+                    "volume": "low",
+                    "slug": "pourquoi-utiliser-l-ia-pour-suivre-les-catastrophes-naturelles-en-direct"
+                },
+                {
+                    "fr": "Actualités sportives en temps réel avec explications IA",
+                    "en": "Real-time sports news with AI explanations",
+                    "volume": "medium",
+                    "slug": "actualit-s-sportives-en-temps-r-el-avec-explications-ia"
+                },
+                {
+                    "fr": "Précision des prévisions politiques par IA en direct",
+                    "en": "Accuracy of AI political predictions in real-time",
+                    "volume": "low",
+                    "slug": "pr-cision-des-pr-visions-politiques-par-ia-en-direct"
+                },
+                {
+                    "fr": "Analyse IA des fake news sur les conflits internationaux",
+                    "en": "AI analysis of fake news about international conflicts",
+                    "volume": "medium",
+                    "slug": "analyse-ia-des-fake-news-sur-les-conflits-internationaux"
+                },
+                {
+                    "fr": "Actualités tech en temps réel avec analyse IA",
+                    "en": "Real-time tech news with AI analysis",
+                    "volume": "high",
+                    "slug": "actualit-s-tech-en-temps-r-el-avec-analyse-ia"
+                },
+                {
+                    "fr": "Comparatif données temps réel vs IA pour l'actualité financière",
+                    "en": "Real-time data vs AI for financial news comparison",
+                    "volume": "low",
+                    "slug": "comparatif-donn-es-temps-r-el-vs-ia-pour-l-actualit-financi-re"
+                },
+                {
+                    "fr": "Pourquoi l'IA améliore la vérification des infos en direct",
+                    "en": "Why AI improves real-time news verification",
+                    "volume": "medium",
+                    "slug": "pourquoi-l-ia-am-liore-la-v-rification-des-infos-en-direct"
+                },
+                {
+                    "fr": "Actualités environnementales en temps réel avec analyse prédictive IA",
+                    "en": "Real-time environmental news with AI predictive analysis",
+                    "volume": "low",
+                    "slug": "actualit-s-environnementales-en-temps-r-el-avec-analyse-pr-dictive-ia"
+                }
+            ]
+        }
+    }
+}

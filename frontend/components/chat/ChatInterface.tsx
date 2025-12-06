@@ -34,7 +34,8 @@ export default function ChatInterface() {
     setLoading(true)
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://universal-api-hub.fly.dev'}/api/chat`, {
+      // Use relative path - Netlify proxy handles /api/* routing to Fly.io backend
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: content, language: 'fr' }),
@@ -87,9 +88,9 @@ export default function ChatInterface() {
           <div className="flex justify-start">
             <div className="bg-dark-700 px-4 py-3 rounded-2xl">
               <div className="flex gap-1">
-                <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></span>
-                <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></span>
-                <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></span>
+                <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
               </div>
             </div>
           </div>
