@@ -150,7 +150,7 @@ class GeminiProvider(AIProvider):
     """Google Gemini provider - 1,500 req/day"""
     
     def __init__(self):
-        super().__init__("gemini", priority=3, daily_quota=1500)
+        super().__init__("gemini", priority=6, daily_quota=1500)
         api_key = os.getenv("GEMINI_API_KEY")
         
         if api_key and api_key != "your_gemini_api_key_here":
@@ -195,11 +195,116 @@ class GeminiProvider(AIProvider):
             raise Exception(f"Gemini API error: {e}")
 
 
+class CohereChatProvider(AIProvider):
+    """Cohere Chat provider - 100 req/day free"""
+    
+    def __init__(self):
+        super().__init__("cohere_chat", priority=4, daily_quota=100)
+        api_key = os.getenv("COHERE_API_KEY")
+        
+        if api_key and api_key != "your_cohere_api_key_here":
+            self.api_key = api_key
+            self.available = True
+            print("✅ Cohere Chat provider initialized (100 req/day)")
+        else:
+            self.available = False
+            print("⚠️  Cohere Chat API key not configured")
+    
+    @circuit_breaker(name="cohere_chat")
+    @with_retry()
+    async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+        """Call Cohere Chat API"""
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                # Cohere utilise un format différent avec chat_history
+                if system_prompt:
+                    # Pour Cohere, on peut mettre le system_prompt au début du message
+                    full_prompt = f"{system_prompt}\n\n{prompt}"
+                else:
+                    full_prompt = prompt
+                
+                response = await client.post(
+                    "https://api.cohere.ai/v1/chat",
+                    headers={
+                        "Authorization": f"Bearer {self.api_key}",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "message": full_prompt,
+                        "model": "command-r-plus",
+                        "temperature": 0.7,
+                        "max_tokens": 1024
+                    }
+                )
+                
+                if response.status_code == 200:
+                    self.increment_usage()
+                    return response.json()["text"]
+                else:
+                    raise Exception(f"Cohere returned status {response.status_code}: {response.text}")
+        
+        except Exception as e:
+            self.last_error = str(e)
+            raise Exception(f"Cohere Chat API error: {e}")
+
+
+class AI21Provider(AIProvider):
+    """AI21 Labs provider - 1,000 req/day free"""
+    
+    def __init__(self):
+        super().__init__("ai21", priority=5, daily_quota=1000)
+        api_key = os.getenv("AI21_API_KEY")
+        
+        if api_key and api_key != "your_ai21_api_key_here":
+            self.api_key = api_key
+            self.available = True
+            print("✅ AI21 Labs provider initialized (1,000 req/day)")
+        else:
+            self.available = False
+            print("⚠️  AI21 Labs API key not configured")
+    
+    @circuit_breaker(name="ai21")
+    @with_retry()
+    async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+        """Call AI21 Labs API"""
+        try:
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                # AI21 utilise un format avec prompt et system
+                full_prompt = prompt
+                if system_prompt:
+                    full_prompt = f"{system_prompt}\n\n{prompt}"
+                
+                response = await client.post(
+                    "https://api.ai21.com/studio/v1/j2-ultra/complete",
+                    headers={
+                        "Authorization": f"Bearer {self.api_key}",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "prompt": full_prompt,
+                        "temperature": 0.7,
+                        "maxTokens": 1024,
+                        "topP": 0.9
+                    }
+                )
+                
+                if response.status_code == 200:
+                    self.increment_usage()
+                    result = response.json()
+                    return result["completions"][0]["data"]["text"]
+                else:
+                    raise Exception(f"AI21 returned status {response.status_code}: {response.text}")
+        
+        except Exception as e:
+            self.last_error = str(e)
+            raise Exception(f"AI21 Labs API error: {e}")
+
+
 class OpenRouterProvider(AIProvider):
     """OpenRouter provider (DeepSeek + 67 models) - 50 req/day free"""
     
     def __init__(self):
-        super().__init__("openrouter", priority=4, daily_quota=50)
+        super().__init__("openrouter", priority=9, daily_quota=50)
         api_key = os.getenv("OPENROUTER_API_KEY")
         
         if api_key and api_key.startswith("sk-or-"):
@@ -251,11 +356,185 @@ class OpenRouterProvider(AIProvider):
             raise Exception(f"OpenRouter API error: {e}")
 
 
+class AnthropicProvider(AIProvider):
+    """Anthropic Claude provider - 5$ crédit gratuit"""
+    
+    def __init__(self):
+        super().__init__("anthropic", priority=3, daily_quota=1000)  # Estimation basée sur crédit
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        
+        if api_key and api_key != "your_anthropic_api_key_here":
+            self.api_key = api_key
+            self.available = True
+            print("✅ Anthropic Claude provider initialized (5$ crédit gratuit)")
+        else:
+            self.available = False
+            print("⚠️  Anthropic API key not configured")
+    
+    @circuit_breaker(name="anthropic")
+    @with_retry()
+    async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+        """Call Anthropic Claude API"""
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                messages = []
+                if system_prompt:
+                    messages.append({"role": "system", "content": system_prompt})
+                messages.append({"role": "user", "content": prompt})
+                
+                # Anthropic utilise Claude 3 Haiku (gratuit) ou Sonnet (payant)
+                model = os.getenv("ANTHROPIC_MODEL", "claude-3-haiku-20240307")
+                
+                response = await client.post(
+                    "https://api.anthropic.com/v1/messages",
+                    headers={
+                        "x-api-key": self.api_key,
+                        "anthropic-version": "2023-06-01",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "model": model,
+                        "max_tokens": 1024,
+                        "messages": messages
+                    }
+                )
+                
+                if response.status_code == 200:
+                    self.increment_usage()
+                    return response.json()["content"][0]["text"]
+                else:
+                    raise Exception(f"Anthropic returned status {response.status_code}: {response.text}")
+        
+        except Exception as e:
+            self.last_error = str(e)
+            raise Exception(f"Anthropic API error: {e}")
+
+
+class PerplexityProvider(AIProvider):
+    """Perplexity AI provider - 5 req/day free (with web search)"""
+    
+    def __init__(self):
+        super().__init__("perplexity", priority=7, daily_quota=5)
+        api_key = os.getenv("PERPLEXITY_API_KEY")
+        
+        if api_key and api_key != "your_perplexity_api_key_here":
+            self.api_key = api_key
+            self.available = True
+            print("✅ Perplexity AI provider initialized (5 req/day, with web search)")
+        else:
+            self.available = False
+            print("⚠️  Perplexity API key not configured")
+    
+    @circuit_breaker(name="perplexity")
+    @with_retry()
+    async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+        """Call Perplexity AI API (with web search)"""
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                messages = []
+                if system_prompt:
+                    messages.append({"role": "system", "content": system_prompt})
+                messages.append({"role": "user", "content": prompt})
+                
+                # Perplexity utilise sonar-online pour la recherche web
+                response = await client.post(
+                    "https://api.perplexity.ai/chat/completions",
+                    headers={
+                        "Authorization": f"Bearer {self.api_key}",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "model": "sonar",
+                        "messages": messages,
+                        "temperature": 0.7,
+                        "max_tokens": 1024
+                    }
+                )
+                
+                if response.status_code == 200:
+                    self.increment_usage()
+                    return response.json()["choices"][0]["message"]["content"]
+                else:
+                    raise Exception(f"Perplexity returned status {response.status_code}: {response.text}")
+        
+        except Exception as e:
+            self.last_error = str(e)
+            raise Exception(f"Perplexity API error: {e}")
+
+
+class HuggingFaceProvider(AIProvider):
+    """Hugging Face provider - Unlimited (rate limit ~30 req/min)"""
+    
+    def __init__(self):
+        super().__init__("huggingface", priority=8, daily_quota=0)  # Unlimited with rate limit
+        api_token = os.getenv("HUGGINGFACE_API_TOKEN")
+        
+        if api_token and api_token != "your_huggingface_token_here":
+            self.api_token = api_token
+            self.available = True
+            # Modèle par défaut : meta-llama/Llama-3-8B-Instruct
+            self.default_model = os.getenv("HUGGINGFACE_MODEL", "meta-llama/Llama-3-8B-Instruct")
+            print(f"✅ Hugging Face provider initialized (unlimited, rate limit ~30 req/min, model: {self.default_model})")
+        else:
+            self.available = False
+            print("⚠️  Hugging Face API token not configured")
+    
+    @circuit_breaker(name="huggingface")
+    @with_retry()
+    async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+        """Call Hugging Face Inference API"""
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                # Construire le prompt complet
+                if system_prompt:
+                    full_prompt = f"{system_prompt}\n\n{prompt}"
+                else:
+                    full_prompt = prompt
+                
+                # Hugging Face Inference API
+                response = await client.post(
+                    f"https://api-inference.huggingface.co/models/{self.default_model}",
+                    headers={
+                        "Authorization": f"Bearer {self.api_token}",
+                        "Content-Type": "application/json"
+                    },
+                    json={
+                        "inputs": full_prompt,
+                        "parameters": {
+                            "temperature": 0.7,
+                            "max_new_tokens": 1024,
+                            "return_full_text": False
+                        }
+                    }
+                )
+                
+                if response.status_code == 200:
+                    self.increment_usage()
+                    result = response.json()
+                    # Format de réponse Hugging Face
+                    if isinstance(result, list) and len(result) > 0:
+                        return result[0].get("generated_text", "")
+                    elif isinstance(result, dict):
+                        return result.get("generated_text", "")
+                    else:
+                        return str(result)
+                elif response.status_code == 503:
+                    # Modèle en cours de chargement, attendre un peu
+                    error_msg = response.json().get("error", "Model is loading")
+                    raise Exception(f"Hugging Face model loading: {error_msg}")
+                else:
+                    raise Exception(f"Hugging Face returned status {response.status_code}: {response.text}")
+        
+        except Exception as e:
+            self.last_error = str(e)
+            raise Exception(f"Hugging Face API error: {e}")
+
+
 class OllamaProvider(AIProvider):
     """Ollama local provider (unlimited fallback)"""
     
     def __init__(self):
-        super().__init__("ollama", priority=5, daily_quota=0)  # Unlimited
+        super().__init__("ollama", priority=10, daily_quota=0)  # Unlimited
         self.base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
         
         try:
@@ -308,9 +587,14 @@ class AIRouter:
         self.providers = [
             GroqProvider(),          # Priority 1: Ultra-fast, 14k/day
             MistralProvider(),       # Priority 2: 1B tokens/month
-            GeminiProvider(),        # Priority 3: 1,500/day
-            OpenRouterProvider(),    # Priority 4: 50/day (DeepSeek)
-            OllamaProvider(),        # Priority 5: Unlimited local
+            AnthropicProvider(),    # Priority 3: 5$ crédit (NOUVEAU)
+            CohereChatProvider(),   # Priority 4: 100/day
+            AI21Provider(),         # Priority 5: 1,000/day
+            GeminiProvider(),       # Priority 6: 1,500/day
+            PerplexityProvider(),   # Priority 7: 5/day (with web search)
+            HuggingFaceProvider(),  # Priority 8: Unlimited (rate limit)
+            OpenRouterProvider(),   # Priority 9: 50/day (DeepSeek)
+            OllamaProvider(),       # Priority 10: Unlimited local
         ]
         
         # Filter only available providers

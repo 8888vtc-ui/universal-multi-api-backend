@@ -133,8 +133,8 @@ class CourseGenerator:
         """
         
         try:
-            response = await self.ai_router.chat(prompt, max_tokens=2000)
-            content = response.get("content", "")
+            response = await self.ai_router.route(prompt)
+            content = response.get("response", "")
             
             # Parser le JSON (peut être dans des blocs markdown)
             import json
@@ -228,8 +228,8 @@ class CourseGenerator:
         """
         
         try:
-            response = await self.ai_router.chat(prompt, max_tokens=1000)
-            content_text = response.get("content", "")
+            response = await self.ai_router.route(prompt)
+            content_text = response.get("response", "")
             
             import json
             import re
@@ -256,5 +256,6 @@ class CourseGenerator:
 
 # Singleton instance
 course_generator = CourseGenerator()
+
 
 

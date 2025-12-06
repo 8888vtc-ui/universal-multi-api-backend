@@ -35,3 +35,4 @@ class UserProfile(BaseModel):
     last_updated: datetime
 
 
+

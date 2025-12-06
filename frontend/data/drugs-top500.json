@@ -1,0 +1,3002 @@
+[
+  {
+    "name": "Ibuprofen"
+  },
+  {
+    "name": "Oxygen"
+  },
+  {
+    "name": "Gabapentin"
+  },
+  {
+    "name": "Dove"
+  },
+  {
+    "name": "Allergy Relief"
+  },
+  {
+    "name": "Amoxicillin"
+  },
+  {
+    "name": "Degree"
+  },
+  {
+    "name": "Famotidine"
+  },
+  {
+    "name": "Omeprazole"
+  },
+  {
+    "name": "Pregabalin"
+  },
+  {
+    "name": "Acetaminophen"
+  },
+  {
+    "name": "Methocarbamol"
+  },
+  {
+    "name": "Cephalexin"
+  },
+  {
+    "name": "Metformin Hydrochloride"
+  },
+  {
+    "name": "Diclofenac Sodium"
+  },
+  {
+    "name": "Hydrocodone Bitartrate And Acetaminophen"
+  },
+  {
+    "name": "Naproxen"
+  },
+  {
+    "name": "Fluoxetine"
+  },
+  {
+    "name": "Levothyroxine Sodium"
+  },
+  {
+    "name": "Amoxicillin And Clavulanate Potassium"
+  },
+  {
+    "name": "Prednisone"
+  },
+  {
+    "name": "Ciprofloxacin"
+  },
+  {
+    "name": "Furosemide"
+  },
+  {
+    "name": "Buspirone Hydrochloride"
+  },
+  {
+    "name": "Hand Sanitizer"
+  },
+  {
+    "name": "Ondansetron"
+  },
+  {
+    "name": "Levetiracetam"
+  },
+  {
+    "name": "Allopurinol"
+  },
+  {
+    "name": "Acyclovir"
+  },
+  {
+    "name": "Glipizide"
+  },
+  {
+    "name": "Potassium Chloride"
+  },
+  {
+    "name": "Baclofen"
+  },
+  {
+    "name": "Metronidazole"
+  },
+  {
+    "name": "Naproxen Sodium"
+  },
+  {
+    "name": "Lidocaine"
+  },
+  {
+    "name": "Atorvastatin Calcium"
+  },
+  {
+    "name": "Hydrochlorothiazide"
+  },
+  {
+    "name": "Salicylic Acid"
+  },
+  {
+    "name": "Metoprolol Tartrate"
+  },
+  {
+    "name": "Cyclobenzaprine Hydrochloride"
+  },
+  {
+    "name": "Losartan Potassium"
+  },
+  {
+    "name": "Nitrogen"
+  },
+  {
+    "name": "Amitriptyline Hydrochloride"
+  },
+  {
+    "name": "Doxycycline Hyclate"
+  },
+  {
+    "name": "Hydrocortisone"
+  },
+  {
+    "name": "Nicotine"
+  },
+  {
+    "name": "Benzonatate"
+  },
+  {
+    "name": "Esomeprazole Magnesium"
+  },
+  {
+    "name": "Stool Softener Laxative"
+  },
+  {
+    "name": "Propranolol Hydrochloride"
+  },
+  {
+    "name": "Venlafaxine Hydrochloride"
+  },
+  {
+    "name": "Ketorolac Tromethamine"
+  },
+  {
+    "name": "Aripiprazole"
+  },
+  {
+    "name": "Azithromycin"
+  },
+  {
+    "name": "Clonazepam"
+  },
+  {
+    "name": "Triamcinolone Acetonide"
+  },
+  {
+    "name": "Lidocaine Hydrochloride"
+  },
+  {
+    "name": "Rosuvastatin Calcium"
+  },
+  {
+    "name": "Carvedilol"
+  },
+  {
+    "name": "Sildenafil"
+  },
+  {
+    "name": "Phentermine Hydrochloride"
+  },
+  {
+    "name": "Atorvastatin Calcium"
+  },
+  {
+    "name": "Lisinopril"
+  },
+  {
+    "name": "Loratadine"
+  },
+  {
+    "name": "Lorazepam"
+  },
+  {
+    "name": "Fenofibrate"
+  },
+  {
+    "name": "Sulfamethoxazole And Trimethoprim"
+  },
+  {
+    "name": "Atenolol"
+  },
+  {
+    "name": "Olanzapine"
+  },
+  {
+    "name": "Duloxetine"
+  },
+  {
+    "name": "Nifedipine"
+  },
+  {
+    "name": "Trazodone Hydrochloride"
+  },
+  {
+    "name": "Fluconazole"
+  },
+  {
+    "name": "Tadalafil"
+  },
+  {
+    "name": "Dicyclomine Hydrochloride"
+  },
+  {
+    "name": "Metformin Hydrochloride"
+  },
+  {
+    "name": "Oxygen"
+  },
+  {
+    "name": "Gabapentin"
+  },
+  {
+    "name": "Aspirin"
+  },
+  {
+    "name": "Celecoxib"
+  },
+  {
+    "name": "Sertraline Hydrochloride"
+  },
+  {
+    "name": "Mirtazapine"
+  },
+  {
+    "name": "Phenobarbital"
+  },
+  {
+    "name": "Alprazolam"
+  },
+  {
+    "name": "Amlodipine Besylate"
+  },
+  {
+    "name": "Topiramate"
+  },
+  {
+    "name": "Glimepiride"
+  },
+  {
+    "name": "Glycopyrrolate"
+  },
+  {
+    "name": "Lamotrigine"
+  },
+  {
+    "name": "Lansoprazole"
+  },
+  {
+    "name": "Lisinopril"
+  },
+  {
+    "name": "Pravastatin Sodium"
+  },
+  {
+    "name": "Warfarin Sodium"
+  },
+  {
+    "name": "Divalproex Sodium"
+  },
+  {
+    "name": "Escitalopram"
+  },
+  {
+    "name": "Metoprolol Succinate"
+  },
+  {
+    "name": "Pantoprazole Sodium"
+  },
+  {
+    "name": "Diazepam"
+  },
+  {
+    "name": "Hydralazine Hydrochloride"
+  },
+  {
+    "name": "Isopropyl Alcohol"
+  },
+  {
+    "name": "Levothyroxine Sodium"
+  },
+  {
+    "name": "Diltiazem Hydrochloride"
+  },
+  {
+    "name": "Etodolac"
+  },
+  {
+    "name": "Finasteride"
+  },
+  {
+    "name": "Cetirizine Hydrochloride"
+  },
+  {
+    "name": "Haloperidol"
+  },
+  {
+    "name": "Hydroxyzine Hydrochloride"
+  },
+  {
+    "name": "Indomethacin"
+  },
+  {
+    "name": "Paroxetine"
+  },
+  {
+    "name": "Prednisone"
+  },
+  {
+    "name": "Labetalol Hydrochloride"
+  },
+  {
+    "name": "Sucralfate"
+  },
+  {
+    "name": "Tamsulosin Hydrochloride"
+  },
+  {
+    "name": "Tizanidine"
+  },
+  {
+    "name": "Levofloxacin"
+  },
+  {
+    "name": "Nystatin"
+  },
+  {
+    "name": "Cefdinir"
+  },
+  {
+    "name": "Dexamethasone"
+  },
+  {
+    "name": "Lisinopril And Hydrochlorothiazide"
+  },
+  {
+    "name": "Promethazine Hydrochloride"
+  },
+  {
+    "name": "Carbamazepine"
+  },
+  {
+    "name": "Estradiol"
+  },
+  {
+    "name": "Sodium Chloride"
+  },
+  {
+    "name": "Spironolactone"
+  },
+  {
+    "name": "Clobetasol Propionate"
+  },
+  {
+    "name": "Quetiapine Fumarate"
+  },
+  {
+    "name": "Hydrogen Peroxide"
+  },
+  {
+    "name": "Mucus Relief"
+  },
+  {
+    "name": "Bupropion Hydrochloride"
+  },
+  {
+    "name": "Minocycline Hydrochloride"
+  },
+  {
+    "name": "Lovastatin"
+  },
+  {
+    "name": "Ondansetron Hydrochloride"
+  },
+  {
+    "name": "Penicillin V Potassium"
+  },
+  {
+    "name": "Albuterol Sulfate"
+  },
+  {
+    "name": "Doxazosin"
+  },
+  {
+    "name": "Topiramate"
+  },
+  {
+    "name": "Baclofen"
+  },
+  {
+    "name": "Doxycycline"
+  },
+  {
+    "name": "Oxycodone Hydrochloride"
+  },
+  {
+    "name": "Nicotine"
+  },
+  {
+    "name": "Citalopram"
+  },
+  {
+    "name": "Fluticasone Propionate"
+  },
+  {
+    "name": "Losartan Potassium And Hydrochlorothiazide"
+  },
+  {
+    "name": "Nortriptyline Hydrochloride"
+  },
+  {
+    "name": "Spironolactone"
+  },
+  {
+    "name": "Triamterene And Hydrochlorothiazide"
+  },
+  {
+    "name": "Triple Antibiotic"
+  },
+  {
+    "name": "Zolpidem Tartrate"
+  },
+  {
+    "name": "Benazepril Hydrochloride"
+  },
+  {
+    "name": "Doxepin Hydrochloride"
+  },
+  {
+    "name": "Methylphenidate Hydrochloride"
+  },
+  {
+    "name": "Miconazole Nitrate"
+  },
+  {
+    "name": "Cyclobenzaprine Hydrochloride"
+  },
+  {
+    "name": "Clonidine Hydrochloride"
+  },
+  {
+    "name": "Loperamide Hydrochloride"
+  },
+  {
+    "name": "Oxycodone And Acetaminophen"
+  },
+  {
+    "name": "Tinted Mineral Sunscreen"
+  },
+  {
+    "name": "Bumetanide"
+  },
+  {
+    "name": "Clotrimazole"
+  },
+  {
+    "name": "Dexamethasone Sodium Phosphate"
+  },
+  {
+    "name": "Sleep Aid"
+  },
+  {
+    "name": "Valsartan"
+  },
+  {
+    "name": "Chlorthalidone"
+  },
+  {
+    "name": "Diclofenac Potassium"
+  },
+  {
+    "name": "Diphenhydramine Hydrochloride"
+  },
+  {
+    "name": "Heparin Sodium"
+  },
+  {
+    "name": "Simvastatin"
+  },
+  {
+    "name": "Atorvastatin Calcium"
+  },
+  {
+    "name": "Ibuprofen"
+  },
+  {
+    "name": "Meclizine Hydrochloride"
+  },
+  {
+    "name": "Metoclopramide"
+  },
+  {
+    "name": "Nicotine Polacrilex"
+  },
+  {
+    "name": "Meloxicam"
+  },
+  {
+    "name": "Epsom Salt"
+  },
+  {
+    "name": "Eszopiclone"
+  },
+  {
+    "name": "Valacyclovir Hydrochloride"
+  },
+  {
+    "name": "Vancomycin Hydrochloride"
+  },
+  {
+    "name": "Metaxalone"
+  },
+  {
+    "name": "Morphine Sulfate"
+  },
+  {
+    "name": "Tobramycin"
+  },
+  {
+    "name": "Antispetic"
+  },
+  {
+    "name": "Lacosamide"
+  },
+  {
+    "name": "Metoprolol Succinate"
+  },
+  {
+    "name": "Midodrine Hydrochloride"
+  },
+  {
+    "name": "Naloxone Hydrochloride"
+  },
+  {
+    "name": "Nighttime Sleep Aid"
+  },
+  {
+    "name": "Pain Relief"
+  },
+  {
+    "name": "Phenazopyridine Hydrochloride"
+  },
+  {
+    "name": "Azithromycin Dihydrate"
+  },
+  {
+    "name": "Clindamycin Phosphate"
+  },
+  {
+    "name": "Nabumetone"
+  },
+  {
+    "name": "Tramadol Hydrochloride"
+  },
+  {
+    "name": "Zolpidem Tartrate"
+  },
+  {
+    "name": "Acyclovir"
+  },
+  {
+    "name": "Sumatriptan"
+  },
+  {
+    "name": "Aconitum Napellus"
+  },
+  {
+    "name": "Enalapril Maleate"
+  },
+  {
+    "name": "Memantine Hydrochloride"
+  },
+  {
+    "name": "Folic Acid"
+  },
+  {
+    "name": "Ketoconazole"
+  },
+  {
+    "name": "Mesalamine"
+  },
+  {
+    "name": "Risperidone"
+  },
+  {
+    "name": "Tretinoin"
+  },
+  {
+    "name": "Ibuprofen"
+  },
+  {
+    "name": "Anti-Diarrheal"
+  },
+  {
+    "name": "Atropine Sulfate"
+  },
+  {
+    "name": "Olopatadine Hydrochloride"
+  },
+  {
+    "name": "Oxybutynin Chloride"
+  },
+  {
+    "name": "Rosuvastatin"
+  },
+  {
+    "name": "Sunscreen"
+  },
+  {
+    "name": "Clonidine Hydrochloride"
+  },
+  {
+    "name": "Hydroxyzine Pamoate"
+  },
+  {
+    "name": "Amiodarone Hydrochloride"
+  },
+  {
+    "name": "Anticavity"
+  },
+  {
+    "name": "Axe"
+  },
+  {
+    "name": "Digoxin"
+  },
+  {
+    "name": "Gas Relief"
+  },
+  {
+    "name": "Metoprolol Tartrate"
+  },
+  {
+    "name": "Ursodiol"
+  },
+  {
+    "name": "Verapamil Hydrochloride"
+  },
+  {
+    "name": "Bupropion Hydrochloride Sr"
+  },
+  {
+    "name": "Donepezil Hydrochloride"
+  },
+  {
+    "name": "Prazosin Hydrochloride"
+  },
+  {
+    "name": "Tacrolimus"
+  },
+  {
+    "name": "Acetazolamide"
+  },
+  {
+    "name": "Erythromycin"
+  },
+  {
+    "name": "Lithium Carbonate"
+  },
+  {
+    "name": "Ofloxacin"
+  },
+  {
+    "name": "Oseltamivir Phosphate"
+  },
+  {
+    "name": "Tolnaftate"
+  },
+  {
+    "name": "Acetaminophen And Codeine Phosphate"
+  },
+  {
+    "name": "Air"
+  },
+  {
+    "name": "Bach Original Flower Remedies"
+  },
+  {
+    "name": "Clarithromycin"
+  },
+  {
+    "name": "Fluocinonide"
+  },
+  {
+    "name": "Guaifenesin"
+  },
+  {
+    "name": "Mucus Relief Dm"
+  },
+  {
+    "name": "Potassium Chloride"
+  },
+  {
+    "name": "Stool Softener"
+  },
+  {
+    "name": "Valacyclovir"
+  },
+  {
+    "name": "Antiseptic"
+  },
+  {
+    "name": "Clopidogrel"
+  },
+  {
+    "name": "Ezetimibe"
+  },
+  {
+    "name": "Irbesartan"
+  },
+  {
+    "name": "Meloxicam"
+  },
+  {
+    "name": "Pantoprazole Sodium"
+  },
+  {
+    "name": "Ramipril"
+  },
+  {
+    "name": "Betamethasone Dipropionate"
+  },
+  {
+    "name": "Cefadroxil"
+  },
+  {
+    "name": "Flecainide Acetate"
+  },
+  {
+    "name": "Oxcarbazepine"
+  },
+  {
+    "name": "Sterile Water"
+  },
+  {
+    "name": "Witch Hazel"
+  },
+  {
+    "name": "Agaricus Muscarius"
+  },
+  {
+    "name": "Ampicillin"
+  },
+  {
+    "name": "Carbidopa And Levodopa"
+  },
+  {
+    "name": "Clindamycin Hydrochloride"
+  },
+  {
+    "name": "Colchicine"
+  },
+  {
+    "name": "Diclofenac Sodium Delayed Release"
+  },
+  {
+    "name": "Docosanol"
+  },
+  {
+    "name": "Fenofibrate"
+  },
+  {
+    "name": "Hydroxyzine Hydrochloride"
+  },
+  {
+    "name": "Nitrogen"
+  },
+  {
+    "name": "Pravastatin Sodium"
+  },
+  {
+    "name": "Ramelteon"
+  },
+  {
+    "name": "Tramadol Hydrochloride"
+  },
+  {
+    "name": "Triamcinolone Acetonide"
+  },
+  {
+    "name": "Valsartan And Hydrochlorothiazide"
+  },
+  {
+    "name": "Gemfibrozil"
+  },
+  {
+    "name": "Medline"
+  },
+  {
+    "name": "Methimazole"
+  },
+  {
+    "name": "Nitrous Oxide"
+  },
+  {
+    "name": "Pain Reliever"
+  },
+  {
+    "name": "Petroleum"
+  },
+  {
+    "name": "Progesterone"
+  },
+  {
+    "name": "Simvastatin"
+  },
+  {
+    "name": "Sotalol Hydrochloride"
+  },
+  {
+    "name": "Verapamil Hydrochloride"
+  },
+  {
+    "name": "Temazepam"
+  },
+  {
+    "name": "Amoxicillin And Clavulanate Potassium"
+  },
+  {
+    "name": "Abrotanum"
+  },
+  {
+    "name": "Alcohol"
+  },
+  {
+    "name": "Atomoxetine"
+  },
+  {
+    "name": "Avobenzone, Homosalate, Octisalate"
+  },
+  {
+    "name": "Bupropion Hydrochloride (Xl)"
+  },
+  {
+    "name": "Cold Sore Fever Blister Treatment"
+  },
+  {
+    "name": "Dextrose"
+  },
+  {
+    "name": "Divalproex Sodium"
+  },
+  {
+    "name": "Famotidine"
+  },
+  {
+    "name": "Felodipine"
+  },
+  {
+    "name": "Methotrexate"
+  },
+  {
+    "name": "Motion Sickness Relief"
+  },
+  {
+    "name": "Ciprofloxacin"
+  },
+  {
+    "name": "Citroma"
+  },
+  {
+    "name": "Adapalene"
+  },
+  {
+    "name": "Antibacterial Hand Sanitizer"
+  },
+  {
+    "name": "Celecoxib"
+  },
+  {
+    "name": "Carbon Dioxide"
+  },
+  {
+    "name": "Daptomycin"
+  },
+  {
+    "name": "Diclofenac Sodium"
+  },
+  {
+    "name": "Docetaxel"
+  },
+  {
+    "name": "Minoxidil"
+  },
+  {
+    "name": "Mometasone Furoate"
+  },
+  {
+    "name": "Pain Relief Extra Strength"
+  },
+  {
+    "name": "Sodium Bicarbonate"
+  },
+  {
+    "name": "Torsemide"
+  },
+  {
+    "name": "Levothyroxine Sodium"
+  },
+  {
+    "name": "Acetaminophen"
+  },
+  {
+    "name": "Bupropion Hydrochloride"
+  },
+  {
+    "name": "Citalopram Hydrobromide"
+  },
+  {
+    "name": "Desmopressin Acetate"
+  },
+  {
+    "name": "Fluorouracil"
+  },
+  {
+    "name": "Magnesium Citrate"
+  },
+  {
+    "name": "Montelukast Sodium"
+  },
+  {
+    "name": "Oxcarbazepine"
+  },
+  {
+    "name": "Piperacillin And Tazobactam"
+  },
+  {
+    "name": "Metoprolol Succinate"
+  },
+  {
+    "name": "Omeprazole"
+  },
+  {
+    "name": "Absinthium"
+  },
+  {
+    "name": "Acid Reducer"
+  },
+  {
+    "name": "Amantadine Hydrochloride"
+  },
+  {
+    "name": "Banana Boat"
+  },
+  {
+    "name": "Buildable Blur"
+  },
+  {
+    "name": "Dapsone"
+  },
+  {
+    "name": "Docusate Sodium"
+  },
+  {
+    "name": "Duloxetine Delayed-Release"
+  },
+  {
+    "name": "Hawaiian Tropic"
+  },
+  {
+    "name": "Hydrochlorothiazide"
+  },
+  {
+    "name": "Nitrofurantoin"
+  },
+  {
+    "name": "Nitrofurantoin (Monohydrate/Macrocrystals)"
+  },
+  {
+    "name": "Pregabalin"
+  },
+  {
+    "name": "Quetiapine Fumarate"
+  },
+  {
+    "name": "Rizatriptan Benzoate"
+  },
+  {
+    "name": "Telmisartan"
+  },
+  {
+    "name": "Tranexamic Acid"
+  },
+  {
+    "name": "Venlafaxine"
+  },
+  {
+    "name": "Levocetirizine Dihydrochloride"
+  },
+  {
+    "name": "Abies Nigra"
+  },
+  {
+    "name": "Aspirin Low Dose"
+  },
+  {
+    "name": "Calcitriol"
+  },
+  {
+    "name": "Cefazolin"
+  },
+  {
+    "name": "Fluphenazine Hydrochloride"
+  },
+  {
+    "name": "Laxative"
+  },
+  {
+    "name": "Prochlorperazine Maleate"
+  },
+  {
+    "name": "Perphenazine"
+  },
+  {
+    "name": "Pioglitazone"
+  },
+  {
+    "name": "Rosuvastatin Calcium"
+  },
+  {
+    "name": "Testosterone Cypionate"
+  },
+  {
+    "name": "Zonisamide"
+  },
+  {
+    "name": "Acetaminophen And Codeine Phosphate"
+  },
+  {
+    "name": "Alcohol Prep Pads"
+  },
+  {
+    "name": "Antiseptic Mouth Rinse"
+  },
+  {
+    "name": "Bupropion Hydrochloride"
+  },
+  {
+    "name": "Budesonide"
+  },
+  {
+    "name": "Bupropion Hydrochloride Xl"
+  },
+  {
+    "name": "Calamine"
+  },
+  {
+    "name": "Dandruff"
+  },
+  {
+    "name": "Glycopyrrolate"
+  },
+  {
+    "name": "Linezolid"
+  },
+  {
+    "name": "Milk Of Magnesia"
+  },
+  {
+    "name": "Olmesartan Medoxomil"
+  },
+  {
+    "name": "Prednisone"
+  },
+  {
+    "name": "Sildenafil Citrate"
+  },
+  {
+    "name": "Tadalafil"
+  },
+  {
+    "name": "Venlafaxine"
+  },
+  {
+    "name": "Anastrozole"
+  },
+  {
+    "name": "Antiseptic Skin Cleanser"
+  },
+  {
+    "name": "Clindamycin Hydrochloride"
+  },
+  {
+    "name": "Childrens Allergy"
+  },
+  {
+    "name": "Childrens Ibuprofen"
+  },
+  {
+    "name": "Daytime Cold And Flu"
+  },
+  {
+    "name": "Desvenlafaxine"
+  },
+  {
+    "name": "Dexmethylphenidate Hydrochloride"
+  },
+  {
+    "name": "Dicyclomine Hydrochloride"
+  },
+  {
+    "name": "Diphenoxylate Hydrochloride And Atropine Sulfate"
+  },
+  {
+    "name": "Headache Relief Extra Strength"
+  },
+  {
+    "name": "Influenzinum"
+  },
+  {
+    "name": "Instant Hand Sanitizer"
+  },
+  {
+    "name": "Metolazone"
+  },
+  {
+    "name": "Succinylcholine Chloride"
+  },
+  {
+    "name": "Tula Radiant Skin Brightening Serum Skin Tint Sunscreen Broad Spectrum Spf 30"
+  },
+  {
+    "name": "Terazosin"
+  },
+  {
+    "name": "Theophylline"
+  },
+  {
+    "name": "Triamcinolone Acetonide"
+  },
+  {
+    "name": "Agnus Castus"
+  },
+  {
+    "name": "Cough Drops"
+  },
+  {
+    "name": "Diclofenac Sodium"
+  },
+  {
+    "name": "Epinephrine"
+  },
+  {
+    "name": "Gentamicin Sulfate"
+  },
+  {
+    "name": "Guanfacine"
+  },
+  {
+    "name": "Naloxone Hydrochloride"
+  },
+  {
+    "name": "Nebivolol"
+  },
+  {
+    "name": "Phenylephrine Hydrochloride"
+  },
+  {
+    "name": "Pramipexole Dihydrochloride"
+  },
+  {
+    "name": "Stomach Relief Regular Strength"
+  },
+  {
+    "name": "Terbinafine Hydrochloride"
+  },
+  {
+    "name": "Bupivacaine Hydrochloride"
+  },
+  {
+    "name": "Buprenorphine And Naloxone"
+  },
+  {
+    "name": "Desonide"
+  },
+  {
+    "name": "Estradiol"
+  },
+  {
+    "name": "Enoxaparin Sodium"
+  },
+  {
+    "name": "Gentle Laxative"
+  },
+  {
+    "name": "Low Dose Aspirin"
+  },
+  {
+    "name": "Metformin Hcl"
+  },
+  {
+    "name": "Methadone Hydrochloride"
+  },
+  {
+    "name": "Modafinil"
+  },
+  {
+    "name": "Oxaliplatin"
+  },
+  {
+    "name": "Promethazine Hydrochloride"
+  },
+  {
+    "name": "Stomach Relief"
+  },
+  {
+    "name": "Metronidazole"
+  },
+  {
+    "name": "Acetaminophen Extra Strength"
+  },
+  {
+    "name": "Aethusa Cynapium"
+  },
+  {
+    "name": "Clobetasol Propionate"
+  },
+  {
+    "name": "Carisoprodol"
+  },
+  {
+    "name": "Childrens Pain And Fever"
+  },
+  {
+    "name": "Cyclobenzaprine Hydrochloride"
+  },
+  {
+    "name": "Fexofenadine Hcl"
+  },
+  {
+    "name": "Fexofenadine Hydrochloride And Pseudoephedrine Hydrochloride"
+  },
+  {
+    "name": "Glyburide"
+  },
+  {
+    "name": "Hyoscyamine Sulfate"
+  },
+  {
+    "name": "Levocetirizine Dihydrochloride"
+  },
+  {
+    "name": "Meloxicam"
+  },
+  {
+    "name": "Nicotine Mini"
+  },
+  {
+    "name": "Risperidone"
+  },
+  {
+    "name": "Sertraline Hydrochloride"
+  },
+  {
+    "name": "Acyclovir"
+  },
+  {
+    "name": "Amlodipine Besylate And Benazepril Hydrochloride"
+  },
+  {
+    "name": "Azacitidine"
+  },
+  {
+    "name": "Belladonna"
+  },
+  {
+    "name": "Carbamazepine"
+  },
+  {
+    "name": "Ceftriaxone Sodium"
+  },
+  {
+    "name": "Cyanocobalamin"
+  },
+  {
+    "name": "Diphenhydramine Hydrochloride"
+  },
+  {
+    "name": "Ephedrine Sulfate"
+  },
+  {
+    "name": "Glycerin"
+  },
+  {
+    "name": "Ipratropium Bromide"
+  },
+  {
+    "name": "Ketorolac Tromethamine"
+  },
+  {
+    "name": "Medroxyprogesterone Acetate"
+  },
+  {
+    "name": "Miconazole 7"
+  },
+  {
+    "name": "Midazolam"
+  },
+  {
+    "name": "Mineral Oil"
+  },
+  {
+    "name": "Naltrexone Hydrochloride"
+  },
+  {
+    "name": "Ondansetron"
+  },
+  {
+    "name": "Pemetrexed"
+  },
+  {
+    "name": "Pirfenidone"
+  },
+  {
+    "name": "Quetiapine"
+  },
+  {
+    "name": "Solifenacin Succinate"
+  },
+  {
+    "name": "Allergy Relief"
+  },
+  {
+    "name": "Esomeprazole Magnesium"
+  },
+  {
+    "name": "Advanced Hand Sanitizer"
+  },
+  {
+    "name": "All Day Allergy Relief"
+  },
+  {
+    "name": "Amlodipine And Benazepril Hydrochloride"
+  },
+  {
+    "name": "Ampicillin And Sulbactam"
+  },
+  {
+    "name": "Anticavity Fluoride Rinse"
+  },
+  {
+    "name": "Bacitracin"
+  },
+  {
+    "name": "Calcium Acetate"
+  },
+  {
+    "name": "Cetirizine Hydrochloride (Allergy)"
+  },
+  {
+    "name": "Chest Rub"
+  },
+  {
+    "name": "Clindamycin Hydrochloride"
+  },
+  {
+    "name": "Cyclophosphamide"
+  },
+  {
+    "name": "Emtricitabine And Tenofovir Disoproxil Fumarate"
+  },
+  {
+    "name": "Fexofenadine Hydrochloride"
+  },
+  {
+    "name": "Hydromorphone Hydrochloride"
+  },
+  {
+    "name": "Lubiprostone"
+  },
+  {
+    "name": "Mycophenolate Mofetil"
+  },
+  {
+    "name": "Prednisone"
+  },
+  {
+    "name": "Phytonadione"
+  },
+  {
+    "name": "Primidone"
+  },
+  {
+    "name": "Ranolazine"
+  },
+  {
+    "name": "Sevelamer Carbonate"
+  },
+  {
+    "name": "Voriconazole"
+  },
+  {
+    "name": "Atorvastatin Calcium"
+  },
+  {
+    "name": "Celecoxib"
+  },
+  {
+    "name": "Escitalopram"
+  },
+  {
+    "name": "Arthritis Pain Reliever"
+  },
+  {
+    "name": "Banana Boat"
+  },
+  {
+    "name": "Bisoprolol Fumarate"
+  },
+  {
+    "name": "Buspirone Hydrochloride"
+  },
+  {
+    "name": "Childrens Allergy Relief"
+  },
+  {
+    "name": "Desoximetasone"
+  },
+  {
+    "name": "Febuxostat"
+  },
+  {
+    "name": "Gas Relief Extra Strength"
+  },
+  {
+    "name": "Gas Relief Ultra Strength"
+  },
+  {
+    "name": "Hand Sanitizer"
+  },
+  {
+    "name": "Hurricaine Topical Anesthetic"
+  },
+  {
+    "name": "Levothyroxine Sodium"
+  },
+  {
+    "name": "Mupirocin"
+  },
+  {
+    "name": "Nystatin And Triamcinolone Acetonide"
+  },
+  {
+    "name": "Hydrocortisone"
+  },
+  {
+    "name": "Ofloxacin"
+  },
+  {
+    "name": "Simvastatin"
+  },
+  {
+    "name": "Allergy Relief"
+  },
+  {
+    "name": "Bortezomib"
+  },
+  {
+    "name": "Cefuroxime Axetil"
+  },
+  {
+    "name": "Cefuroxime Axetil"
+  },
+  {
+    "name": "Chlorhexidine Gluconate"
+  },
+  {
+    "name": "Cinacalcet"
+  },
+  {
+    "name": "Clindamycin Phosphate And Benzoyl Peroxide"
+  },
+  {
+    "name": "Clobazam"
+  },
+  {
+    "name": "Clotrimazole And Betamethasone Dipropionate"
+  },
+  {
+    "name": "Decitabine"
+  },
+  {
+    "name": "Dextroamphetamine Saccharate, Amphetamine Aspartate Monohydrate, Dextroamphetamine Sulfate And Amphetamine Sulfate"
+  },
+  {
+    "name": "Dextroamphetamine Saccharate, Amphetamine Aspartate Monohydrate, Dextroamphetamine Sulfate, And Amphetamine Sulfate"
+  },
+  {
+    "name": "Dutasteride"
+  },
+  {
+    "name": "Epinephrine"
+  },
+  {
+    "name": "Esomeprazole Magnesium"
+  },
+  {
+    "name": "Furosemide"
+  },
+  {
+    "name": "Hydrocortisone"
+  },
+  {
+    "name": "Hydroxyzine Hydrochloride"
+  },
+  {
+    "name": "Hydroxyzine Pamoate"
+  },
+  {
+    "name": "Isosorbide Mononitrate"
+  },
+  {
+    "name": "Neomycin And Polymyxin B Sulfates And Hydrocortisone"
+  },
+  {
+    "name": "Nighttime Cold And Flu"
+  },
+  {
+    "name": "Oxycodone And Acetaminophen"
+  },
+  {
+    "name": "Rocuronium Bromide"
+  },
+  {
+    "name": "Sertraline"
+  },
+  {
+    "name": "Simethicone"
+  },
+  {
+    "name": "Testosterone"
+  },
+  {
+    "name": "Doxycycline"
+  },
+  {
+    "name": "Tramadol Hydrochloride"
+  },
+  {
+    "name": "70%"
+  },
+  {
+    "name": "Albuterol Sulfate"
+  },
+  {
+    "name": "Amlodipine Besylate"
+  },
+  {
+    "name": "Aspirin"
+  },
+  {
+    "name": "Azithromycin"
+  },
+  {
+    "name": "Allergy"
+  },
+  {
+    "name": "Arnica Montana"
+  },
+  {
+    "name": "Chlorpromazine Hydrochloride"
+  },
+  {
+    "name": "Cough And Cold Hbp"
+  },
+  {
+    "name": "Doxepin Hydrochloride"
+  },
+  {
+    "name": "Diphenhydramine Hcl"
+  },
+  {
+    "name": "Ecolab"
+  },
+  {
+    "name": "Ergocalciferol"
+  },
+  {
+    "name": "Guaifenesin And Dextromethorphan Hbr"
+  },
+  {
+    "name": "Mgc Health"
+  },
+  {
+    "name": "Magnesium Sulfate"
+  },
+  {
+    "name": "Meropenem"
+  },
+  {
+    "name": "Mini Nicotine"
+  },
+  {
+    "name": "Nadolol"
+  },
+  {
+    "name": "Olopatadine Hydrochloride Ophthalmic Solution"
+  },
+  {
+    "name": "Polyethylene Glycol 3350"
+  },
+  {
+    "name": "Potassium Chloride Extended-Release"
+  },
+  {
+    "name": "Sildenafil Citrate"
+  },
+  {
+    "name": "Temazepam"
+  },
+  {
+    "name": "Zoledronic Acid"
+  },
+  {
+    "name": "Propranolol Hydrochloride"
+  },
+  {
+    "name": "Acetylcysteine"
+  },
+  {
+    "name": "Atovaquone"
+  },
+  {
+    "name": "Bacitracin Zinc"
+  },
+  {
+    "name": "Benztropine Mesylate"
+  },
+  {
+    "name": "Chamomilla"
+  },
+  {
+    "name": "Cyproheptadine Hydrochloride"
+  },
+  {
+    "name": "Doxycycline"
+  },
+  {
+    "name": "Daytime Nighttime Cold Flu Relief"
+  },
+  {
+    "name": "Dextroamphetamine Saccharate, Amphetamine Aspartate, Dextroamphetamine Sulfate And Amphetamine Sulfate"
+  },
+  {
+    "name": "Doxorubicin Hydrochloride"
+  },
+  {
+    "name": "Hydrocodone Bitartrate And Acetaminophen"
+  },
+  {
+    "name": "Loratadine"
+  },
+  {
+    "name": "Meclizine Hydrochloride"
+  },
+  {
+    "name": "Megestrol Acetate"
+  },
+  {
+    "name": "Morphine Sulfate"
+  },
+  {
+    "name": "Nicotine Transdermal System"
+  },
+  {
+    "name": "Nitroglycerin"
+  },
+  {
+    "name": "Pravastatin Sodium"
+  },
+  {
+    "name": "Acetaminophen And Ibuprofen"
+  },
+  {
+    "name": "Adamas"
+  },
+  {
+    "name": "Alcohol Prep Pad"
+  },
+  {
+    "name": "Ammonia N 13"
+  },
+  {
+    "name": "Antibacterial"
+  },
+  {
+    "name": "Athletes Foot"
+  },
+  {
+    "name": "Bisoprolol Fumarate And Hydrochlorothiazide"
+  },
+  {
+    "name": "Buprenorphine"
+  },
+  {
+    "name": "Carisoprodol"
+  },
+  {
+    "name": "Chlorthalidone"
+  },
+  {
+    "name": "Cyproheptadine Hydrochloride"
+  },
+  {
+    "name": "Captopril"
+  },
+  {
+    "name": "Chlorzoxazone"
+  },
+  {
+    "name": "Dexamethasone Sodium Phosphate"
+  },
+  {
+    "name": "Daily Moisturizing"
+  },
+  {
+    "name": "Deferasirox"
+  },
+  {
+    "name": "Diltiazem Hydrochloride Extended-Release"
+  },
+  {
+    "name": "Diphenhydramine Hcl"
+  },
+  {
+    "name": "Enalapril Maleate"
+  },
+  {
+    "name": "Eszopiclone"
+  },
+  {
+    "name": "Folic Acid"
+  },
+  {
+    "name": "Felbamate"
+  },
+  {
+    "name": "First Aid Antiseptic"
+  },
+  {
+    "name": "Flucytosine"
+  },
+  {
+    "name": "Fluocinolone Acetonide"
+  },
+  {
+    "name": "Fosaprepitant"
+  },
+  {
+    "name": "H.E.B Solutions Sunscreen"
+  },
+  {
+    "name": "Irbesartan And Hydrochlorothiazide"
+  },
+  {
+    "name": "Isopropyl Alcohol"
+  },
+  {
+    "name": "Letrozole"
+  },
+  {
+    "name": "Mucus Relief"
+  },
+  {
+    "name": "Nitroglycerin"
+  },
+  {
+    "name": "Oxycodone Hydrochloride"
+  },
+  {
+    "name": "Phenylephrine Hydrochloride"
+  },
+  {
+    "name": "Povidone Iodine"
+  },
+  {
+    "name": "Propafenone Hydrochloride"
+  },
+  {
+    "name": "Rabeprazole Sodium"
+  },
+  {
+    "name": "Sacubitril And Valsartan"
+  },
+  {
+    "name": "Senna"
+  },
+  {
+    "name": "Silicea"
+  },
+  {
+    "name": "Sumatriptan Succinate"
+  },
+  {
+    "name": "Terbinafine"
+  },
+  {
+    "name": "Ticagrelor"
+  },
+  {
+    "name": "Timolol Maleate"
+  },
+  {
+    "name": "Zolmitriptan"
+  },
+  {
+    "name": "Prazosin Hydrochloride"
+  },
+  {
+    "name": "Tadalafil"
+  },
+  {
+    "name": "Tizanidine"
+  },
+  {
+    "name": "Amitriptyline Hydrochloride"
+  },
+  {
+    "name": "Acidum Aceticum"
+  },
+  {
+    "name": "Actaea Spicata"
+  },
+  {
+    "name": "Adenosine"
+  },
+  {
+    "name": "Azelastine Hydrochloride"
+  },
+  {
+    "name": "Betamethasone Valerate"
+  },
+  {
+    "name": "Bisacodyl"
+  },
+  {
+    "name": "Bryonia"
+  },
+  {
+    "name": "Burkhart"
+  },
+  {
+    "name": "Butalbital, Acetaminophen And Caffeine"
+  },
+  {
+    "name": "Chlorzoxazone"
+  },
+  {
+    "name": "Capecitabine"
+  },
+  {
+    "name": "Capsaicin"
+  },
+  {
+    "name": "Carvedilol Phosphate"
+  },
+  {
+    "name": "Chlordiazepoxide Hydrochloride"
+  },
+  {
+    "name": "Ciprofloxacin Hydrochloride"
+  },
+  {
+    "name": "Clopidogrel Bisulfate"
+  },
+  {
+    "name": "Cough Dm"
+  },
+  {
+    "name": "Doxycycline Hyclate"
+  },
+  {
+    "name": "Diaper Rash"
+  },
+  {
+    "name": "Fulvestrant"
+  },
+  {
+    "name": "Hydralazine Hydrochloride"
+  },
+  {
+    "name": "Hydroxychloroquine Sulfate"
+  },
+  {
+    "name": "Ibuprofen Pm"
+  },
+  {
+    "name": "Ivermectin"
+  },
+  {
+    "name": "Magnesium Oxide"
+  },
+  {
+    "name": "Metformin"
+  },
+  {
+    "name": "Methylprednisolone"
+  },
+  {
+    "name": "Nicotine"
+  },
+  {
+    "name": "Progesterone"
+  },
+  {
+    "name": "Stay Ageless Tinted Mineral Sunscreen Broad Spectrum Spf 30"
+  },
+  {
+    "name": "Stay Awake"
+  },
+  {
+    "name": "Tolnafate"
+  },
+  {
+    "name": "Basic Care Nicotine"
+  },
+  {
+    "name": "Bhs Beautiful Hair And Scalp"
+  },
+  {
+    "name": "Olmesartan Medoxomil"
+  },
+  {
+    "name": "Alcohol Wipes"
+  },
+  {
+    "name": "Antacid"
+  },
+  {
+    "name": "Argatroban"
+  },
+  {
+    "name": "Armodafinil"
+  },
+  {
+    "name": "Butalbital, Acetaminophen And Caffeine"
+  },
+  {
+    "name": "Borax"
+  },
+  {
+    "name": "Butalbital, Acetaminophen, And Caffeine"
+  },
+  {
+    "name": "Calcarea Phosphorica"
+  },
+  {
+    "name": "Causticum"
+  },
+  {
+    "name": "Chelidonium Majus"
+  },
+  {
+    "name": "Ciclopirox Olamine"
+  },
+  {
+    "name": "Cold And Flu Nighttime"
+  },
+  {
+    "name": "Dexmedetomidine Hydrochloride"
+  },
+  {
+    "name": "Dove Men Plus Care"
+  },
+  {
+    "name": "Flumazenil"
+  },
+  {
+    "name": "Good Sense Nicotine"
+  },
+  {
+    "name": "Headache Relief"
+  },
+  {
+    "name": "Hydrocortisone Acetate"
+  },
+  {
+    "name": "Isoniazid"
+  },
+  {
+    "name": "Methylphenidate Hydrochloride"
+  },
+  {
+    "name": "Mineral Lip Sunscreen"
+  },
+  {
+    "name": "Nafcillin"
+  },
+  {
+    "name": "Neostigmine Methylsulfate"
+  },
+  {
+    "name": "Phenobarbital Sodium"
+  },
+  {
+    "name": "Phosphorus"
+  },
+  {
+    "name": "Pulsatilla"
+  },
+  {
+    "name": "Senna Laxative"
+  },
+  {
+    "name": "Sepia"
+  },
+  {
+    "name": "Sulphur"
+  },
+  {
+    "name": "Valproic Acid"
+  },
+  {
+    "name": "Xylocaine"
+  },
+  {
+    "name": "Childrens Allergy Relief"
+  },
+  {
+    "name": "Divalproex Sodium"
+  },
+  {
+    "name": "Ketorolac Tromethamine"
+  },
+  {
+    "name": "Nitrofurantoin Macrocrystals"
+  },
+  {
+    "name": "2 In 1 Dandruff"
+  },
+  {
+    "name": "Abiraterone Acetate"
+  },
+  {
+    "name": "Alendronate Sodium"
+  },
+  {
+    "name": "Allergy Relief Childrens"
+  },
+  {
+    "name": "Ammonium Lactate"
+  },
+  {
+    "name": "Apis Mellifica"
+  },
+  {
+    "name": "Argentum Nitricum"
+  },
+  {
+    "name": "Arsenicum Album"
+  },
+  {
+    "name": "Bencocaine Topical Anesthetic"
+  },
+  {
+    "name": "Benzethonium Chloride Plus Dyclonine Hydrochloride"
+  },
+  {
+    "name": "Childrens Ibuprofen"
+  },
+  {
+    "name": "Cabergoline"
+  },
+  {
+    "name": "Calcarea Fluorica"
+  },
+  {
+    "name": "Calcium Chloride"
+  },
+  {
+    "name": "Carbo Vegetabilis"
+  },
+  {
+    "name": "Cetirizine Hcl"
+  },
+  {
+    "name": "Ciclopirox"
+  },
+  {
+    "name": "Claritin"
+  },
+  {
+    "name": "Cuprum Metallicum"
+  },
+  {
+    "name": "Cyclosporine"
+  },
+  {
+    "name": "Daytime Nighttime Cold And Flu"
+  },
+  {
+    "name": "Dextroamphetamine Sulfate"
+  },
+  {
+    "name": "Dofetilide"
+  },
+  {
+    "name": "Doxepin Hydrochloride"
+  },
+  {
+    "name": "Doxycycline Hyclate"
+  },
+  {
+    "name": "Dragon Pain Relieving Balm"
+  },
+  {
+    "name": "Ertapenem"
+  },
+  {
+    "name": "Escitalopram Oxalate"
+  },
+  {
+    "name": "Esmolol Hydrochloride"
+  },
+  {
+    "name": "Ferrum Phosphoricum"
+  },
+  {
+    "name": "Fludeoxyglucose F 18"
+  },
+  {
+    "name": "Fludrocortisone Acetate"
+  },
+  {
+    "name": "Guaifenesin"
+  },
+  {
+    "name": "Gelato Apf"
+  },
+  {
+    "name": "Helium"
+  },
+  {
+    "name": "Honey Lemon Cough Drops"
+  },
+  {
+    "name": "Kids Relief"
+  },
+  {
+    "name": "Lurasidone Hydrochloride"
+  },
+  {
+    "name": "Mexiletine Hydrochloride"
+  },
+  {
+    "name": "Misoprostol"
+  },
+  {
+    "name": "Nighttime Sleep Aid"
+  },
+  {
+    "name": "Nystatin"
+  },
+  {
+    "name": "Nighttime Cold And Flu Relief"
+  },
+  {
+    "name": "Paroxetine"
+  },
+  {
+    "name": "Pain Reliever Extra Strength"
+  },
+  {
+    "name": "Pain Reliever Pm"
+  },
+  {
+    "name": "Phentermine Hydrochloride"
+  },
+  {
+    "name": "Phenytoin Sodium"
+  },
+  {
+    "name": "Piroxicam"
+  },
+  {
+    "name": "Potassium Chloride Extended-Release"
+  },
+  {
+    "name": "Potassium Citrate"
+  },
+  {
+    "name": "Prednisolone Sodium Phosphate"
+  },
+  {
+    "name": "Rabeprazole Sodium"
+  },
+  {
+    "name": "Ropinirole"
+  },
+  {
+    "name": "Sennosides"
+  },
+  {
+    "name": "Tramadol Hydrochloride And Acetaminophen"
+  },
+  {
+    "name": "Bupropion Hydrochloride"
+  },
+  {
+    "name": "Fenofibrate"
+  },
+  {
+    "name": "Honey Lemon Cough Drops"
+  },
+  {
+    "name": "Nasal"
+  },
+  {
+    "name": "Adsol Red Cell Preservation"
+  },
+  {
+    "name": "Allopurinol"
+  },
+  {
+    "name": "Advanced Healing"
+  },
+  {
+    "name": "Alumina"
+  },
+  {
+    "name": "Aminocaproic Acid"
+  },
+  {
+    "name": "Amlodipine And Atorvastatin"
+  },
+  {
+    "name": "Amphetamine Sulfate"
+  },
+  {
+    "name": "Antifungal Liquid"
+  },
+  {
+    "name": "Antimonium Tartaricum"
+  },
+  {
+    "name": "Buspirone Hydrochloride"
+  },
+  {
+    "name": "Benzalkonium Chloride"
+  },
+  {
+    "name": "Berberis Vulgaris"
+  },
+  {
+    "name": "Carvedilol"
+  },
+  {
+    "name": "Cpda-1"
+  },
+  {
+    "name": "Calcarea Carbonica"
+  },
+  {
+    "name": "Candida Albicans"
+  },
+  {
+    "name": "Cantharis"
+  },
+  {
+    "name": "Castor Oil"
+  },
+  {
+    "name": "Cefpodoxime Proxetil"
+  },
+  {
+    "name": "Cefprozil"
+  },
+  {
+    "name": "Ceftriaxone"
+  },
+  {
+    "name": "Chloraprep One-Step"
+  },
+  {
+    "name": "Chlordiazepoxide Hydrochloride And Clidinium Bromide"
+  },
+  {
+    "name": "Cinchona Officinalis"
+  },
+  {
+    "name": "Clomipramine Hydrochloride"
+  },
+  {
+    "name": "Clonidine Hydrochloride"
+  },
+  {
+    "name": "Cocculus Indicus"
+  },
+  {
+    "name": "Cold And Flu Relief"
+  },
+  {
+    "name": "Colocynthis"
+  },
+  {
+    "name": "Cytarabine"
+  },
+  {
+    "name": "Dexmedetomidine"
+  },
+  {
+    "name": "Droxidopa"
+  },
+  {
+    "name": "Dulcamara"
+  },
+  {
+    "name": "Eliquis"
+  },
+  {
+    "name": "Econazole Nitrate"
+  },
+  {
+    "name": "Emtricitabine And Tenofovir Disoproxil Fumarate"
+  },
+  {
+    "name": "Enalapril Maleate"
+  },
+  {
+    "name": "Entacapone"
+  },
+  {
+    "name": "Everolimus"
+  },
+  {
+    "name": "Everyday Clean Dandruff"
+  },
+  {
+    "name": "Extra Strength Pain Relief"
+  },
+  {
+    "name": "Famciclovir"
+  },
+  {
+    "name": "Fluvoxamine Maleate"
+  },
+  {
+    "name": "Gemfibrozil"
+  },
+  {
+    "name": "Glyburide"
+  },
+  {
+    "name": "Gemcitabine"
+  },
+  {
+    "name": "Gentamicin"
+  },
+  {
+    "name": "Glyburide And Metformin Hydrochloride"
+  },
+  {
+    "name": "Graphites"
+  },
+  {
+    "name": "Hemorrhoidal"
+  },
+  {
+    "name": "Hypericum Perforatum"
+  },
+  {
+    "name": "Ibuprofen Oral"
+  },
+  {
+    "name": "Imipramine Hydrochloride"
+  },
+  {
+    "name": "Isotretinoin"
+  },
+  {
+    "name": "Itch Relief"
+  },
+  {
+    "name": "Lacosamide"
+  },
+  {
+    "name": "Leucovorin Calcium"
+  },
+  {
+    "name": "Loxapine"
+  },
+  {
+    "name": "Mexiletine Hydrochloride"
+  },
+  {
+    "name": "Montelukast"
+  },
+  {
+    "name": "Naltrexone Hydrochloride"
+  },
+  {
+    "name": "Naproxen"
+  },
+  {
+    "name": "Np Thyroid"
+  },
+  {
+    "name": "Neomycin And Polymyxin B Sulfates And Dexamethasone"
+  },
+  {
+    "name": "Oseltamivir Phosphate"
+  },
+  {
+    "name": "Patterson Dental Topical Anesthetic"
+  },
+  {
+    "name": "Pyridostigmine Bromide"
+  },
+  {
+    "name": "Sodium Bicarbonate"
+  },
+  {
+    "name": "Salicylic Acid"
+  },
+  {
+    "name": "Silver Sulfadiazine"
+  },
+  {
+    "name": "Thuja Occidentalis"
+  },
+  {
+    "name": "Tizanidne Hydrochloride"
+  },
+  {
+    "name": "Varenicline"
+  },
+  {
+    "name": "Zolpidem"
+  },
+  {
+    "name": "Doxycycline Hyclate"
+  },
+  {
+    "name": "Lidocaine"
+  },
+  {
+    "name": "Ropinirole"
+  },
+  {
+    "name": "Verapamil Hydrochloride"
+  },
+  {
+    "name": "Ziprasidone Hydrochloride"
+  },
+  {
+    "name": "Ampicillin"
+  },
+  {
+    "name": "Atropine Sulfate"
+  },
+  {
+    "name": "Abacavir"
+  },
+  {
+    "name": "Albendazole"
+  },
+  {
+    "name": "All Day Pain Relief"
+  },
+  {
+    "name": "Allium Cepa"
+  },
+  {
+    "name": "Anticavity Rinse"
+  },
+  {
+    "name": "Antimonium Crudum"
+  },
+  {
+    "name": "Aurum Metallicum"
+  },
+  {
+    "name": "Azathioprine"
+  },
+  {
+    "name": "Benztropine Mesylate"
+  },
+  {
+    "name": "Bio Spectra Attitude"
+  },
+  {
+    "name": "Buprenorphine"
+  },
+  {
+    "name": "Banophen"
+  },
+  {
+    "name": "Bethanechol Chloride"
+  },
+  {
+    "name": "Bicalutamide"
+  },
+  {
+    "name": "Bimatoprost"
+  },
+  {
+    "name": "Brimonidine Tartrate"
+  },
+  {
+    "name": "Burkhart Topical Anesthetic"
+  },
+  {
+    "name": "Butalbital, Acetaminophen, Caffeine"
+  },
+  {
+    "name": "Carbidopa And Levodopa"
+  },
+  {
+    "name": "Cetirizine Hydrochloride"
+  },
+  {
+    "name": "Calamine Plus Pramoxine Hcl"
+  },
+  {
+    "name": "Cefoxitin"
+  },
+  {
+    "name": "Cetirizine"
+  },
+  {
+    "name": "Cetirizine Hydrochloride"
+  },
+  {
+    "name": "Childrens Acetaminophen"
+  },
+  {
+    "name": "Childrens Pain Relief"
+  },
+  {
+    "name": "Cholestyramine"
+  },
+  {
+    "name": "Cina"
+  },
+  {
+    "name": "Cisatracurium Besylate"
+  },
+  {
+    "name": "Coffea Cruda"
+  },
+  {
+    "name": "Cold And Flu"
+  },
+  {
+    "name": "Conium Maculatum"
+  },
+  {
+    "name": "Docusate Sodium"
+  },
+  {
+    "name": "Dabigatran Etexilate"
+  },
+  {
+    "name": "Darunavir"
+  },
+  {
+    "name": "Drosera"
+  },
+  {
+    "name": "Entecavir"
+  },
+  {
+    "name": "Esokalli Testosterone Booster Oral Dissolving Film"
+  },
+  {
+    "name": "Esterified Estrogens And Methyltestosterone"
+  },
+  {
+    "name": "Etomidate"
+  },
+  {
+    "name": "Extra Strength Antacid"
+  },
+  {
+    "name": "Eye Itch Relief"
+  },
+  {
+    "name": "Fingolimod"
+  },
+  {
+    "name": "Gelato Topical Anesthetic"
+  },
+  {
+    "name": "Gelsemium Sempervirens"
+  },
+  {
+    "name": "Guaifenesin And Pseudoephedrine Hcl"
+  },
+  {
+    "name": "Hydroxychloroquine Sulfate"
+  },
+  {
+    "name": "Ibu"
+  },
+  {
+    "name": "Ibuprofen Childrens"
+  },
+  {
+    "name": "Icosapent Ethyl"
+  },
+  {
+    "name": "Imatinib Mesylate"
+  },
+  {
+    "name": "Ipratropium Bromide And Albuterol Sulfate"
+  },
+  {
+    "name": "Isosorbide Dinitrate"
+  },
+  {
+    "name": "Lactated Ringers"
+  },
+  {
+    "name": "Lamivudine"
+  },
+  {
+    "name": "Leg Body Makeup"
+  },
+  {
+    "name": "Liothyronine Sodium"
+  },
+  {
+    "name": "Metoprolol Succinate"
+  },
+  {
+    "name": "Mens Massage Cream"
+  },
+  {
+    "name": "Menstrual Complete"
+  },
+  {
+    "name": "Methazolamide"
+  },
+  {
+    "name": "Moxifloxacin"
+  },
+  {
+    "name": "Mycophenolate Mofetil"
+  },
+  {
+    "name": "Nasal Decongestant"
+  },
+  {
+    "name": "Nicardipine Hydrochloride"
+  },
+  {
+    "name": "Norepinephrine Bitartrate"
+  },
+  {
+    "name": "Nux Vomica"
+  },
+  {
+    "name": "Olmesartan Medoxomil And Hydrochlorothiazide"
+  },
+  {
+    "name": "Orphenadrine Citrate"
+  },
+  {
+    "name": "Oxybutynin Chloride Extended Release"
+  },
+  {
+    "name": "Paricalcitol"
+  },
+  {
+    "name": "Posaconazole"
+  },
+  {
+    "name": "Premier Value"
+  },
+  {
+    "name": "Pseudoephedrine Hydrochloride"
+  },
+  {
+    "name": "Regadenoson"
+  },
+  {
+    "name": "Rhus Tox"
+  },
+  {
+    "name": "Senna S"
+  },
+  {
+    "name": "Staphysagria"
+  },
+  {
+    "name": "Symphytum Officinale"
+  },
+  {
+    "name": "Teriflunomide"
+  },
+  {
+    "name": "Unlimited By Degree"
+  },
+  {
+    "name": "Vitamin D"
+  },
+  {
+    "name": "Walgreens"
+  },
+  {
+    "name": "Wart Remover"
+  },
+  {
+    "name": "Acetaminophen"
+  },
+  {
+    "name": "Azithromycin"
+  },
+  {
+    "name": "Cherry Cough Drops"
+  },
+  {
+    "name": "Epinephrine"
+  },
+  {
+    "name": "Equate Nicotine"
+  },
+  {
+    "name": "Lurasidone Hydrochloride"
+  },
+  {
+    "name": "Alendronate Sodium"
+  },
+  {
+    "name": "Amphetamine Sulfate"
+  },
+  {
+    "name": "Anastrozole"
+  },
+  {
+    "name": "Azelastine Hydrochloride"
+  },
+  {
+    "name": "Agraphis Nutans"
+  },
+  {
+    "name": "Albuterol Sulfate"
+  },
+  {
+    "name": "Alcohol-Free Anticavity"
+  },
+  {
+    "name": "Alfuzosin Hydrochloride"
+  },
+  {
+    "name": "Allergy Relief Dye Free"
+  },
+  {
+    "name": "Aspirin 81 Mg"
+  },
+  {
+    "name": "Aspirin Regular Strength"
+  },
+  {
+    "name": "Avant"
+  },
+  {
+    "name": "Benzonatate"
+  },
+  {
+    "name": "Baryta Carbonica"
+  },
+  {
+    "name": "Bayer Genuine Aspirin"
+  },
+  {
+    "name": "Bivalirudin"
+  },
+  {
+    "name": "Busulfan"
+  },
+  {
+    "name": "Carboprost Tromethamine"
+  },
+  {
+    "name": "Ccc Clean Corrective With Vitamin C Tinted Moisturizer Broad Spectrum Spf 30"
+  },
+  {
+    "name": "Ciclopirox"
+  },
+  {
+    "name": "Calcarea Sulphurica"
+  },
+  {
+    "name": "Cefepime"
+  },
+  {
+    "name": "Cherry Cough Drops"
+  },
+  {
+    "name": "Childrens Tylenol"
+  },
+  {
+    "name": "Clorazepate Dipotassium"
+  },
+  {
+    "name": "Desvenlafaxine"
+  },
+  {
+    "name": "Diazepam"
+  },
+  {
+    "name": "Docosanol"
+  },
+  {
+    "name": "Dye-Free Childrens Loratadine"
+  },
+  {
+    "name": "Dantrolene Sodium"
+  },
+  {
+    "name": "Dental City Topical Anesthetic"
+  },
+  {
+    "name": "Diethylpropion Hydrochloride Er"
+  },
+  {
+    "name": "Dorzolamide Hydrochloride And Timolol Maleate"
+  },
+  {
+    "name": "Doxepin"
+  },
+  {
+    "name": "Doxercalciferol"
+  },
+  {
+    "name": "Dry Scalp Care"
+  },
+  {
+    "name": "Extra Strength Acetaminophen"
+  },
+  {
+    "name": "Eplerenone"
+  },
+  {
+    "name": "Eptifibatide"
+  },
+  {
+    "name": "Equate"
+  },
+  {
+    "name": "Esomeprazole"
+  },
+  {
+    "name": "Exemestane"
+  },
+  {
+    "name": "Extra Strength Gas Relief"
+  },
+  {
+    "name": "Extra Strength Pain Reliever"
+  },
+  {
+    "name": "Fb Hydrating Hand Sanitizer"
+  },
+  {
+    "name": "Fentanyl"
+  },
+  {
+    "name": "Fexofenadine Hydrochloride"
+  },
+  {
+    "name": "Fluocinonide"
+  },
+  {
+    "name": "Family Wellness"
+  },
+  {
+    "name": "Fexofenadine Hcl"
+  },
+  {
+    "name": "Fexofenadine Hydrochloride"
+  },
+  {
+    "name": "Find Your Happy Place"
+  },
+  {
+    "name": "Flurbiprofen"
+  },
+  {
+    "name": "Gemcitabine"
+  },
+  {
+    "name": "Galantamine"
+  },
+  {
+    "name": "Glonoinum"
+  },
+  {
+    "name": "Guanfacine Extended-Release"
+  },
+  {
+    "name": "Hismile"
+  },
+  {
+    "name": "Haloperidol Decanoate"
+  },
+  {
+    "name": "Hydrocortisone 1%"
+  },
+  {
+    "name": "Hyoscyamus Niger"
+  },
+  {
+    "name": "Isosorbide Mononitrate"
+  },
+  {
+    "name": "Imiquimod"
+  },
+  {
+    "name": "Isopropyl Rubbing Alcohol"
+  },
+  {
+    "name": "Labetalol Hydrochloride"
+  },
+  {
+    "name": "Lidocaine"
+  },
+  {
+    "name": "Lidocaine Hydrochloride"
+  },
+  {
+    "name": "Loratadine Allergy Relief"
+  },
+  {
+    "name": "Loratadine Odt"
+  },
+  {
+    "name": "Loratadine And Pseudoephedrine Sulfate"
+  },
+  {
+    "name": "Lycopodium Clavatum"
+  },
+  {
+    "name": "Metronidazole"
+  },
+  {
+    "name": "Menthol Cough Drops"
+  },
+  {
+    "name": "Midazolam Hydrochloride"
+  },
+  {
+    "name": "Mineral Sunscreen"
+  },
+  {
+    "name": "Moisturizing Antibacterial"
+  },
+  {
+    "name": "Multivitamin With Fluoride"
+  },
+  {
+    "name": "Nebivolol"
+  },
+  {
+    "name": "Nitrofurantoin"
+  },
+  {
+    "name": "Nitrous Oxide"
+  },
+  {
+    "name": "Naproxen And Esomeprazole Magnesium"
+  },
+  {
+    "name": "Night Time Cold And Flu Relief Multi Symptom"
+  },
+  {
+    "name": "Nighttime Sleep-Aid"
+  },
+  {
+    "name": "Posaconazole"
+  },
+  {
+    "name": "Paclitaxel"
+  },
+  {
+    "name": "Pain Relief Pm"
+  }
+]

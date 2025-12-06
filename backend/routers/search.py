@@ -588,8 +588,8 @@ async def universal_search(request: SearchRequest):
             
             Donne un résumé concis en français de ce qui a été trouvé.
             """
-            ai_response = await ai_router.chat(summary_prompt, max_tokens=200)
-            ai_summary = ai_response.get("content", "")
+            ai_response = await ai_router.route(summary_prompt)
+            ai_summary = ai_response.get("response", "")
         except:
             pass
     

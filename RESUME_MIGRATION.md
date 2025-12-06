@@ -205,3 +205,4 @@ sudo bash backend/scripts/verify_deployment.sh
 
 *Dernière mise à jour : Décembre 2024 - v2.3.0*
 
+

@@ -92,3 +92,4 @@ def test_prometheus_format():
     assert "api_requests_total" in prometheus_output
 
 
+

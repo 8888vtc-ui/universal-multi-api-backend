@@ -1,229 +1,107 @@
-# 🇮🇱 Guide Touristique Israélien
+# 🚀 WikiAsk - Frontend
 
-**Type** : Sous-Projet Frontend  
-**Backend** : Moteur Multi-API Universel  
-**Version** : 1.0.0
+Moteur de recherche IA intelligent qui agrège 78+ APIs pour des résultats complets et précis.
 
----
+## ✨ Fonctionnalités
 
-## 🎯 **CONCEPT**
+- 🔍 **Recherche intelligente** avec auto-complétion
+- ✨ **Recherche IA** (RAG) avec synthèse intelligente
+- 💬 **Chat conversationnel** avec 10 providers IA
+- 🌐 **Explorer 78+ APIs** avec testeur intégré
+- 📊 **Dashboard analytics** pour les utilisateurs Pro
+- 📱 **Design responsive** (Mobile/Tablet/Desktop)
+- 🌙 **Dark mode** par défaut
 
-Ce projet est un **sous-projet frontend** qui consomme les APIs du **backend multi-API universel**.
+## 🛠️ Technologies
 
-### **Architecture**
+- **Next.js 14.2.5** - Framework React
+- **TypeScript** - Typage statique
+- **Tailwind CSS** - Styling
+- **Zustand** - State management
+- **Lucide React** - Icônes
 
-```
-Backend Central (Port 8000)
-    ↓ (APIs REST)
-Frontend Guide Israélien (Port 3000)
-    ↓
-Utilisateurs finaux
-```
-
-**Le frontend NE contient PAS les APIs**, il les consomme depuis le backend central.
-
----
-
-## 📱 **FONCTIONNALITÉS**
-
-### **Chat IA Bilingue**
-- Interface en hébreu (RTL) et anglais
-- Conseils voyage personnalisés
-- Recommandations kasher et Shabbat
-- Alertes sécurité
-
-### **Intégrations Backend**
-- **IA** : Chat conversationnel (Groq, Mistral, Gemini)
-- **Météo** : Prévisions destinations (OpenWeather)
-- **Devises** : Conversion Shekel ↔ autres (ExchangeRate)
-- **Restaurants** : Recherche kasher (Yelp)
-
----
-
-## 🏗️ **ARCHITECTURE**
-
-### **Frontend (Next.js 14)**
-
-```
-frontend/
-├── app/
-│   ├── page.tsx              # Page principale
-│   ├── layout.tsx            # Layout racine
-│   └── globals.css           # Styles globaux
-├── components/
-│   ├── Header.tsx            # En-tête + switch langue
-│   ├── ChatInterface.tsx     # Interface chat
-│   └── MessageBubble.tsx     # Bulles messages
-├── hooks/
-│   └── useChat.ts            # Hook custom chat
-└── lib/
-    ├── api.ts                # Client API (consomme backend)
-    └── i18n.ts               # Traductions HE/EN
-```
-
-### **Consommation du Backend**
-
-```typescript
-// lib/api.ts
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-
-export async function sendMessage(message: string, language: string) {
-  const response = await fetch(`${API_URL}/api/chat`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, language })
-  });
-  
-  return response.json();
-}
-```
-
-**Le frontend appelle simplement les endpoints du backend, il ne gère PAS les APIs directement.**
-
----
-
-## 🚀 **INSTALLATION**
-
-### **Prérequis**
-- Node.js 18+
-- Backend multi-API en cours d'exécution (port 8000)
-
-### **Installation**
+## 📦 Installation
 
 ```bash
-cd frontend
 npm install
 ```
 
-### **Configuration**
-
-Créer `.env.local` :
-
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_DEFAULT_LANGUAGE=he
-```
-
-### **Démarrage**
+## 🚀 Développement
 
 ```bash
 npm run dev
 ```
 
-**Application** : http://localhost:3000
+Ouvrir [http://localhost:3000](http://localhost:3000)
 
----
-
-## 🔌 **DÉPENDANCES AU BACKEND**
-
-Ce frontend **NÉCESSITE** que le backend soit en cours d'exécution.
-
-### **Endpoints Utilisés**
-
-| Endpoint | Usage |
-|----------|-------|
-| `POST /api/chat` | Chat IA conversationnel |
-| `GET /api/health` | Vérification santé backend |
-| `GET /api/entertainment/restaurants/search` | Recherche restaurants kasher |
-
-**Sans le backend, le frontend ne fonctionne pas.**
-
----
-
-## 🎨 **FONCTIONNALITÉS**
-
-### **Actuelles**
-- ✅ Chat IA bilingue (hébreu RTL + anglais)
-- ✅ Interface moderne responsive
-- ✅ Dark mode automatique
-- ✅ Historique conversation
-- ✅ Support hébreu natif
-
-### **À Venir**
-- [ ] Intégration météo temps réel
-- [ ] Conversion devises automatique
-- [ ] Recherche restaurants kasher
-- [ ] Alertes sécurité destinations
-- [ ] Système RAG (mémoire)
-- [ ] Mode hors-ligne (PWA)
-
----
-
-## 📊 **RELATION AVEC LE BACKEND**
-
-### **Ce que fait le Frontend**
-- 🎨 Interface utilisateur
-- 🌍 Gestion langues (HE/EN)
-- 💬 Affichage messages
-- 📱 Responsive design
-
-### **Ce que fait le Backend**
-- 🤖 Intelligence artificielle
-- 🌤️ Données météo
-- 💱 Taux de change
-- 🍽️ Données restaurants
-- 🔄 Fallback providers
-- 📊 Gestion quotas
-
-**Séparation claire des responsabilités !**
-
----
-
-## 🚀 **DÉPLOIEMENT**
-
-### **Frontend (Vercel)**
+## 🏗️ Build
 
 ```bash
-# Déployer sur Vercel
-vercel
-
-# Configurer les variables d'environnement
-NEXT_PUBLIC_API_URL=https://votre-backend.com
+npm run build
+npm start
 ```
 
-### **Backend (VPS)**
+## 🌐 Déploiement
 
-Le backend doit être déployé séparément sur un VPS ou service cloud.
+### Netlify (Recommandé)
 
-**Les deux doivent être accessibles pour que l'application fonctionne.**
+1. **Via GitHub** :
+   - Pousser le code sur GitHub
+   - Connecter le repo à Netlify
+   - Netlify détecte automatiquement la config
 
----
+2. **Via CLI** :
+   ```bash
+   npm install -g netlify-cli
+   netlify login
+   netlify init
+   netlify deploy --prod
+   ```
 
-## 🎯 **AUTRES SOUS-PROJETS**
+### Variables d'environnement
 
-Ce frontend est **l'un des 50+ sous-projets** prévus qui utilisent le même backend :
+Créer `.env.local` :
+```env
+NEXT_PUBLIC_API_URL=https://api.wikiask.net
+NEXT_PUBLIC_APP_NAME=WikiAsk
+NEXT_PUBLIC_APP_SLOGAN=Ask Everything. Know Everything.
+```
 
-1. **Guide Touristique Israélien** ← Ce projet
-2. Assistant Finance
-3. Recherche Médicale
-4. Guide Loisirs
-5. ... 46+ autres
+Dans Netlify Dashboard → Site settings → Environment variables
 
-**Tous partagent le même backend central.**
+## 📁 Structure
 
----
+```
+frontend/
+├── app/              # Pages Next.js
+├── components/        # Composants React
+├── hooks/            # Hooks personnalisés
+├── lib/              # Utilitaires et API client
+├── store/            # Zustand store
+├── public/           # Assets statiques
+└── netlify.toml      # Configuration Netlify
+```
 
-## 📝 **DÉVELOPPEMENT**
+## 🔗 Domaines
 
-### **Ajouter une Nouvelle Fonctionnalité**
+- **Production** : https://wikiask.net
+- **API** : https://api.wikiask.net
+- **Redirections** : wikiask.fr, wikiask.io → wikiask.net
 
-1. Vérifier si l'API existe dans le backend
-2. Si non, demander l'ajout au backend
-3. Consommer l'endpoint dans `lib/api.ts`
-4. Créer le composant frontend
-5. Intégrer dans l'interface
+## 📝 Scripts
 
-**Ne jamais ajouter de logique API dans le frontend !**
+- `npm run dev` - Développement
+- `npm run build` - Build production
+- `npm run start` - Serveur production
+- `npm run lint` - Linter
 
----
+## 🎨 Design
 
-## 🎉 **SUCCÈS**
+- **Thème** : Dark mode par défaut
+- **Couleurs** : Indigo/Purple gradient
+- **Style** : Glassmorphism moderne
+- **Responsive** : Mobile-first
 
-Ce sous-projet démontre :
+## 📄 License
 
-✅ **Architecture modulaire** (frontend ↔ backend)  
-✅ **Réutilisation des APIs** (backend partagé)  
-✅ **Développement rapide** (APIs déjà prêtes)  
-✅ **Scalabilité** (facile d'ajouter features)  
-
-**Le frontend consomme, le backend fournit ! 🚀**
+Propriétaire - WikiAsk © 2024

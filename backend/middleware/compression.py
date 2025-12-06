@@ -58,3 +58,4 @@ def get_gzip_middleware(minimum_size: int = 500):
     return GZipMiddleware
 
 
+

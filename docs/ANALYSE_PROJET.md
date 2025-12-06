@@ -344,3 +344,4 @@ analysis = api.chat(f"Analyse: {price}, {news}")
 **Dernière mise à jour** : Décembre 2024
 
 
+

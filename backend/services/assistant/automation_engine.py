@@ -191,8 +191,8 @@ class AutomationEngine:
             }}
             """
             
-            response = await self.ai_router.chat(prompt, max_tokens=500)
-            content = response.get("content", "")
+            response = await self.ai_router.route(prompt)
+            content = response.get("response", "")
             
             # Parser JSON
             import json
@@ -236,5 +236,6 @@ class AutomationEngine:
 
 # Singleton instance
 automation_engine = AutomationEngine()
+
 
 

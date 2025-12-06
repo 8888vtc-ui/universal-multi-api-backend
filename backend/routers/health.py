@@ -17,7 +17,7 @@ async def health_check():
     """
     return HealthResponse(
         status="healthy",
-        version="1.0.0",
+        version="2.4.0",
         ai_providers=ai_router.get_status(),
         cache_status="available" if cache_service.health_check() else "unavailable"
     )

@@ -163,3 +163,4 @@ class TestAssistantRouter:
         assert "user_id" in profile or "total_interactions" in profile
 
 
+

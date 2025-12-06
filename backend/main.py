@@ -1,6 +1,6 @@
 """
-Universal Multi-API Backend v2.3.0
-Production-Ready FastAPI Backend with 40+ API integrations
+Universal Multi-API Backend v2.4.0
+Production-Ready FastAPI Backend with 70+ API integrations
 """
 import os
 import logging
@@ -27,7 +27,7 @@ startup_results = validate_startup(fail_on_error=False)
 async def lifespan(app: FastAPI):
     """Application lifespan - startup and shutdown events"""
     # Startup
-    logger.info("🚀 Starting Universal Multi-API Backend v2.3.0...")
+    logger.info("🚀 Starting Universal Multi-API Backend v2.4.0...")
     
     # Log enabled features
     from services.ai_router import ai_router
@@ -63,9 +63,23 @@ from routers import (
     chat, embeddings, health, finance, medical, entertainment,
     translation, news, messaging, weather, space, sports,
     utilities, geocoding, nutrition, email, media, boltai,
-    aggregated, search, video, assistant, analytics, auth, health_check
+    aggregated, search, assistant, analytics, auth, health_check,
+    countries, webhooks, wikipedia, giphy, books, omdb, ip_geolocation, youtube,
+    jsonplaceholder, randomuser, fakestore, quotes, lorem, pixabay, lorempicsum,
+    github, worldtime, coincap, tinyurl,
+    # New APIs (December 2024 - Extended)
+    jokes, trivia, bored, numbers, animals, exchange, export, openlibrary,
+    nameanalysis, history
 )
-from routers import health_deep, metrics
+from routers import health_deep, metrics, search_optimized, ai_search
+
+# Video router optionnel (dépendances lourdes)
+try:
+    from routers import video
+    VIDEO_AVAILABLE = True
+except ImportError:
+    VIDEO_AVAILABLE = False
+    logger.warning("⚠️ Video router not available (missing dependencies)")
 
 # Create FastAPI app with lifespan
 app = FastAPI(
@@ -73,25 +87,45 @@ app = FastAPI(
     description="""
     ## 🚀 Production-Ready Multi-API Backend
     
-    Complete backend with 40+ API integrations:
-    - 🤖 **AI Chat**: Groq, Mistral, Gemini, OpenRouter, Ollama
-    - 💰 **Finance**: CoinGecko, Alpha Vantage, Yahoo Finance
-    - 📰 **News**: NewsAPI, NewsData.io
-    - 🌤️ **Weather**: OpenMeteo, WeatherAPI
-    - 🗺️ **Geocoding**: Nominatim, OpenCage
-    - 🎬 **Video**: D-ID, ElevenLabs
-    - 🔍 **Universal Search**: Cross-API search
-    - 📊 **Analytics**: Metrics, monitoring
+    Complete backend with **70+ API integrations**:
     
-    ### Features
+    ### 🤖 AI & LLM (10 providers)
+    Groq, Mistral, Gemini, Anthropic, Cohere, AI21, Perplexity, Hugging Face, OpenRouter, Ollama
+    
+    ### 💰 Finance & Crypto
+    CoinGecko, CoinCap, Alpha Vantage, Yahoo Finance, Exchange Rate API
+    
+    ### 📰 Media & Content
+    NewsAPI, NewsData.io, OMDB (movies), YouTube, Giphy, Pixabay
+    
+    ### 🌍 Location & Geo
+    OpenMeteo, WeatherAPI, REST Countries, IP Geolocation, Nominatim, OpenCage
+    
+    ### 📚 Knowledge & Data
+    Wikipedia, Google Books, Open Library, Open Trivia DB, Numbers API
+    
+    ### 🎭 Fun & Entertainment
+    JokeAPI, Chuck Norris, Bored API, Dog API, Cat API, Lorem Picsum
+    
+    ### 🔧 Utilities
+    TinyURL, Export (JSON/CSV/MD), Name Analysis (Agify/Genderize), Search History
+    
+    ### 🔍 Intelligent Search
+    - **AI Search**: IA + Data combined search
+    - **Optimized Search**: Category-based grouping
+    - **Universal Search**: Cross-API queries
+    
+    ### ⚙️ Features
     - Intelligent fallback between providers
     - Redis caching with memory fallback
     - Rate limiting & circuit breaker
     - JWT authentication
     - Request tracing (X-Request-ID)
     - Prometheus metrics
+    - Export to JSON/CSV/Markdown
+    - Search history tracking
     """,
-    version="2.3.0",
+    version="2.4.0",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
@@ -181,6 +215,8 @@ app.include_router(assistant.router)
 # Search & Aggregation
 app.include_router(search.router)
 app.include_router(aggregated.router)
+app.include_router(search_optimized.router)
+app.include_router(ai_search.router)
 
 # Finance
 app.include_router(finance.router)
@@ -188,7 +224,8 @@ app.include_router(finance.router)
 # Media & Content
 app.include_router(news.router)
 app.include_router(media.router)
-app.include_router(video.router)
+if VIDEO_AVAILABLE:
+    app.include_router(video.router)
 app.include_router(entertainment.router)
 
 # Location & Weather
@@ -211,6 +248,41 @@ app.include_router(utilities.router)
 app.include_router(auth.router)
 app.include_router(analytics.router)
 
+# New APIs (December 2024)
+app.include_router(countries.router)
+app.include_router(webhooks.router)
+app.include_router(wikipedia.router)
+app.include_router(giphy.router)
+app.include_router(books.router)
+app.include_router(omdb.router)
+app.include_router(ip_geolocation.router)
+app.include_router(youtube.router)
+
+# Free APIs (January 2025)
+app.include_router(jsonplaceholder.router)
+app.include_router(randomuser.router)
+app.include_router(fakestore.router)
+app.include_router(quotes.router)
+app.include_router(lorem.router)
+app.include_router(pixabay.router)
+app.include_router(lorempicsum.router)
+app.include_router(github.router)
+app.include_router(worldtime.router)
+app.include_router(coincap.router)
+app.include_router(tinyurl.router)
+
+# Extended Free APIs (December 2024)
+app.include_router(jokes.router)      # JokeAPI + Chuck Norris
+app.include_router(trivia.router)     # Open Trivia DB
+app.include_router(bored.router)      # Bored API (activities)
+app.include_router(numbers.router)    # Numbers API (facts)
+app.include_router(animals.router)    # Dog + Cat APIs
+app.include_router(exchange.router)   # Exchange Rate API
+app.include_router(export.router)     # Export (JSON, CSV, Markdown)
+app.include_router(openlibrary.router)  # Open Library (free books)
+app.include_router(nameanalysis.router)  # Agify/Genderize/Nationalize
+app.include_router(history.router)    # Search History
+
 
 # ============================================
 # ROOT ENDPOINTS
@@ -229,7 +301,7 @@ async def root():
     
     return {
         "name": "Universal Multi-API Backend",
-        "version": "2.3.0",
+        "version": "2.4.0",
         "status": "operational",
         "features": {
             "ai_providers": len(available_ai),
@@ -257,7 +329,7 @@ async def api_info():
     from services.cache import cache_service
     
     return {
-        "version": "2.3.0",
+        "version": "2.4.0",
         "environment": os.getenv("ENVIRONMENT", "development"),
         "python_version": os.sys.version.split()[0],
         "features": {
@@ -292,21 +364,23 @@ if __name__ == "__main__":
     import uvicorn
     
     host = os.getenv("API_HOST", "0.0.0.0")
-    port = int(os.getenv("API_PORT", 8000))
+    # Fly.io utilise PORT, sinon API_PORT, sinon 8000 par défaut
+    port = int(os.getenv("PORT", os.getenv("API_PORT", 8000)))
     reload = os.getenv("API_RELOAD", "true").lower() == "true"
     log_level = os.getenv("LOG_LEVEL", "info").lower()
     workers = int(os.getenv("API_WORKERS", 1))
     
     banner = f"""
     ╔══════════════════════════════════════════════════════════════════╗
-    ║  🚀 Universal Multi-API Backend v2.3.0                           ║
+    ║  🚀 Universal Multi-API Backend v2.4.0                           ║
     ║  ═══════════════════════════════════════════════════════════════ ║
     ║  📡 Server:     http://{host}:{port:<5}                              ║
     ║  📚 Docs:       http://{host}:{port}/docs                            ║
     ║  ❤️  Health:     http://{host}:{port}/api/health                     ║
     ║  📊 Metrics:    http://{host}:{port}/api/metrics                     ║
     ║  ═══════════════════════════════════════════════════════════════ ║
-    ║  Features: AI Chat | Finance | News | Weather | Video | Search   ║
+    ║  APIs: 70+ (AI | Finance | News | Weather | Jokes | Books...)    ║
+    ║  Features: AI Search | Export | History | Fallback | Cache       ║
     ║  Security: JWT | Rate Limit | CORS | Headers | Sanitization      ║
     ╚══════════════════════════════════════════════════════════════════╝
     """

@@ -161,8 +161,8 @@ class AssistantRouter:
             Réponds uniquement avec la suggestion, sans explication.
             """
             
-            response = await self.ai_router.chat(prompt, max_tokens=50)
-            return response.get("content", "").strip()
+            response = await self.ai_router.route(prompt)
+            return response.get("response", "").strip()
         except:
             return None
     

@@ -80,8 +80,8 @@ class TaskExecutor:
             Donne un résumé concis et utile en français.
             """
             
-            response = await self.ai_router.chat(prompt, max_tokens=200)
-            summary = response.get("content", "")
+            response = await self.ai_router.route(prompt)
+            summary = response.get("response", "")
             
             return {
                 "success": True,
@@ -210,5 +210,6 @@ class TaskExecutor:
 
 # Singleton instance
 task_executor = TaskExecutor()
+
 
 

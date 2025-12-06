@@ -1,0 +1,3 @@
+"""Open Trivia Database API"""
+
+

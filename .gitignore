@@ -151,3 +151,7 @@ dump.rdb
 # Docker
 .dockerignore
 
+
+
+# Local Netlify folder
+.netlify

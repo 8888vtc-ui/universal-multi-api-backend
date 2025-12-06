@@ -233,3 +233,4 @@ Les utilisateurs sont stockés dans `data/auth.db` (SQLite) avec :
 **Dernière mise à jour** : Décembre 2024
 
 
+

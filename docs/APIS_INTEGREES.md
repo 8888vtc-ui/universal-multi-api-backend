@@ -214,7 +214,159 @@ Ce document liste **TOUTES** les APIs intégrées dans le serveur backend et con
 | **Messaging** | 1 | `messaging.py` | ✅ |
 | **Vidéo IA** | 2 | `video.py` | ✅ |
 
-**TOTAL** : **40+ Providers** | **23 Routers** | **100+ Endpoints**
+**TOTAL** : **66+ Providers** | **42 Routers** | **195+ Endpoints**
+
+---
+
+## 🆕 APIs Gratuites Ajoutées (Janvier 2025)
+
+### 📝 Données de Test (3 providers)
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **JSONPlaceholder** | `jsonplaceholder.py` | `/api/jsonplaceholder/*` | ✅ NOUVEAU |
+| **RandomUser** | `randomuser.py` | `/api/randomuser/*` | ✅ NOUVEAU |
+| **FakeStore** | `fakestore.py` | `/api/fakestore/*` | ✅ NOUVEAU |
+
+**Total** : 3 providers données de test
+
+---
+
+### 💬 Contenu (2 providers)
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **Quotes & Advice** | `quotes.py` | `/api/quotes/*` | ✅ NOUVEAU |
+| **Lorem Ipsum** | `lorem.py` | `/api/lorem/*` | ✅ NOUVEAU |
+
+**Total** : 2 providers contenu
+
+---
+
+### 🖼️ Images (2 providers)
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **Pixabay** | `pixabay.py` | `/api/pixabay/*` | ✅ NOUVEAU |
+| **Lorem Picsum** | `lorempicsum.py` | `/api/lorempicsum/*` | ✅ NOUVEAU |
+
+**Total** : 2 providers images
+
+---
+
+### 💻 Développement (1 provider)
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **GitHub** | `github.py` | `/api/github/*` | ✅ NOUVEAU |
+
+**Total** : 1 provider développement
+
+---
+
+### 🌍 Utilitaires (3 providers)
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **World Time API** | `worldtime.py` | `/api/worldtime/*` | ✅ NOUVEAU |
+| **TinyURL** | `tinyurl.py` | `/api/tinyurl/*` | ✅ NOUVEAU |
+| **IP Geolocation** | `ip_geolocation.py` | `/api/ip/*` | ✅ Intégré |
+
+**Total** : 3 providers utilitaires
+
+---
+
+### 💰 Finance Supplémentaire (1 provider)
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **CoinCap** | `coincap.py` | `/api/coincap/*` | ✅ NOUVEAU |
+
+**Total** : 1 provider finance supplémentaire
+
+---
+
+**TOTAL NOUVELLES APIs** : **11 APIs gratuites** ajoutées en Janvier 2025
+
+---
+
+### 🌍 Countries (1 provider) - NOUVEAU
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **REST Countries** | `countries.py` | `/api/countries/*` | ✅ Intégré |
+
+**Total** : 1 provider countries
+
+---
+
+### 🔔 Webhooks (1 provider) - NOUVEAU
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **Discord Webhook** | `webhooks.py` | `/api/webhooks/discord/*` | ✅ Intégré |
+
+**Total** : 1 provider webhooks
+
+---
+
+### 📖 Wikipedia (1 provider) - NOUVEAU
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **Wikipedia** | `wikipedia.py` | `/api/wikipedia/*` | ✅ Intégré |
+
+**Total** : 1 provider wikipedia
+
+---
+
+### 🎨 GIFs (1 provider) - NOUVEAU
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **Giphy** | `giphy.py` | `/api/giphy/*` | ✅ Intégré |
+
+**Total** : 1 provider gifs
+
+---
+
+### 📚 Books (1 provider) - NOUVEAU
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **Google Books** | `books.py` | `/api/books/*` | ✅ Intégré |
+
+**Total** : 1 provider books
+
+---
+
+### 🎞️ Movies (1 provider) - NOUVEAU
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **OMDB** | `omdb.py` | `/api/omdb/*` | ✅ Intégré |
+
+**Total** : 1 provider movies
+
+---
+
+### 📍 IP Geolocation (1 provider) - NOUVEAU
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **IP Geolocation** | `ip_geolocation.py` | `/api/ip/*` | ✅ Intégré |
+
+**Total** : 1 provider IP geolocation
+
+---
+
+### 🎥 YouTube (1 provider) - NOUVEAU
+
+| Provider | Router | Endpoints | Status |
+|----------|--------|-----------|--------|
+| **YouTube Data** | `youtube.py` | `/api/youtube/*` | ✅ Intégré |
+
+**Total** : 1 provider YouTube
 
 ---
 
@@ -262,9 +414,32 @@ Ce document liste **TOUTES** les APIs intégrées dans le serveur backend et con
 ✅ video.router           # Service vidéo
 ✅ assistant.router        # Assistant personnel
 ✅ analytics.router        # Analytics
+✅ countries.router        # REST Countries (NOUVEAU)
+✅ webhooks.router         # Discord Webhooks (NOUVEAU)
+✅ wikipedia.router        # Wikipedia (NOUVEAU)
+✅ giphy.router           # Giphy GIFs (NOUVEAU)
+✅ books.router           # Google Books (NOUVEAU)
+✅ omdb.router            # OMDB Movies (NOUVEAU)
+✅ ip_geolocation.router   # IP Geolocation (NOUVEAU)
+✅ youtube.router         # YouTube Data (NOUVEAU)
 ```
 
-**Total** : **23 routers intégrés** ✅
+**Total** : **42 routers intégrés** ✅
+
+### Nouveaux Routers (Janvier 2025)
+```python
+✅ jsonplaceholder.router    # JSONPlaceholder (NOUVEAU)
+✅ randomuser.router         # RandomUser (NOUVEAU)
+✅ fakestore.router          # FakeStore (NOUVEAU)
+✅ quotes.router             # Quotes & Advice (NOUVEAU)
+✅ lorem.router              # Lorem Ipsum (NOUVEAU)
+✅ pixabay.router            # Pixabay Images (NOUVEAU)
+✅ lorempicsum.router        # Lorem Picsum (NOUVEAU)
+✅ github.router             # GitHub API (NOUVEAU)
+✅ worldtime.router          # World Time API (NOUVEAU)
+✅ coincap.router            # CoinCap Crypto (NOUVEAU)
+✅ tinyurl.router            # TinyURL Shortener (NOUVEAU)
+```
 
 ---
 
@@ -292,7 +467,26 @@ Ce document liste **TOUTES** les APIs intégrées dans le serveur backend et con
 
 ---
 
-**Dernière vérification** : Décembre 2024  
-**Statut** : ✅ Toutes les APIs intégrées et opérationnelles
+**Dernière vérification** : Janvier 2025  
+**Statut** : ✅ Toutes les APIs intégrées et opérationnelles  
+**Total** : **66+ Providers** | **42 Routers** | **195+ Endpoints**
+
+---
+
+## 🆕 Nouvelles APIs Ajoutées (Décembre 2024)
+
+### APIs Gratuites Illimitées
+- ✅ **REST Countries** - Informations sur tous les pays (illimité)
+- ✅ **Discord Webhook** - Notifications Discord (illimité)
+- ✅ **Wikipedia** - Articles Wikipedia (illimité)
+- ✅ **Giphy** - GIFs animés (illimité avec clé API)
+
+### APIs avec Quotas Gratuits
+- ✅ **Google Books** - 1,000 req/jour (gratuit)
+- ✅ **OMDB** - 1,000 req/jour (gratuit, nécessite clé API)
+- ✅ **IP Geolocation** - Illimité (gratuit, multiple providers)
+- ✅ **YouTube Data** - 10,000 req/jour (gratuit, nécessite clé API)
+
+**Total nouvelles APIs** : **8 APIs** ajoutées
 
 

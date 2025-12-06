@@ -1,0 +1,3 @@
+"""OMDB API service"""
+
+

@@ -1,0 +1,3 @@
+"""Bored API - Activity suggestions"""
+
+

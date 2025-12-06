@@ -60,11 +60,8 @@ class BoltAIRouter:
             logger.info(f"⚡ BoltAI {model} processing...")
             
             # Router vers le bon LLM
-            response = await self.ai_router.chat(
-                message=message,
-                provider=provider,
-                temperature=temperature,
-                max_tokens=max_tokens
+            response = await self.ai_router.route(
+                prompt=message
             )
             
             # Branding BoltAI
@@ -102,11 +99,8 @@ class BoltAIRouter:
             try:
                 logger.info(f"🔄 Trying {provider}...")
                 
-                response = await self.ai_router.chat(
-                    message=message,
-                    provider=provider,
-                    temperature=temperature,
-                    max_tokens=max_tokens
+                response = await self.ai_router.route(
+                    prompt=message
                 )
                 
                 logger.info(f"✅ BoltAI fallback success with {provider}")

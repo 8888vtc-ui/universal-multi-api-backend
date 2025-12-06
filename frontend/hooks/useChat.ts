@@ -33,7 +33,7 @@ export function useChat(language: Language): UseChatReturn {
         try {
             const response = await apiClient.chat({
                 message,
-                language,
+                language: language === 'he' ? 'en' : language as 'fr' | 'en' | 'es' | 'de',
                 conversation_history: messages,
             });
 
