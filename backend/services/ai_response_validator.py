@@ -15,14 +15,9 @@ class AIResponseValidator:
     
     # Mots-clés indiquant des réponses potentiellement problématiques
     RED_FLAGS = [
-        r"je ne sais pas",
-        r"je ne peux pas",
-        r"je ne suis pas sûr",
-        r"je ne peux pas répondre",
-        r"je n'ai pas d'information",
-        r"données insuffisantes",
-        r"impossible de",
-        r"aucune information",
+        r"je ne veux pas",
+        r"je refuse de",
+        r"impossible de traiter",
     ]
     
     # Patterns de réponses vagues ou non utiles
@@ -738,18 +733,17 @@ class AIResponseValidator:
         # Règles strictes anti-hallucinations
         enhancements.append(
             "[WARN] RÈGLES CRITIQUES ANTI-HALLUCINATIONS:\n"
-            "1. Ne mentionne JAMAIS de faits que tu n'es pas certain à 100%\n"
-            "2. Pour les dates/événements, vérifie toujours la date actuelle\n"
-            "3. Si tu n'es pas sûr, dis 'Je ne suis pas certain, mais...'\n"
-            "4. Ne répète PAS des informations que tu as déjà données dans cette conversation\n"
-            "5. Si l'utilisateur pose la même question, reformule ta réponse différemment\n"
-            "6. Évite de répéter exactement les mêmes phrases déjà utilisées"
+            "1. TA PRIORITÉ EST DE RÉPONDRE. Ne dis jamais 'Je ne peux pas' sauf illégalité.\n"
+            "2. Si tu n'as pas la donnée exacte, fais une ESTIMATION basée sur tes connaissances.\n"
+            "3. Précise 'Selon mes connaissances générales...' ou 'Ceci est une estimation...'.\n"
+            "4. Ne répète PAS les mêmes phrases en boucle.\n"
+            "5. Pour les dates/événements politiques, vérifie la date actuelle."
         )
         
         # Instructions de précision
         enhancements.append(
-            "IMPORTANT: Fournis uniquement des informations que tu es certain d'être correctes. "
-            "Si tu n'es pas sûr, dis-le clairement."
+            "IMPORTANT: L'objectif est d'être UTILE. Une réponse approximative (clairement indiquée) "
+            "vaut mieux qu'un refus de répondre. Utilise ta logique."
         )
         
         # Instructions spéciales pour les informations politiques/électorales
