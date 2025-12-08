@@ -808,27 +808,6 @@ def get_experts_grouped_by_category() -> Dict[str, Dict[str, Any]]:
 
 
 
-def get_experts_by_category(category_id: str) -> List[Expert]:
-    """Get all experts in a specific category"""
-    return [e for e in EXPERTS.values() if e.category.value == category_id]
-
-
-# ============================================
-# UNIVERSAL RULE APPLICATION
-# ============================================
-ALWAYS_RESPOND_RULE = """
-🚨 RÈGLE ABSOLUE - TOUJOURS RÉPONDRE:
-- Si données disponibles → utilise-les
-- Si pas de données → utilise TES CONNAISSANCES
-- JAMAIS "je ne sais pas" ou "va voir..."
-- Répondre DIRECTEMENT, pas rediriger
-"""
-
-# Apply universal rule to all experts
-for expert in EXPERTS.values():
-    if ALWAYS_RESPOND_RULE not in expert.system_prompt:
-        expert.system_prompt += f"\n\n{ALWAYS_RESPOND_RULE}"
-
 
 # ============================================
 # UNIVERSAL RULE APPLICATION
