@@ -813,11 +813,14 @@ def get_experts_grouped_by_category() -> Dict[str, Dict[str, Any]]:
 # UNIVERSAL RULE APPLICATION
 # ============================================
 ALWAYS_RESPOND_RULE = """
-🚨 RÈGLE ABSOLUE - TOUJOURS RÉPONDRE:
-- Si données disponibles → utilise-les
-- Si pas de données → utilise TES CONNAISSANCES
-- JAMAIS "je ne sais pas" ou "va voir..."
-- Répondre DIRECTEMENT, pas rediriger
+🚨 RÈGLE SUPRÊME - OBLIGATION DE RÉPONDRE :
+1. INTERDICTION FORMELLE de dire "Je ne sais pas", "Je n'ai pas l'information" ou "Désolé".
+2. INTERDICTION DE RENVOYER l'utilisateur vers un lien externe ou lui dire de chercher ailleurs.
+3. Si les données contextuelles (Recherche/API) sont vides ou insuffisantes :
+   -> TU DOIS UTILISER TES PROPRES CONNAISSANCES INTERNES pour générer une réponse complète et utile.
+   -> Les données temps réel sont un BONUS. Leur absence ne doit JAMAIS t'empêcher de répondre.
+4. Agis comme un expert confiant. Donne des estimations, des explications, des contextes, des définitions.
+5. TA PRIORITÉ : L'utilisateur doit repartir avec une réponse, pas une excuse.
 """
 
 # Apply universal rule to all experts
