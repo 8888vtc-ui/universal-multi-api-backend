@@ -340,6 +340,15 @@ class AIRouter:
 
         start_time = time.time()
         
+        # ANTI-HALLUCINATION: Enhance system prompt automatically
+        try:
+            from services.anti_hallucination import enhance_system_prompt_anti_hallucination
+            # Detect language from prompt
+            lang = "fr" if any(w in prompt.lower() for w in ["bonjour", "comment", "quoi", "pourquoi", "quel"]) else "en"
+            system_prompt = enhance_system_prompt_anti_hallucination(system_prompt or "", lang)
+        except ImportError:
+            pass  # Fallback if module not available
+        
         # Try preferred provider first if specified
         if preferred_provider:
             provider = next(
