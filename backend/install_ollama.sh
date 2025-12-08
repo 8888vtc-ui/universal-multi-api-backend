@@ -179,3 +179,11 @@ echo ""
 echo -e "${YELLOW}⚠️  Sécurité: N'oubliez pas de sécuriser l'accès à Ollama en production !${NC}"
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

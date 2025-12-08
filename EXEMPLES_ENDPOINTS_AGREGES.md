@@ -280,3 +280,11 @@ Avec ces endpoints agrégés :
 **Vous avez raison : avec toutes ces APIs combinées, on peut créer des choses EXTRAORDINAIRES ! 🌟**
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

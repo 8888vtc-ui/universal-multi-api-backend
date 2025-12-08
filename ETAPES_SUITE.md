@@ -432,3 +432,11 @@ Ensuite, passez à l'Étape 2 et suivez le guide.
 
 *Dernière mise à jour : Décembre 2024 - v2.3.0*
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

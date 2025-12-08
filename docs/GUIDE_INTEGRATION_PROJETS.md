@@ -335,3 +335,11 @@ translation = api.translate("Hello", target_lang="fr")
 **Dernière mise à jour** : Décembre 2024
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

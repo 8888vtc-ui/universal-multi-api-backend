@@ -181,3 +181,11 @@ python backend/scripts/test_endpoints_manual.py
 
 *Dernière mise à jour : Décembre 2024 - v2.3.0*
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

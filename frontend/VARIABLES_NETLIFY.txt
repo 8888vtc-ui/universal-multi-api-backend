@@ -1,0 +1,8 @@
+NEXT_PUBLIC_API_URL=https://universal-api-hub.fly.dev
+NEXT_PUBLIC_APP_NAME=WikiAsk
+NEXT_PUBLIC_APP_SLOGAN=Ask Everything. Know Everything.
+
+
+
+
+

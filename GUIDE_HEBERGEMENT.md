@@ -401,3 +401,11 @@ jobs:
 **Besoin d'aide pour le déploiement ? Je peux créer un script d'installation automatique ! 🚀**
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

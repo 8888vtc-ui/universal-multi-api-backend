@@ -306,3 +306,11 @@ tail -f /var/log/nginx/universal-api-error.log
 
 *Dernière mise à jour : Décembre 2024 - v2.3.0*
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

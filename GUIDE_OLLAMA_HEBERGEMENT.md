@@ -383,3 +383,11 @@ Je peux créer un script qui fait tout automatiquement :
 **Avec Ollama + Llama local, vous n'avez plus besoin de quotas d'API ! 🎉**
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

@@ -75,3 +75,11 @@ echo ""
 echo -e "${GREEN}🎉 Installation terminée !${NC}"
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

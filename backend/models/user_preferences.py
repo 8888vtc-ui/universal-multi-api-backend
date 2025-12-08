@@ -35,3 +35,11 @@ class UserProfile(BaseModel):
     last_updated: datetime
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

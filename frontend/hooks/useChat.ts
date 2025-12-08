@@ -65,3 +65,6 @@ export function useChat(language: Language): UseChatReturn {
         clearMessages,
     };
 }
+
+    };
+}

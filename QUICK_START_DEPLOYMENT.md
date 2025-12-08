@@ -99,3 +99,11 @@ certbot --nginx -d votre-domaine.com
 
 **Bon déploiement ! 🚀**
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

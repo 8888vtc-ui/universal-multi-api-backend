@@ -102,3 +102,11 @@ print(result["ai_advice"])  # Conseils complets
 **C'est exactement ce qu'il fallait pour créer des choses extraordinaires ! 🚀**
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

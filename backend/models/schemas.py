@@ -19,12 +19,37 @@ class ChatRequest(BaseModel):
     context: Optional[str] = None
 
 
+class WidgetData(BaseModel):
+    """Data structure for UI widgets"""
+    type: Literal["chart", "news_list", "weather_card", "crypto_card", "stats_card"]
+    title: Optional[str] = None
+    data: dict  # Flexible data payload for the specific widget
+
+
 class ChatResponse(BaseModel):
     """Chat API response"""
     response: str
     source: str  # "groq", "ollama", "cache"
     tokens_used: Optional[int] = None
     processing_time_ms: float
+    widgets: Optional[List[WidgetData]] = None  # UI Widgets support
+
+
+class ExpertChatRequest(BaseModel):
+    message: str
+    session_id: Optional[str] = None
+    language: Optional[str] = None
+
+
+class ExpertChatResponse(BaseModel):
+    expert_id: str
+    expert_name: str
+    response: str
+    session_id: str
+    sources: List[str]
+    source: str
+    processing_time_ms: float
+    widgets: Optional[List[WidgetData]] = None  # UI Widgets support
 
 
 class EmbeddingRequest(BaseModel):

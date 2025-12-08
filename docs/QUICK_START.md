@@ -150,3 +150,11 @@ pip install -r requirements.txt --force-reinstall
 **Besoin d'aide ?** Voir la documentation complète dans `docs/`
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

@@ -17,6 +17,8 @@ except ImportError:
     def with_retry(func):
         return func
 
+from services.provider_personalities import enhance_for_provider
+
 load_dotenv()
 
 
@@ -335,6 +337,7 @@ class AIRouter:
         if not self.available_providers:
             raise Exception("No AI providers available")
         
+
         start_time = time.time()
         
         # Try preferred provider first if specified
@@ -345,7 +348,14 @@ class AIRouter:
             )
             if provider and provider.can_handle_request():
                 try:
-                    response = await provider.call(prompt, system_prompt)
+                    # Enhance prompt with provider personality
+                    local_system_prompt = enhance_for_provider(system_prompt or "", provider.name)
+
+                    if provider.name == "groq":
+                        response = await provider.call(prompt, local_system_prompt)
+                    else:
+                        response = await provider.call(prompt, local_system_prompt)
+                        
                     processing_time = (time.time() - start_time) * 1000
                     return {
                         "response": response,
@@ -363,7 +373,14 @@ class AIRouter:
                 continue
             
             try:
-                response = await provider.call(prompt, system_prompt)
+                # Enhance prompt with provider personality
+                local_system_prompt = enhance_for_provider(system_prompt or "", provider.name)
+
+                if provider.name == "groq":
+                    response = await provider.call(prompt, local_system_prompt)
+                else:
+                    response = await provider.call(prompt, local_system_prompt)
+                    
                 processing_time = (time.time() - start_time) * 1000
                 
                 return {
@@ -379,6 +396,7 @@ class AIRouter:
         
         # All providers failed or exhausted
         raise Exception("All AI providers failed or quota exhausted")
+
     
     def get_status(self) -> Dict[str, Any]:
         """Get status of all providers with quota info"""

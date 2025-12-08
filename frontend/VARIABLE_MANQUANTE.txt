@@ -1,0 +1,43 @@
+===========================================
+⚠️ VARIABLE MANQUANTE À AJOUTER
+===========================================
+
+Vous avez déjà ajouté :
+✅ NEXT_PUBLIC_APP_NAME = WikiAsk
+✅ NEXT_PUBLIC_APP_SLOGAN = Ask Everything. Know Everything.
+
+❌ MANQUE : NEXT_PUBLIC_API_URL
+
+===========================================
+À AJOUTER DANS NETLIFY :
+===========================================
+
+Variable:
+Key: NEXT_PUBLIC_API_URL
+Value: https://api.wikiask.net
+
+===========================================
+INSTRUCTIONS :
+===========================================
+
+1. Dans Netlify Dashboard → Site settings → Environment variables
+2. Cliquer sur "Add variable"
+3. Key: NEXT_PUBLIC_API_URL
+4. Value: https://api.wikiask.net
+5. Cliquer sur "Save"
+6. IMPORTANT: Redéployer le site après avoir ajouté cette variable
+   (Deploys → Trigger deploy → Deploy site)
+
+===========================================
+POURQUOI C'EST IMPORTANT :
+===========================================
+
+Cette variable permet au frontend de savoir où se trouve l'API backend.
+Sans elle, les appels API ne fonctionneront pas !
+
+===========================================
+
+
+
+
+

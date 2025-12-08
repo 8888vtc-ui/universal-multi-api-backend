@@ -186,3 +186,11 @@ curl http://localhost:8000/api/metrics/prometheus
 
 *Dernière mise à jour : Décembre 2024 - v2.3.0*
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

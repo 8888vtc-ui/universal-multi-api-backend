@@ -151,3 +151,16 @@ dump.rdb
 # Docker
 .dockerignore
 
+<<<<<<< Updated upstream
+=======
+
+
+# Local Netlify folder
+.netlify
+
+
+
+.netlify-token
+
+
+>>>>>>> Stashed changes

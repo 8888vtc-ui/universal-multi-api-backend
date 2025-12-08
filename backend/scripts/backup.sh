@@ -97,3 +97,11 @@ echo ""
 print_info "Pour restaurer:"
 echo "  tar -xzf $BACKUP_DIR/$BACKUP_NAME.tar.gz -C /tmp/restore"
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

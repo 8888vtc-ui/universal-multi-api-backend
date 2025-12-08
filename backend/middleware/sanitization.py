@@ -70,3 +70,11 @@ class SanitizationMiddleware(BaseHTTPMiddleware):
         return any(pattern in value_lower for pattern in self.DANGEROUS_PATTERNS)
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

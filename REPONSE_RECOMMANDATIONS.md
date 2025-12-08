@@ -262,3 +262,11 @@ Le pipeline se déclenche automatiquement sur :
 **Dernière mise à jour** : Décembre 2024
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

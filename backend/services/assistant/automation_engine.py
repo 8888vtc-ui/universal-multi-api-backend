@@ -238,3 +238,11 @@ class AutomationEngine:
 automation_engine = AutomationEngine()
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

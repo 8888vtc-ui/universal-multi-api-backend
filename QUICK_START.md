@@ -263,3 +263,11 @@ Votre backend est maintenant opérationnel. Explorez la documentation interactiv
 *Dernière mise à jour : v2.3.0*
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

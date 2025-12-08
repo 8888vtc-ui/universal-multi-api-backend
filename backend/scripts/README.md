@@ -77,3 +77,11 @@ Ces scripts peuvent être intégrés dans un pipeline CI/CD :
 ```
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

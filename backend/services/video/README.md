@@ -79,3 +79,11 @@ ELEVENLABS_API_KEY=your_key_here  # Optionnel
 - [ ] Compression vidéo
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

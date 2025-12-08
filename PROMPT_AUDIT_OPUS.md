@@ -230,3 +230,11 @@ L'audit est réussi si :
 **Merci de faire un audit complet, critique et constructif !** 🚀
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

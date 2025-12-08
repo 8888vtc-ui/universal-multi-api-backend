@@ -66,3 +66,11 @@ echo "  Status: sudo systemctl status api-backend"
 echo "  Logs: sudo journalctl -u api-backend -f"
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

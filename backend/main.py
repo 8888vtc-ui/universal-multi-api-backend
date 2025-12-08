@@ -65,7 +65,19 @@ from routers import (
     utilities, geocoding, nutrition, email, media, boltai,
     aggregated, search, video, assistant, analytics, auth, health_check
 )
+<<<<<<< Updated upstream
 from routers import health_deep, metrics
+=======
+from routers import health_deep, metrics, search_optimized, ai_search, expert_chat, agent, agent_expert, super_chat, agent_metrics
+
+# Video router optionnel (dépendances lourdes)
+try:
+    from routers import video
+    VIDEO_AVAILABLE = True
+except ImportError:
+    VIDEO_AVAILABLE = False
+    logger.warning("[WARN] Video router not available (missing dependencies)")
+>>>>>>> Stashed changes
 
 # Create FastAPI app with lifespan
 app = FastAPI(
@@ -177,6 +189,14 @@ app.include_router(chat.router)
 app.include_router(embeddings.router)
 app.include_router(boltai.router)
 app.include_router(assistant.router)
+<<<<<<< Updated upstream
+=======
+app.include_router(expert_chat.router)  # Expert AI specialists (legacy)
+app.include_router(agent_expert.router) # Quality First Agents (new)
+app.include_router(agent_metrics.router) # Agent metrics & statistics
+app.include_router(agent.router)        # Autonomous Agent (ReAct)
+app.include_router(super_chat.router)   # Super Agent - Smart routing
+>>>>>>> Stashed changes
 
 # Search & Aggregation
 app.include_router(search.router)
@@ -321,3 +341,5 @@ if __name__ == "__main__":
         workers=1 if reload else workers,
         access_log=False  # We use our own request logger
     )
+
+    

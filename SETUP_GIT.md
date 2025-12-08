@@ -352,3 +352,11 @@ cat ~/.ssh/id_ed25519.pub
 
 *Dernière mise à jour : Décembre 2024 - v2.3.0*
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

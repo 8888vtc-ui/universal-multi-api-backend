@@ -85,3 +85,11 @@
 **Toute la documentation est à jour et complète ! 📚**
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

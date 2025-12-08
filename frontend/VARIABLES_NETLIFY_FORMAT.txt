@@ -1,0 +1,39 @@
+===========================================
+VARIABLES D'ENVIRONNEMENT POUR NETLIFY
+===========================================
+
+Copiez-collez ces variables dans :
+Netlify Dashboard → Site settings → Environment variables
+
+-------------------------------------------
+
+Variable 1:
+Key: NEXT_PUBLIC_API_URL
+Value: https://api.wikiask.net
+
+Variable 2:
+Key: NEXT_PUBLIC_APP_NAME
+Value: WikiAsk
+
+Variable 3:
+Key: NEXT_PUBLIC_APP_SLOGAN
+Value: Ask Everything. Know Everything.
+
+===========================================
+INSTRUCTIONS:
+===========================================
+
+1. Aller dans Netlify Dashboard
+2. Sélectionner votre site
+3. Site settings → Environment variables
+4. Cliquer sur "Add variable"
+5. Ajouter chaque variable une par une
+6. Cliquer sur "Save"
+7. Redéployer le site (Deploys → Trigger deploy)
+
+===========================================
+
+
+
+
+

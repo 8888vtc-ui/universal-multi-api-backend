@@ -258,3 +258,11 @@ class CourseGenerator:
 course_generator = CourseGenerator()
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

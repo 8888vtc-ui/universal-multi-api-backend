@@ -21,3 +21,11 @@ def test_env():
         del os.environ["TESTING"]
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

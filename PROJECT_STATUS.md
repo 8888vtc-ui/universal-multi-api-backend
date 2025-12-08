@@ -187,3 +187,11 @@ Le projet est **prêt pour la production** avec :
 *Dernière mise à jour : Décembre 2024 - v2.3.0*
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes

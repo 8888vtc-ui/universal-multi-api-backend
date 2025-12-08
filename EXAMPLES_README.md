@@ -215,3 +215,11 @@ readinessProbe:
 *Dernière mise à jour : v2.3.0*
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes
