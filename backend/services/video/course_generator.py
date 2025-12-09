@@ -256,13 +256,3 @@ class CourseGenerator:
 
 # Singleton instance
 course_generator = CourseGenerator()
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

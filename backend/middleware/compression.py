@@ -56,13 +56,3 @@ def get_gzip_middleware(minimum_size: int = 500):
         minimum_size: Taille minimum en bytes pour compresser (défaut: 500)
     """
     return GZipMiddleware
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

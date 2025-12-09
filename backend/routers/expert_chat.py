@@ -70,7 +70,7 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
     Uses intelligent query detection to skip APIs if not needed.
     Returns: (context_string, list_of_sources)
     """
-    from services.intent_detector import IntentDetector
+    from services.intent_detector import IntentDetector, get_search_mode
     
     # 1. Detect Intent: Should we even call APIs?
     intent = IntentDetector.detect_intent(query, expert.id.value)
@@ -79,9 +79,35 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
         logger.info(f"Skipping API calls for chat-only query: '{query}' ({expert.id.value})")
         return "Contexte: Conversation simple, pas de données externes nécessaires.", []
     
-    # ... Continue with existing logic for data_needed ...
+    # 2. For HEALTH expert: Check if DEEP search is needed
+    if expert.id.value == "health":
+        search_mode = get_search_mode(query, expert.id.value)
+        logger.info(f"Health expert search mode: {search_mode}")
+        
+        if search_mode == "deep":
+            # Use DEEP medical search - comprehensive search across ALL APIs
+            try:
+                from services.deep_medical_search import perform_deep_search
+                logger.info(f"Starting DEEP medical search for: {query}")
+                
+                context, search_result = await perform_deep_search(query)
+                
+                # Build sources from the search
+                sources = [f"[{api.upper()}]" for api in search_result.apis_with_data]
+                
+                logger.info(
+                    f"DEEP search completed: {len(search_result.apis_searched)} APIs, "
+                    f"{len(search_result.apis_with_data)} with data, "
+                    f"{search_result.total_time_ms:.0f}ms"
+                )
+                
+                return context, sources
+                
+            except Exception as e:
+                logger.error(f"Deep search failed, falling back to standard: {e}")
+                # Fall through to standard search
     
-    # Pour l'expert financier, utiliser la détection intelligente
+    # 3. For FINANCE expert, use intelligent detection
     if expert.id.value == "finance":
         from services.finance_query_detector import FinanceQueryDetector
         
@@ -621,18 +647,51 @@ async def chat_with_expert(expert_id: str, body: ExpertChatRequest):
                 )
             # Sinon, ignorer le cache pour forcer une nouvelle réponse (évite répétitions immédiates)
     
-    # Récupérer l'historique de conversation
-    from services.conversation_manager import conversation_manager
-    history = conversation_manager.get_conversation_history(session_id, expert_id, limit=10)
-    history_context = conversation_manager.format_history_for_prompt(history)
-    
-    # Stocker le message utilisateur
-    conversation_manager.add_message(
-        session_id=session_id,
-        expert_id=expert_id,
-        role="user",
-        message=body.message
-    )
+    # ============================================
+    # MÉMOIRE V2 - Système amélioré avec profilage
+    # ============================================
+    try:
+        from services.enhanced_memory import enhanced_memory, get_smart_context
+        
+        # Stocker le message utilisateur avec tracking intelligent
+        enhanced_memory.add_message(
+            session_id=session_id,
+            expert_id=expert_id,
+            role="user",
+            message=body.message
+        )
+        
+        # Construire le contexte intelligent (profil + sujets + historique compact)
+        memory_context = enhanced_memory.build_smart_context(
+            session_id=session_id,
+            expert_id=expert_id,
+            include_profile=True,
+            include_topics=True,
+            max_messages=10
+        )
+        
+        # Détection automatique du profil utilisateur (pour expert santé)
+        if expert_id == "health":
+            user_profile = enhanced_memory.get_or_create_profile(session_id)
+            profile_type = user_profile.get("user_type")
+            
+            # Si profil détecté, adapter le format de réponse
+            if profile_type:
+                logger.info(f"Using profile '{profile_type}' for health expert")
+        
+    except ImportError:
+        # Fallback sur l'ancien système si enhanced_memory n'existe pas
+        from services.conversation_manager import conversation_manager
+        
+        history = conversation_manager.get_conversation_history(session_id, expert_id, limit=10)
+        memory_context = conversation_manager.format_history_for_prompt(history)
+        
+        conversation_manager.add_message(
+            session_id=session_id,
+            expert_id=expert_id,
+            role="user",
+            message=body.message
+        )
     
     # Fetch context data from expert's APIs
     context, sources = await fetch_context_data(expert, body.message)
@@ -653,11 +712,10 @@ async def chat_with_expert(expert_id: str, body: ExpertChatRequest):
     
     # Add current date/time to context (critical for date-aware experts)
     date_info = get_current_datetime_context(language)
-    context = date_info + "\n\n" + context
     
-    # Injecter l'historique dans le contexte
-    if history_context:
-        context = history_context + "\n\n" + context
+    # Construire le contexte final (ordre optimisé pour les tokens)
+    # Format: Date -> Mémoire (profil+historique) -> APIs
+    context = f"{date_info}\n\n{memory_context}\n\n{context}" if memory_context else f"{date_info}\n\n{context}"
     
     # Build system prompt with context
     system_prompt = expert.system_prompt.replace("{context}", context)
@@ -797,12 +855,23 @@ async def chat_with_expert(expert_id: str, body: ExpertChatRequest):
             # Sinon, ajouter un avertissement
             result["response"] = f"[WARN] {result['response']}\n\n(Note: Cette réponse nécessite une vérification supplémentaire)"
     
-    # Stocker la réponse de l'IA dans la conversation
-    conversation_manager.add_message(
-        session_id=session_id,
-        expert_id=expert_id,
-        message=result["response"]
-    )
+    # Stocker la réponse de l'IA dans la mémoire
+    try:
+        from services.enhanced_memory import enhanced_memory
+        enhanced_memory.add_message(
+            session_id=session_id,
+            expert_id=expert_id,
+            role="assistant",
+            message=result["response"]
+        )
+    except ImportError:
+        from services.conversation_manager import conversation_manager
+        conversation_manager.add_message(
+            session_id=session_id,
+            expert_id=expert_id,
+            role="assistant",
+            message=result["response"]
+        )
     
     # Cache the response
     if use_cache:
@@ -918,29 +987,6 @@ async def chat_with_expert_stream(expert_id: str, body: ExpertChatRequest):
             yield f"\n[ERR] Error: {str(e)}"
 
     return StreamingResponse(event_generator(), media_type="text/plain")
-
-        elif api_name == "finance_company":
-            # Company profile data
-            company_name = stock_data.get("name") or stock_data.get("company_name") or stock_data.get("longName")
-            industry = stock_data.get("industry")
-            sector = stock_data.get("sector")
-            description = stock_data.get("description") or stock_data.get("longBusinessSummary")
-            
-            if company_name:
-                parts.append(f"Entreprise: {company_name}")
-            if industry:
-                parts.append(f"Industrie: {industry}")
-            if sector:
-                parts.append(f"Secteur: {sector}")
-            if description:
-                parts.append(f"Description: {description[:200]}")
-            
-            return f"[PROFIL ENTREPRISE] {' | '.join(parts)}" if parts else str(data)[:500]
-        
-        return str(data)[:500]
-    except Exception as e:
-        logger.debug(f"Error extracting stock summary: {e}")
-        return str(data)[:500]
 
 
 def _extract_news_summary(data: dict) -> str:

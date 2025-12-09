@@ -33,9 +33,9 @@ class CacheService:
             # Test connection
             self.redis.ping()
             self.available = True
-            print("✅ Redis cache connected")
+            print("[OK] Redis cache connected")
         except (RedisError, Exception) as e:
-            print(f"⚠️  Redis unavailable: {e}. Running without cache.")
+            print(f"[WARN] Redis unavailable: {e}. Running without cache.")
             self.available = False
     
     def _generate_key(self, prefix: str, data: str) -> str:

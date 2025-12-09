@@ -1,0 +1,33 @@
+﻿================================================================================
+python : Traceback (most recent call last):
+Au caractère Ligne:1 : 1
++ python test_global_quality.py 2>&1 | Out-File -FilePath test_results. ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last) 
+   ::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "D:\moteur israelien\backend\test_global_quality.py", line 324, in 
+<module>
+    asyncio.run(run_global_tests())
+  File "C:\Users\8888v\AppData\Local\Programs\Python\Python312\Lib\asyncio\runn
+ers.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\8888v\AppData\Local\Programs\Python\Python312\Lib\asyncio\runn
+ers.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\8888v\AppData\Local\Programs\Python\Python312\Lib\asyncio\base
+_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "D:\moteur israelien\backend\test_global_quality.py", line 208, in 
+run_global_tests
+    print("\U0001f3c6 TEST GLOBAL QUALIT╔ - MEILLEUR MOTEUR M╔DICAL DU MONDE")
+  File "C:\Users\8888v\AppData\Local\Programs\Python\Python312\Lib\encodings\cp
+1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c6' in 
+position 0: character maps to <undefined>

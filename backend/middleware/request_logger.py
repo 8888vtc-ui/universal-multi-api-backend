@@ -83,13 +83,3 @@ class RequestLoggerMiddleware(BaseHTTPMiddleware):
                 f"-> ERROR ({duration_ms:.1f}ms) [{client_ip}]: {e}"
             )
             raise
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

@@ -86,13 +86,3 @@ def setup_request_id_logging():
     for handler in root_logger.handlers:
         handler.addFilter(request_filter)
         handler.setFormatter(formatter)
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

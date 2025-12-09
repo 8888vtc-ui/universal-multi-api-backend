@@ -49,13 +49,3 @@ class AnalyticsMiddleware(BaseHTTPMiddleware):
                     user_id=user_id
                 )
             raise
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

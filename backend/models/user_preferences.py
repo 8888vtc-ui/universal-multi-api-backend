@@ -33,13 +33,3 @@ class UserProfile(BaseModel):
     learned_patterns: Dict[str, Any]
     created_at: datetime
     last_updated: datetime
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

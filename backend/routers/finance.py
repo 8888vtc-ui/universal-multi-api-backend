@@ -92,14 +92,7 @@ async def get_stock_quote(symbol: str):
 @router.get("/market/summary")
 async def get_market_summary():
     """Get market summary (major indices)"""
-<<<<<<< Updated upstream
-    try:
-        data = await yahoo_finance.get_market_summary()
-        return {"success": True, "data": data, "source": "yahoo_finance"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-=======
-    # Try Yahoo Finance first (most reliable)
+# Try Yahoo Finance first (most reliable)
     if yahoo_finance and yahoo_finance.available:
         try:
             data = await yahoo_finance.get_market_summary()
@@ -200,14 +193,6 @@ async def get_market_news(category: str = "general", limit: int = 10):
         status_code=503,
         detail="Market news service temporarily unavailable."
     )
-
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.error(f"Crypto price fetch failed: {e}", exc_info=True)
-        raise HTTPException(
-            status_code=500,
-            detail="Finance service temporarily unavailable. Please try again later."
-        )
 
 
 @router.get("/crypto/trending")
@@ -416,4 +401,3 @@ async def get_market_news(category: str = "general", limit: int = 10):
         status_code=503,
         detail="Market news service temporarily unavailable."
     )
->>>>>>> Stashed changes

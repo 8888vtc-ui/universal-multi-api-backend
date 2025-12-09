@@ -31,7 +31,7 @@ class VideoRouter:
         self.wav2lip_available = False
         
         if not self.providers:
-            print("⚠️  No video providers available")
+            print("[WARN] No video providers available")
     
     async def create_talking_avatar(
         self,
@@ -70,7 +70,7 @@ class VideoRouter:
                 )
                 return result
             except Exception as e:
-                print(f"⚠️  D-ID failed: {e}")
+                print(f"[WARN] D-ID failed: {e}")
                 # Fallback vers Wav2Lip si disponible
                 if self.wav2lip_available:
                     # TODO: Implémenter fallback Wav2Lip
@@ -105,13 +105,3 @@ class VideoRouter:
 
 # Singleton instance
 video_router = VideoRouter()
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

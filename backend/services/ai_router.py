@@ -61,12 +61,12 @@ class GroqProvider(AIProvider):
             try:
                 self.client = Groq(api_key=api_key)
                 self.available = True
-                print("✅ Groq provider initialized (14k req/day)")
+                print("[OK] Groq provider initialized (14k req/day)")
             except Exception as e:
-                print(f"⚠️  Groq initialization failed: {e}")
+                print(f"[WARN] Groq initialization failed: {e}")
                 self.available = False
         else:
-            print("⚠️  Groq API key not configured")
+            print("[WARN] Groq API key not configured")
             self.available = False
     
     @circuit_breaker(name="groq")
@@ -107,12 +107,12 @@ class MistralProvider(AIProvider):
             try:
                 self.api_key = api_key
                 self.available = True
-                print("✅ Mistral provider initialized (1B tokens/month)")
+                print("[OK] Mistral provider initialized (1B tokens/month)")
             except Exception as e:
-                print(f"⚠️  Mistral initialization failed: {e}")
+                print(f"[WARN] Mistral initialization failed: {e}")
                 self.available = False
         else:
-            print("⚠️  Mistral API key not configured")
+            print("[WARN] Mistral API key not configured")
             self.available = False
     
     @circuit_breaker(name="mistral")
@@ -159,12 +159,12 @@ class GeminiProvider(AIProvider):
             try:
                 self.api_key = api_key
                 self.available = True
-                print("✅ Gemini provider initialized (1,500 req/day)")
+                print("[OK] Gemini provider initialized (1,500 req/day)")
             except Exception as e:
-                print(f"⚠️  Gemini initialization failed: {e}")
+                print(f"[WARN] Gemini initialization failed: {e}")
                 self.available = False
         else:
-            print("⚠️  Gemini API key not configured")
+            print("[WARN] Gemini API key not configured")
             self.available = False
     
     @circuit_breaker(name="gemini")
@@ -208,12 +208,12 @@ class OpenRouterProvider(AIProvider):
             try:
                 self.api_key = api_key
                 self.available = True
-                print("✅ OpenRouter provider initialized (50 req/day, DeepSeek + 67 models)")
+                print("[OK] OpenRouter provider initialized (50 req/day, DeepSeek + 67 models)")
             except Exception as e:
-                print(f"⚠️  OpenRouter initialization failed: {e}")
+                print(f"[WARN] OpenRouter initialization failed: {e}")
                 self.available = False
         else:
-            print("⚠️  OpenRouter API key not configured")
+            print("[WARN] OpenRouter API key not configured")
             self.available = False
     
     @circuit_breaker(name="openrouter")
@@ -264,13 +264,13 @@ class OllamaProvider(AIProvider):
             response = httpx.get(f"{self.base_url}/api/tags", timeout=2)
             if response.status_code == 200:
                 self.available = True
-                print("✅ Ollama provider initialized (unlimited local)")
+                print("[OK] Ollama provider initialized (unlimited local)")
             else:
                 self.available = False
-                print("⚠️  Ollama not responding")
+                print("[WARN] Ollama not responding")
         except Exception as e:
             self.available = False
-            print(f"⚠️  Ollama not available: {e}")
+            print(f"[WARN] Ollama not available: {e}")
     
     @circuit_breaker(name="ollama")
     async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
@@ -319,9 +319,9 @@ class AIRouter:
         self.available_providers = [p for p in self.providers if p.available]
         
         if not self.available_providers:
-            print("❌ No AI providers available!")
+            print("[ERROR] No AI providers available!")
         else:
-            print(f"✅ AI Router ready with {len(self.available_providers)} provider(s)")
+            print(f"[OK] AI Router ready with {len(self.available_providers)} provider(s)")
             print(f"   Total daily quota: {sum(p.daily_quota for p in self.available_providers if p.daily_quota > 0)} + unlimited")
     
     async def route(
@@ -378,7 +378,7 @@ class AIRouter:
         # Try providers in priority order (only those with quota remaining)
         for provider in sorted(self.available_providers, key=lambda p: p.priority):
             if not provider.can_handle_request():
-                print(f"⚠️  {provider.name} quota exhausted ({provider.requests_today}/{provider.daily_quota})")
+                print(f"[WARN] {provider.name} quota exhausted ({provider.requests_today}/{provider.daily_quota})")
                 continue
             
             try:

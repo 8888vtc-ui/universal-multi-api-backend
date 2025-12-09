@@ -198,13 +198,3 @@ async def analytics_info():
             "dashboard": "/api/analytics/dashboard"
         }
     }
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

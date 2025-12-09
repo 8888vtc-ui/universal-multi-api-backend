@@ -68,13 +68,3 @@ class SanitizationMiddleware(BaseHTTPMiddleware):
         
         value_lower = value.lower()
         return any(pattern in value_lower for pattern in self.DANGEROUS_PATTERNS)
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

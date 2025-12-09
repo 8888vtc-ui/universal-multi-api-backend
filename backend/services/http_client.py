@@ -83,13 +83,3 @@ async def get_http_client() -> httpx.AsyncClient:
 async def cleanup_http_client():
     """Fermer le client HTTP lors de l'arrêt"""
     await http_client.close()
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

@@ -242,13 +242,3 @@ class MemoryStore:
 
 # Singleton instance
 memory_store = MemoryStore()
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

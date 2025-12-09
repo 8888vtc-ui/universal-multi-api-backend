@@ -210,13 +210,3 @@ class TaskExecutor:
 
 # Singleton instance
 task_executor = TaskExecutor()
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

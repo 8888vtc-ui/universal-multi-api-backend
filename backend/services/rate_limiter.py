@@ -9,7 +9,7 @@ try:
     SLOWAPI_AVAILABLE = True
 except ImportError:
     SLOWAPI_AVAILABLE = False
-    print("⚠️  slowapi not installed. Rate limiting disabled. Install with: pip install slowapi")
+    print("[WARN] slowapi not installed. Rate limiting disabled. Install with: pip install slowapi")
 
 
 # Créer le limiter

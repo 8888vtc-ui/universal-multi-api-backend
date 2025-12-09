@@ -194,13 +194,3 @@ async def liveness_check():
         "status": "alive",
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

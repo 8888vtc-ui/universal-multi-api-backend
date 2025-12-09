@@ -117,12 +117,3 @@ def ensure_logging_configured():
         setup_logging(log_file=log_file, json_format=json_logs)
         _configured = True
 
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

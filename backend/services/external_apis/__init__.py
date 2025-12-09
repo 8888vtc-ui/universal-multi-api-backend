@@ -6,20 +6,19 @@ from .finance import coingecko, alphavantage, yahoo_finance
 from .medical import pubmed, openfda
 from .entertainment import tmdb, yelp, spotify
 
-__all__ = [
-    # Finance
-    'coingecko',
-    'alphavantage',
-    'yahoo_finance',
-    # Medical
-    'pubmed',
-    'openfda',
-    # Entertainment
-    'tmdb',
-    'yelp',
-    'spotify'
-]
+try:
+    from .finnhub.provider import finnhub
+except ImportError:
+    finnhub = None
 
+try:
+    from .twelve_data.provider import twelve_data
+except ImportError:
+    twelve_data = None
+
+try:
+    from .polygon.provider import polygon
+except ImportError:
     polygon = None
 
 try:

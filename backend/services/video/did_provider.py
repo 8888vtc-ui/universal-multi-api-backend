@@ -20,9 +20,9 @@ class DIDProvider:
         self.available = bool(self.api_key and self.api_key != "your_did_api_key_here")
         
         if self.available:
-            print("✅ D-ID provider initialized")
+            print("[OK] D-ID provider initialized")
         else:
-            print("⚠️  D-ID not available (no API key)")
+            print("[WARN] D-ID not available (no API key)")
     
     async def create_talking_avatar(
         self,

@@ -178,13 +178,3 @@ class StartupValidator:
 def validate_startup(fail_on_error: bool = True) -> Dict[str, Any]:
     """Helper function to run startup validation"""
     return StartupValidator.run_all_validations(fail_on_error)
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

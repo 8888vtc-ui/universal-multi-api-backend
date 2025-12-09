@@ -11,6 +11,8 @@ from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr
 import sqlite3
 from pathlib import Path
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 
 logger = logging.getLogger(__name__)
 
@@ -395,9 +397,6 @@ def get_auth_service() -> AuthService:
 
 # For backward compatibility
 auth_service = get_auth_service()
-<<<<<<< Updated upstream
-=======
-
 # FastAPI Dependencies
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login", auto_error=False)
 
@@ -426,80 +425,6 @@ async def get_optional_user(token: str = Depends(oauth2_scheme)) -> Optional[Dic
         return None
     
     return auth_service.verify_token(token)
-
-Gestion des utilisateurs, tokens JWT, et authentification
-"""
-import os
-import logging
-from jose import jwt
-from datetime import datetime, timedelta, timezone
-from typing import Optional, Dict, Any
-from passlib.context import CryptContext
-from pydantic import BaseModel, EmailStr
-import sqlite3
-from pathlib import Path
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-
-logger = logging.getLogger(__name__)
-
-# Configuration
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
-if not SECRET_KEY:
-    # En développement, utiliser une clé par défaut avec warning
-    if os.getenv("ENVIRONMENT", "development") == "development":
-        SECRET_KEY = "dev-secret-key-not-for-production-use"
-        logger.warning(
-            "[WARN]  JWT_SECRET_KEY not set. Using development key. "
-            "Set JWT_SECRET_KEY in production!"
-        )
-    else:
-        raise ValueError(
-            "JWT_SECRET_KEY must be set in environment variables.\n"
-            "Generate a secure key with: python -c 'import secrets; print(secrets.token_urlsafe(32))'\n"
-            "Or set JWT_SECRET_KEY in your .env file."
-        )
-
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
-REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", 7))
-
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-class User(BaseModel):
-    """Modèle utilisateur"""
-    id: Optional[str] = None
-    email: EmailStr
-    username: str
-    hashed_password: str
-    is_active: bool = True
-    created_at: Optional[str] = None
-
-
-class UserCreate(BaseModel):
-    """Modèle pour création utilisateur"""
-    email: EmailStr
-    username: str
-    password: str
-
-
-class Token(BaseModel):
-    """Modèle token"""
-    access_token: str
-    refresh_token: str
-    token_type: str = "bearer"
-
-
-class TokenData(BaseModel):
-    """Données du token"""
-    user_id: Optional[str] = None
-    email: Optional[str] = None
-
-
-class AuthService:
-    """Service d'authentification avec gestion SQLite sécurisée"""
     
     def __init__(self, db_path: str = "./data/auth.db"):
         self.db_path = Path(db_path)
@@ -860,4 +785,3 @@ async def get_optional_user(token: str = Depends(oauth2_scheme)) -> Optional[Dic
         return None
     
     return auth_service.verify_token(token)
->>>>>>> Stashed changes

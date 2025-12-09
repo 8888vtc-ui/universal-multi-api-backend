@@ -98,13 +98,3 @@ class VideoStorage:
 
 # Singleton instance
 video_storage = VideoStorage()
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

@@ -107,13 +107,3 @@ class APIFallbackManager:
 
 # Singleton
 api_fallback_manager = APIFallbackManager()
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

@@ -163,13 +163,3 @@ if __name__ == "__main__":
     else:
         print("⚠️  Certains composants nécessitent attention")
     print("="*60)
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

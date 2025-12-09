@@ -574,15 +574,6 @@ Réponds en français, de manière naturelle et utile."""
 
 # Instance globale
 ai_search_engine = AISearchEngine()
-
-
-
-
-
-Combine l'intelligence artificielle avec la recherche multi-sources
-Approche RAG (Retrieval Augmented Generation)
-"""
-import asyncio
 import time
 import json
 import hashlib

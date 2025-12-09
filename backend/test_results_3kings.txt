@@ -1,0 +1,43 @@
+﻿python : Traceback (most recent call last):
+Au caractère Ligne:1 : 1
++ python test_3_kings_complete.py 2>&1 | Out-File -FilePath test_result ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last) 
+   ::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "D:\moteur israelien\backend\test_3_kings_complete.py", line 18, in 
+<module>
+[OK] ClinicalTrials.gov provider initialized
+[OK] Orphanet provider initialized
+[OK] Open Targets provider initialized
+[OK] DrugBank Open provider initialized (5 mÚdicaments)
+[OK] SNOMED CT provider initialized
+[OK] ICD-11 WHO provider initialized
+[OK] Europe PMC provider initialized
+[OK] LOINC provider initialized (8 tests)
+[OK] 8 world medical providers loaded
+[OK] Medical Search Engine: 14 providers loaded
+[WARN] Could not load registry: 'charmap' codec can't encode characters in position 2-73: character maps to <undefined>
+[OK] Premium Medical APIs loaded (MeSH, Gene, DrugCentral, KEGG, OMIM)
+[OK] Ultimate Medical APIs loaded: 50 APIs registered
+[OK] Ultimate Medical APIs loaded: 50 APIs registered
+[OK] Ultimate Medical APIs loaded: 50 APIs registered
+[OK] Ultimate Medical APIs loaded: 50 APIs registered
+[OK] Ultimate Medical APIs loaded: 50 APIs registered
+[OK] Smart Router: 17 providers ready
+[OK] Ultimate Medical APIs loaded: 50 APIs registered
+[WARN] Elite APIs not loaded: 'charmap' codec can't encode characters in position 2-69: character maps to <undefined>
+[OK] Deep Medical Search: 17 APIs ready
+    from services.external_apis.medical_mega_registry import 
+MegaMedicalRegistry
+  File "D:\moteur 
+israelien\backend\services\external_apis\medical_mega_registry.py", line 1069, 
+in <module>
+    print(MegaMedicalRegistry.get_summary())
+  File "C:\Users\8888v\AppData\Local\Programs\Python\Python312\Lib\encodings\cp
+1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 2-73: 
+character maps to <undefined>

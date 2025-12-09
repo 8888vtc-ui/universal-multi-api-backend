@@ -19,13 +19,3 @@ def test_env():
     # Cleanup après tests
     if "TESTING" in os.environ:
         del os.environ["TESTING"]
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

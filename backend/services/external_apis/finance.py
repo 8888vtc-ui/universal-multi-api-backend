@@ -130,55 +130,6 @@ class YahooFinanceProvider:
                 "pe_ratio": info.get("trailingPE"),
                 "company_name": info.get("longName")
             }
-        except Exception as e:
-            logger.error(f"Yahoo Finance error: {e}")
-            raise Exception(f"Yahoo Finance error: {e}")
-    
-    async def get_market_summary(self) -> Dict[str, Any]:
-        """Get market summary (major indices)"""
-        try:
-            import yfinance as yf
-            
-            indices = {
-                "S&P 500": "^GSPC",
-                "Dow Jones": "^DJI",
-                "NASDAQ": "^IXIC"
-            }
-            
-            summary = {}
-            for name, symbol in indices.items():
-                ticker = yf.Ticker(symbol)
-                info = ticker.info
-                summary[name] = {
-                    "price": info.get("regularMarketPrice"),
-                    "change": info.get("regularMarketChange"),
-                    "change_percent": info.get("regularMarketChangePercent")
-                }
-            
-            return summary
-        except Exception as e:
-            logger.error(f"Yahoo Finance error: {e}")
-            raise Exception(f"Yahoo Finance error: {e}")
-
-
-# Singleton instances
-coingecko = CoinGeckoProvider()
-alphavantage = AlphaVantageProvider()
-yahoo_finance = YahooFinanceProvider()
-
-                    result.update({
-                        "market_cap": info.get("marketCap"),
-                        "pe_ratio": info.get("trailingPE"),
-                        "company_name": info.get("longName") or info.get("shortName") or symbol
-                    })
-            except Exception as e:
-                logger.debug(f"Info method failed for {symbol}: {e}")
-            
-            if not data_found or not result.get("price"):
-                raise Exception(f"No price data available for {symbol}")
-            
-            return result
-            
         except ImportError:
             logger.error("yfinance library not installed")
             raise Exception("Yahoo Finance library not available")

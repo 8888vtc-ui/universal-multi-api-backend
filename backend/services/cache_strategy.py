@@ -235,13 +235,3 @@ def cached(
         
         return wrapper
     return decorator
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

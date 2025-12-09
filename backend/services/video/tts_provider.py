@@ -24,17 +24,17 @@ class TTSProvider:
             self.coqui_available = True
             self.coqui_tts = TTS(model_name="tts_models/fr/css10/vits", progress_bar=False)
             self.providers.append("coqui")
-            print("✅ Coqui TTS initialized")
+            print("[OK] Coqui TTS initialized")
         except ImportError:
             self.coqui_available = False
-            print("⚠️  Coqui TTS not available (install: pip install TTS)")
+            print("[WARN] Coqui TTS not available (install: pip install TTS)")
         
         # ElevenLabs (si disponible)
         elevenlabs_key = os.getenv("ELEVENLABS_API_KEY")
         if elevenlabs_key and elevenlabs_key != "your_elevenlabs_api_key_here":
             self.elevenlabs_available = True
             self.providers.append("elevenlabs")
-            print("✅ ElevenLabs TTS available")
+            print("[OK] ElevenLabs TTS available")
         else:
             self.elevenlabs_available = False
     
@@ -77,7 +77,7 @@ class TTSProvider:
                     "format": "wav"
                 }
             except Exception as e:
-                print(f"⚠️  Coqui TTS failed: {e}")
+                print(f"[WARN] Coqui TTS failed: {e}")
         
         # Fallback vers ElevenLabs si disponible
         if self.elevenlabs_available:
@@ -114,13 +114,3 @@ class TTSProvider:
 
 # Singleton instance
 tts_provider = TTSProvider()
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

@@ -5,13 +5,22 @@ from fastapi import APIRouter, HTTPException
 from models.schemas import EmbeddingRequest, EmbeddingResponse
 from services.cache import cache_service
 import os
-import cohere
+
+# Optional cohere import
+try:
+    import cohere
+    COHERE_AVAILABLE = True
+except ImportError:
+    cohere = None
+    COHERE_AVAILABLE = False
 
 router = APIRouter(prefix="/api", tags=["embeddings"])
 
 
 def get_cohere_client():
     """Get Cohere client"""
+    if not COHERE_AVAILABLE:
+        return None
     api_key = os.getenv("COHERE_API_KEY")
     if not api_key or api_key == "your_cohere_api_key_here":
         return None

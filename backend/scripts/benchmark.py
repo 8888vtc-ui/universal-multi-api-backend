@@ -206,13 +206,3 @@ async def run_benchmarks():
 
 if __name__ == "__main__":
     asyncio.run(run_benchmarks())
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes

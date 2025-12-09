@@ -147,13 +147,3 @@ async def get_metrics_summary():
             2
         )
     }
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
-
->>>>>>> Stashed changes
