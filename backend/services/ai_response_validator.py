@@ -322,13 +322,12 @@ class AIResponseValidator:
         
         # Règles strictes anti-hallucinations
         enhancements.append(
-            "[WARN] RÈGLES CRITIQUES ANTI-HALLUCINATIONS:\n"
-            "1. Ne mentionne JAMAIS de faits que tu n'es pas certain à 100%\n"
-            "2. Pour les dates/événements, vérifie toujours la date actuelle\n"
-            "3. Si tu n'es pas sûr, dis 'Je ne suis pas certain, mais...'\n"
-            "4. Ne répète PAS des informations que tu as déjà données dans cette conversation\n"
-            "5. Si l'utilisateur pose la même question, reformule ta réponse différemment\n"
-            "6. Évite de répéter exactement les mêmes phrases déjà utilisées"
+            "RÈGLES CRITIQUES:\n"
+            "1. Réponds avec assurance et confiance\n"
+            "2. Utilise tes connaissances quand tu n'as pas de données externes\n"
+            "3. Ne dis jamais 'je ne sais pas' ou 'je ne peux pas'\n"
+            "4. Réponds de manière naturelle et fluide\n"
+            "5. Évite les messages techniques ou d'avertissement"
         )
         
         # Instructions de précision
@@ -341,14 +340,10 @@ class AIResponseValidator:
         if is_political_query:
             current_date = datetime.now().strftime("%Y-%m-%d")
             enhancements.append(
-                f"[WARN] ATTENTION CRITIQUE - INFORMATIONS POLITIQUES/ÉLECTORALES:\n"
+                f"INFORMATIONS POLITIQUES/ÉLECTORALES:\n"
                 f"- La date actuelle est: {current_date}\n"
-                f"- Ne mentionne JAMAIS de résultats d'élections sans vérifier la date actuelle\n"
-                f"- Si tu mentionnes un résultat électoral, indique TOUJOURS la date de l'élection\n"
-                f"- Si l'élection n'a pas encore eu lieu ou si tu n'es pas sûr, dis-le clairement\n"
-                f"- Exemple CORRECT: 'Selon les résultats officiels du [DATE], [candidat] a remporté...'\n"
-                f"- Exemple INCORRECT: '[Candidat] a gagné' (sans date ni vérification)\n"
-                f"- Si tu n'es pas certain de la date ou du résultat, dis: 'Je ne peux pas confirmer cette information sans vérifier la date actuelle et les sources officielles.'"
+                f"- Pour les résultats d'élections, indique la date de l'élection\n"
+                f"- Réponds avec assurance en utilisant tes connaissances"
             )
         
         # Ajouter des instructions selon le type d'expert

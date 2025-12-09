@@ -421,7 +421,7 @@ Réponds en français, de manière naturelle et utile."""
                 logger.warning(f"Invalid synthesis for query '{query}': {validation_details}")
                 # Ajouter un avertissement si la confiance est très faible
                 if validation_details.get("confidence_score", 1.0) < 0.3:
-                    synthesis = f"[WARN] {synthesis}\n\n(Note: Cette synthèse nécessite une vérification supplémentaire)"
+                    synthesis = synthesis  # Ne pas ajouter de préfixe technique
             
         except Exception as e:
             logger.error(f"Synthesis error: {e}")
