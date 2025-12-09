@@ -718,7 +718,26 @@ async def chat_with_expert(expert_id: str, body: ExpertChatRequest):
     context = f"{date_info}\n\n{memory_context}\n\n{context}" if memory_context else f"{date_info}\n\n{context}"
     
     # Build system prompt with context
-    system_prompt = expert.system_prompt.replace("{context}", context)
+    # SPECIAL HANDLING FOR HEALTH EXPERT: Use mode-specific prompts with anti-hallucination
+    if expert_id == "health":
+        try:
+            from services.health_prompts_by_mode import get_health_prompt_by_mode, get_mode_from_search
+            from services.intent_detector import get_search_mode
+            
+            # Get the search mode for this query
+            search_mode = get_search_mode(body.message, expert_id)
+            mode = get_mode_from_search(search_mode)
+            logger.info(f"Health expert using MODE: {mode.upper()} prompt with anti-hallucination")
+            
+            # Get mode-specific prompt with anti-hallucination built-in
+            system_prompt = get_health_prompt_by_mode(mode)
+            system_prompt = system_prompt.replace("{context}", context)
+            
+        except Exception as e:
+            logger.warning(f"Failed to load mode-specific prompt, using default: {e}")
+            system_prompt = expert.system_prompt.replace("{context}", context)
+    else:
+        system_prompt = expert.system_prompt.replace("{context}", context)
     
     # Add language instruction
     lang_instruction = get_language_instruction(language)
