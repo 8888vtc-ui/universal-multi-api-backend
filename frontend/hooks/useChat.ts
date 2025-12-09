@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { apiClient, ChatMessage } from '@/lib/api';
 import { Language } from '@/lib/i18n';
+
+export type SearchMode = 'fast' | 'normal' | 'deep';
 
 interface UseChatReturn {
     messages: ChatMessage[];
     isLoading: boolean;
     error: string | null;
-    sendMessage: (message: string) => Promise<void>;
+    sendMessage: (message: string, mode?: SearchMode) => Promise<void>;
     clearMessages: () => void;
 }
 
@@ -17,7 +19,7 @@ export function useChat(language: Language): UseChatReturn {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const sendMessage = async (message: string) => {
+    const sendMessage = async (message: string, mode: SearchMode = 'normal') => {
         if (!message.trim()) return;
 
         // Add user message
@@ -35,6 +37,7 @@ export function useChat(language: Language): UseChatReturn {
                 message,
                 language,
                 conversation_history: messages,
+                search_mode: mode,  // Pass search mode to API
             });
 
             // Add assistant response
@@ -63,8 +66,5 @@ export function useChat(language: Language): UseChatReturn {
         error,
         sendMessage,
         clearMessages,
-    };
-}
-
     };
 }

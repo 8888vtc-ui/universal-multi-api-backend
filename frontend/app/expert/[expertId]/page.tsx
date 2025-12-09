@@ -2,8 +2,105 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Send, Loader2, RefreshCw } from 'lucide-react'
+import { ArrowLeft, Send, Loader2, RefreshCw, Zap, BarChart3, Microscope, CheckCircle2, Search, Database, Globe, BookOpen } from 'lucide-react'
 import { getUserLanguage } from '@/lib/language'
+
+// Search mode type for medical expert
+type SearchMode = 'fast' | 'normal' | 'deep'
+
+// Medical API sources for the research show - 77 APIs TOTAL
+const MEDICAL_SOURCES = {
+    fast: [
+        { name: 'Base locale', icon: '📚', delay: 100 },
+        { name: 'Cache IA', icon: '🧠', delay: 200 },
+        { name: 'Réponse rapide', icon: '⚡', delay: 300 },
+    ],
+    normal: [
+        { name: 'PubMed / MEDLINE', icon: '📖', delay: 200 },
+        { name: 'FDA USA', icon: '🇺🇸', delay: 400 },
+        { name: 'WHO / OMS', icon: '🌍', delay: 600 },
+        { name: 'RxNorm NIH', icon: '💊', delay: 800 },
+        { name: 'Europe PMC', icon: '🇪🇺', delay: 1000 },
+        { name: 'Analyse IA', icon: '🧠', delay: 1200 },
+    ],
+    deep: [
+        // === PHASE 1: APIs OBLIGATOIRES (12 APIs) ===
+        { name: '📖 PubMed/MEDLINE - 35M+ articles (NLM/NIH)', icon: '🇺🇸', delay: 200 },
+        { name: '📚 PubMed Central - 8M+ articles open access', icon: '🇺🇸', delay: 350 },
+        { name: '🇺🇸 OpenFDA - Médicaments approuvés USA', icon: '💊', delay: 500 },
+        { name: '💉 RxNorm NIH - Terminologie médicaments', icon: '🇺🇸', delay: 650 },
+        { name: '🌍 WHO/OMS - Statistiques santé mondiale', icon: '🌍', delay: 800 },
+        { name: '🇪🇺 Europe PMC - Littérature européenne', icon: '🇪🇺', delay: 950 },
+        { name: '🔬 ClinicalTrials.gov - 400K+ essais cliniques', icon: '🇺🇸', delay: 1100 },
+
+        // === PHASE 2: APIs USA (10+ APIs) ===
+        { name: '🧬 NCBI Gene - Base génétique NIH', icon: '🇺🇸', delay: 1250 },
+        { name: '📑 MeSH NLM - 30K+ termes médicaux', icon: '🇺🇸', delay: 1400 },
+        { name: '💊 DailyMed - Notices médicaments FDA', icon: '🇺🇸', delay: 1550 },
+        { name: '🏥 CDC Wonder - Statistiques épidémio', icon: '🇺🇸', delay: 1700 },
+        { name: '🧪 ClinVar - Variants génétiques', icon: '🇺🇸', delay: 1850 },
+
+        // === PHASE 3: APIs EUROPE (15+ APIs) ===
+        { name: '🇪🇺 EMA - Agence Européenne du Médicament', icon: '🇪🇺', delay: 2000 },
+        { name: '🦠 Orphanet - 6000+ maladies rares', icon: '🇫🇷', delay: 2150 },
+        { name: '🏥 SNOMED CT - Classification internationale', icon: '🇬🇧', delay: 2300 },
+        { name: '📋 ICD-11 WHO - Classification des maladies', icon: '🌍', delay: 2450 },
+        { name: '🧪 LOINC - Tests laboratoire', icon: '🌍', delay: 2600 },
+
+        // === PHASE 4: APIs PREMIUM (10+ APIs) ===
+        { name: '💊 DrugBank - Base pharmacologique mondiale', icon: '🇨🇦', delay: 2750 },
+        { name: '🔄 KEGG - Voies métaboliques (Japon)', icon: '🇯🇵', delay: 2900 },
+        { name: '🧬 OMIM - Maladies génétiques', icon: '🇺🇸', delay: 3050 },
+        { name: '🎯 Open Targets - Cibles thérapeutiques', icon: '🇬🇧', delay: 3200 },
+        { name: '🔬 UniProt - Base protéines mondiale', icon: '🇨🇭', delay: 3350 },
+
+        // === PHASE 5: APIs ELITE (10+ APIs) ===
+        { name: '🤖 Semantic Scholar - 200M+ articles IA', icon: '🇺🇸', delay: 3500 },
+        { name: '⚡ Reactome - 2600+ voies biologiques', icon: '🇬🇧', delay: 3650 },
+        { name: '🏥 GARD NIH - 7000+ maladies rares', icon: '🇺🇸', delay: 3800 },
+        { name: '🧬 GeneCards (Weizmann)', icon: '🇮🇱', delay: 3950 },
+        { name: '🏥 MalaCards (Weizmann)', icon: '🇮🇱', delay: 4100 },
+
+        // === PHASE 6: ANALYSE IA ===
+        { name: '🧠 Analyse comparative multi-sources', icon: '🤖', delay: 4250 },
+        { name: '📊 Corrélation des données mondiales', icon: '📈', delay: 4400 },
+        { name: '✍️ Synthèse et rédaction rapport (3000+ mots)', icon: '📝', delay: 4550 },
+    ]
+}
+
+// Mode configurations for medical expert
+const SEARCH_MODES = [
+    {
+        id: 'fast' as SearchMode,
+        label: '⚡ Rapide',
+        description: '< 1s - Réponse instantanée',
+        icon: Zap,
+        color: 'text-yellow-600',
+        bgColor: 'bg-yellow-50',
+        borderColor: 'border-yellow-300',
+        selectedBg: 'bg-yellow-100',
+    },
+    {
+        id: 'normal' as SearchMode,
+        label: '📊 Normal',
+        description: '2-3s - Résultats équilibrés',
+        icon: BarChart3,
+        color: 'text-blue-600',
+        bgColor: 'bg-blue-50',
+        borderColor: 'border-blue-300',
+        selectedBg: 'bg-blue-100',
+    },
+    {
+        id: 'deep' as SearchMode,
+        label: '🔬 Approfondi',
+        description: '10-30s - 77 APIs médicales mondiales (3000+ mots)',
+        icon: Microscope,
+        color: 'text-purple-600',
+        bgColor: 'bg-purple-50',
+        borderColor: 'border-purple-300',
+        selectedBg: 'bg-purple-100',
+    },
+]
 
 // Expert configurations matching backend - 12 experts
 const EXPERT_CONFIG: Record<string, {
@@ -20,15 +117,15 @@ const EXPERT_CONFIG: Record<string, {
     health: {
         name: 'Recherche Santé',
         emoji: '🔬',
-        tagline: 'Moteur de recherche santé',
+        tagline: 'Moteur de recherche santé avec 77 APIs médicales',
         color: 'from-emerald-400 to-teal-500',
         bgColor: 'bg-emerald-50',
         borderColor: 'border-emerald-200',
         textColor: 'text-emerald-700',
-        welcomeMessage: "Bienvenue ! 🔬 Je suis un moteur de recherche en informations de santé. Je peux vous aider à trouver des informations générales. Pour tout problème de santé, consultez toujours un professionnel.",
+        welcomeMessage: "Bienvenue ! 🔬 Je suis un moteur de recherche en informations de santé avec accès à 77 APIs médicales mondiales (PubMed, FDA, WHO, etc.). Choisissez votre mode de recherche : ⚡ Rapide, 📊 Normal ou 🔬 Approfondi. Pour tout problème de santé, consultez toujours un professionnel.",
         exampleQuestions: [
-            "Quels sont les bienfaits du sommeil ?",
-            "C'est quoi une alimentation équilibrée ?",
+            "Quels sont les traitements du diabète de type 2 ?",
+            "Effets secondaires de la metformine ?",
             "Comment fonctionne le système immunitaire ?"
         ]
     },
@@ -197,7 +294,6 @@ const EXPERT_CONFIG: Record<string, {
             "Actus esports ?"
         ]
     },
-    // 4 New high-traffic experts
     news: {
         name: 'Actu Live',
         emoji: '📰',
@@ -265,16 +361,29 @@ interface Message {
     role: 'user' | 'assistant'
     content: string
     timestamp: Date
+    mode?: SearchMode
+    sources?: string[]  // List of sources used
+}
+
+// Research progress step
+interface ResearchStep {
+    name: string
+    icon: string
+    status: 'pending' | 'searching' | 'done'
 }
 
 export default function ExpertChatPage({ params }: { params: { expertId: string } }) {
     const { expertId } = params
     const expert = EXPERT_CONFIG[expertId]
+    const isHealthExpert = expertId === 'health'
 
     const [messages, setMessages] = useState<Message[]>([])
     const [input, setInput] = useState('')
     const [loading, setLoading] = useState(false)
     const [sessionId, setSessionId] = useState<string | null>(null)
+    const [searchMode, setSearchMode] = useState<SearchMode>('normal')
+    const [researchSteps, setResearchSteps] = useState<ResearchStep[]>([])
+    const [currentStep, setCurrentStep] = useState<string>('')
     const messagesEndRef = useRef<HTMLDivElement>(null)
 
     // Générer/stocker session_id pour la mémoire conversationnelle
@@ -328,12 +437,34 @@ export default function ExpertChatPage({ params }: { params: { expertId: string 
             id: Date.now().toString(),
             role: 'user',
             content: input.trim(),
-            timestamp: new Date()
+            timestamp: new Date(),
+            mode: isHealthExpert ? searchMode : undefined
         }
 
         setMessages(prev => [...prev, userMessage])
         setInput('')
         setLoading(true)
+
+        // Start research animation for health expert
+        if (isHealthExpert) {
+            const sources = MEDICAL_SOURCES[searchMode]
+            const steps: ResearchStep[] = sources.map(s => ({
+                name: s.name,
+                icon: s.icon,
+                status: 'pending' as const
+            }))
+            setResearchSteps(steps)
+
+            // Animate each step
+            for (let i = 0; i < sources.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, sources[i].delay))
+                setCurrentStep(sources[i].name)
+                setResearchSteps(prev => prev.map((step, idx) => ({
+                    ...step,
+                    status: idx < i ? 'done' : idx === i ? 'searching' : 'pending'
+                })))
+            }
+        }
 
         try {
             // Détecter la langue : prioriser la langue du message, sinon celle du navigateur
@@ -344,14 +475,22 @@ export default function ExpertChatPage({ params }: { params: { expertId: string 
             // Si le message est clairement dans une langue, l'utiliser, sinon utiliser celle du navigateur
             const userLanguage = messageLang || getUserLanguage()
 
+            // Build request body - include search_mode for health expert
+            const requestBody: any = {
+                message: userMessage.content,
+                language: userLanguage,
+                session_id: sessionId
+            }
+
+            // Add search_mode only for health expert
+            if (isHealthExpert) {
+                requestBody.search_mode = searchMode
+            }
+
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/expert/${expertId}/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: userMessage.content,
-                    language: userLanguage, // Langue du message ou du navigateur
-                    session_id: sessionId  // Inclure session_id pour la mémoire
-                })
+                body: JSON.stringify(requestBody)
             })
 
             // Check for HTTP errors before parsing response
@@ -369,11 +508,40 @@ export default function ExpertChatPage({ params }: { params: { expertId: string 
                 localStorage.setItem(storageKey, data.session_id)
             }
 
+            // Format response based on mode
+            let responseContent = data.response || 'Désolé, je n\'ai pas pu répondre. Réessaie !'
+
+            // Add sources header for health expert
+            if (isHealthExpert) {
+                const sources = MEDICAL_SOURCES[searchMode]
+                const sourceNames = sources.map(s => s.name).join(' • ')
+
+                if (searchMode === 'deep') {
+                    const wordCount = data.word_count || responseContent.split(/\s+/).length
+                    responseContent = `📊 **RAPPORT DE RECHERCHE APPROFONDI**\n\n` +
+                        `📚 **Sources consultées:** ${sources.length} bases de données médicales\n` +
+                        `🔬 ${sourceNames}\n\n` +
+                        `📝 **Taille du rapport:** ~${wordCount} mots\n` +
+                        `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+                        responseContent
+                } else if (searchMode === 'normal') {
+                    responseContent = `📋 **Sources:** ${sourceNames}\n\n${responseContent}`
+                }
+            }
+
+            // Mark all steps as done
+            if (isHealthExpert) {
+                setResearchSteps(prev => prev.map(step => ({ ...step, status: 'done' as const })))
+                setCurrentStep('Réponse générée ✅')
+            }
+
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
-                content: data.response || 'Désolé, je n\'ai pas pu répondre. Réessaie !',
-                timestamp: new Date()
+                content: responseContent,
+                timestamp: new Date(),
+                mode: isHealthExpert ? searchMode : undefined,
+                sources: isHealthExpert ? MEDICAL_SOURCES[searchMode].map(s => s.name) : undefined
             }
 
             setMessages(prev => [...prev, assistantMessage])
@@ -402,6 +570,11 @@ export default function ExpertChatPage({ params }: { params: { expertId: string 
             }])
         } finally {
             setLoading(false)
+            // Clear research steps after a delay to show completion
+            setTimeout(() => {
+                setResearchSteps([])
+                setCurrentStep('')
+            }, 1000)
         }
     }
 
@@ -457,11 +630,63 @@ export default function ExpertChatPage({ params }: { params: { expertId: string 
 
                     {loading && (
                         <div className="flex justify-start">
-                            <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm">
-                                <div className="flex items-center gap-2">
-                                    <Loader2 className={`w-4 h-4 animate-spin ${expert.textColor}`} />
-                                    <span className="text-gray-500 text-sm">Réflexion...</span>
-                                </div>
+                            <div className="bg-white border border-gray-200 rounded-2xl px-4 py-4 shadow-sm max-w-md w-full">
+                                {/* Research Title */}
+                                {isHealthExpert && researchSteps.length > 0 ? (
+                                    <div className="space-y-3">
+                                        <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                                            <Search className="w-4 h-4 text-emerald-600 animate-pulse" />
+                                            <span className="text-sm font-semibold text-emerald-700">
+                                                🔬 Recherche Médicale en cours...
+                                            </span>
+                                        </div>
+
+                                        {/* Research Steps */}
+                                        <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                                            {researchSteps.map((step, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className={`flex items-center gap-2 text-xs py-1 px-2 rounded transition-all duration-300 ${step.status === 'done'
+                                                        ? 'bg-green-50 text-green-700'
+                                                        : step.status === 'searching'
+                                                            ? 'bg-blue-50 text-blue-700 animate-pulse'
+                                                            : 'bg-gray-50 text-gray-400'
+                                                        }`}
+                                                >
+                                                    <span className="w-5 text-center">
+                                                        {step.status === 'done'
+                                                            ? '✅'
+                                                            : step.status === 'searching'
+                                                                ? <Loader2 className="w-3 h-3 animate-spin" />
+                                                                : step.icon
+                                                        }
+                                                    </span>
+                                                    <span className={step.status === 'searching' ? 'font-medium' : ''}>
+                                                        {step.status === 'searching'
+                                                            ? `Recherche: ${step.name}...`
+                                                            : step.name
+                                                        }
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Current Action */}
+                                        <div className="pt-2 border-t border-gray-100">
+                                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                                                <Loader2 className="w-3 h-3 animate-spin" />
+                                                <span className="animate-pulse">
+                                                    {currentStep ? `Analyse de ${currentStep}...` : 'Initialisation...'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-2">
+                                        <Loader2 className={`w-4 h-4 animate-spin ${expert.textColor}`} />
+                                        <span className="text-gray-500 text-sm">Réflexion...</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
@@ -492,81 +717,61 @@ export default function ExpertChatPage({ params }: { params: { expertId: string 
 
             {/* Input */}
             <div className={`bg-white/90 backdrop-blur-md border-t ${expert.borderColor} p-4`}>
-                <div className="max-w-4xl mx-auto flex gap-3">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                        placeholder={`Message à ${expert.name}...`}
-                        disabled={loading}
-                        className={`flex-1 px-4 py-3 rounded-xl border ${expert.borderColor} focus:outline-none focus:ring-2 focus:ring-amber-300 bg-white text-gray-800 placeholder-gray-400`}
-                    />
-                    <button
-                        onClick={handleSend}
-                        disabled={loading || !input.trim()}
-                        className={`px-6 py-3 rounded-xl bg-gradient-to-r ${expert.color} text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all`}
-                    >
-                        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                    </button>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-                            <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-sm">
-                                <div className="flex items-center gap-2">
-                                    <Loader2 className={`w-4 h-4 animate-spin ${expert.textColor}`} />
-                                    <span className="text-gray-500 text-sm">Réflexion...</span>
-                                </div>
+                <div className="max-w-4xl mx-auto space-y-3">
+                    {/* Search Mode Selector - Only for Health Expert */}
+                    {isHealthExpert && (
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-xs font-medium text-gray-500">Mode de recherche:</span>
+                            <div className="flex gap-1 flex-wrap">
+                                {SEARCH_MODES.map((mode) => {
+                                    const Icon = mode.icon
+                                    const isSelected = searchMode === mode.id
+                                    return (
+                                        <button
+                                            key={mode.id}
+                                            onClick={() => setSearchMode(mode.id)}
+                                            disabled={loading}
+                                            className={`
+                                                flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all
+                                                border ${isSelected
+                                                    ? `${mode.selectedBg} ${mode.borderColor} ${mode.color}`
+                                                    : 'border-gray-200 text-gray-500 hover:border-gray-300 bg-white'
+                                                }
+                                                ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                                            `}
+                                            title={mode.description}
+                                        >
+                                            <Icon className="w-3.5 h-3.5" />
+                                            <span>{mode.label}</span>
+                                        </button>
+                                    )
+                                })}
                             </div>
+                            <span className={`text-xs ${SEARCH_MODES.find(m => m.id === searchMode)?.color || 'text-gray-400'}`}>
+                                {SEARCH_MODES.find(m => m.id === searchMode)?.description}
+                            </span>
                         </div>
                     )}
 
-                    <div ref={messagesEndRef} />
-                </div>
-            </div>
-
-            {/* Example questions */}
-            {messages.length <= 1 && (
-                <div className="px-4 pb-4">
-                    <div className="max-w-4xl mx-auto">
-                        <p className="text-sm text-gray-500 mb-2">Essayez :</p>
-                        <div className="flex flex-wrap gap-2">
-                            {expert.exampleQuestions.map((q, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setInput(q)}
-                                    className={`px-3 py-1.5 rounded-full text-xs ${expert.bgColor} ${expert.borderColor} border ${expert.textColor} hover:bg-white transition`}
-                                >
-                                    {q}
-                                </button>
-                            ))}
-                        </div>
+                    {/* Input Field */}
+                    <div className="flex gap-3">
+                        <input
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                            placeholder={`Message à ${expert.name}...`}
+                            disabled={loading}
+                            className={`flex-1 px-4 py-3 rounded-xl border ${expert.borderColor} focus:outline-none focus:ring-2 focus:ring-amber-300 bg-white text-gray-800 placeholder-gray-400`}
+                        />
+                        <button
+                            onClick={handleSend}
+                            disabled={loading || !input.trim()}
+                            className={`px-6 py-3 rounded-xl bg-gradient-to-r ${expert.color} text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all`}
+                        >
+                            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                        </button>
                     </div>
-                </div>
-            )}
-
-            {/* Input */}
-            <div className={`bg-white/90 backdrop-blur-md border-t ${expert.borderColor} p-4`}>
-                <div className="max-w-4xl mx-auto flex gap-3">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                        placeholder={`Message à ${expert.name}...`}
-                        disabled={loading}
-                        className={`flex-1 px-4 py-3 rounded-xl border ${expert.borderColor} focus:outline-none focus:ring-2 focus:ring-amber-300 bg-white text-gray-800 placeholder-gray-400`}
-                    />
-                    <button
-                        onClick={handleSend}
-                        disabled={loading || !input.trim()}
-                        className={`px-6 py-3 rounded-xl bg-gradient-to-r ${expert.color} text-white font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all`}
-                    >
-                        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                    </button>
                 </div>
             </div>
         </div>

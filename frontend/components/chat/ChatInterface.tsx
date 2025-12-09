@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import ChatBubble from './ChatBubble'
-import ChatInput from './ChatInput'
+import ChatInput, { SearchMode } from './ChatInput'
 import SourcesList from './SourcesList'
 
 interface Message {
@@ -11,6 +11,7 @@ interface Message {
   content: string
   sources?: any[]
   timestamp: Date
+  mode?: SearchMode
 }
 
 export default function ChatInterface() {
@@ -22,12 +23,13 @@ export default function ChatInterface() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const handleSend = async (content: string) => {
+  const handleSend = async (content: string, mode: SearchMode) => {
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
       content,
       timestamp: new Date(),
+      mode,
     }
 
     setMessages(prev => [...prev, userMessage])
@@ -38,17 +40,30 @@ export default function ChatInterface() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: content, language: 'fr' }),
+        body: JSON.stringify({
+          message: content,
+          language: 'fr',
+          search_mode: mode,  // Send search mode to backend
+        }),
       })
 
       const data = await response.json()
 
+      // Format response with mode indicator
+      let responseContent = data.response || data.error || 'Erreur de réponse'
+
+      // Add mode indicator if deep mode and word count info
+      if (mode === 'deep' && data.word_count) {
+        responseContent = `📊 **Rapport approfondi** (${data.word_count} mots)\n\n${responseContent}`
+      }
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: data.response || data.error || 'Erreur de réponse',
+        content: responseContent,
         sources: data.sources,
         timestamp: new Date(),
+        mode,
       }
 
       setMessages(prev => [...prev, assistantMessage])
