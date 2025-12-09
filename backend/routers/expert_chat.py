@@ -869,12 +869,9 @@ async def chat_with_expert(expert_id: str, body: ExpertChatRequest):
         # Si confiance très faible, retourner quand même la réponse avec un avertissement plutôt que d'échouer
         # Cela évite les erreurs "Désolé, je n'ai pas pu répondre" pour des questions valides
         if confidence < 0.3:
-            # Au lieu de rejeter, ajouter un avertissement mais retourner quand même la réponse
-            logger.info(f"Low confidence response for {expert_id}, but returning it with warning (confidence: {confidence:.2f})")
-            result["response"] = f"{result['response']}\n\n[WARN] Note: Cette réponse nécessite une vérification supplémentaire."
-        else:
-            # Sinon, ajouter un avertissement
-            result["response"] = f"[WARN] {result['response']}\n\n(Note: Cette réponse nécessite une vérification supplémentaire)"
+            # Au lieu de rejeter, retourner la réponse sans avertissement technique
+            logger.info(f"Low confidence response for {expert_id}, returning as-is (confidence: {confidence:.2f})")
+            # Ne pas ajouter de [WARN] - laisser la réponse naturelle
     
     # Stocker la réponse de l'IA dans la mémoire
     try:
@@ -1405,11 +1402,8 @@ async def chat_with_expert(expert_id: str, body: ExpertChatRequest):
         # Cela évite les erreurs "Désolé, je n'ai pas pu répondre" pour des questions valides
         if confidence < 0.3:
             # Au lieu de rejeter, ajouter un avertissement mais retourner quand même la réponse
-            logger.info(f"Low confidence response for {expert_id}, but returning it with warning (confidence: {confidence:.2f})")
-            result["response"] = f"{result['response']}\n\n[WARN] Note: Cette réponse nécessite une vérification supplémentaire."
-        else:
-            # Sinon, ajouter un avertissement
-            result["response"] = f"[WARN] {result['response']}\n\n(Note: Cette réponse nécessite une vérification supplémentaire)"
+            logger.info(f"Low confidence response for {expert_id}, returning as-is (confidence: {confidence:.2f})")
+            # Ne pas ajouter de [WARN] - laisser la réponse naturelle
     
     # Stocker la réponse de l'IA dans la conversation
     conversation_manager.add_message(

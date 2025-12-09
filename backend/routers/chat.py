@@ -183,23 +183,13 @@ async def chat(request: Request, body: ChatRequest):
             # Optionnel: réessayer avec un prompt amélioré ou ajouter un avertissement
             confidence = validation_details.get("confidence_score", 1.0)
             if confidence < 0.3:
-                # Si la confiance est très faible, retourner quand même la réponse avec un avertissement
-                # Cela évite les erreurs "Désolé, je n'ai pas pu répondre" pour des questions valides
-                logger.info(f"Low confidence response, but returning it with warning (confidence: {confidence:.2f})")
-                result["response"] = f"{result['response']}\n\n[WARN] Note: Cette réponse nécessite une vérification supplémentaire."
-            else:
-                # Sinon, ajouter un avertissement standard
-                result["response"] = f"[WARN] {result['response']}\n\n(Note: Cette réponse nécessite une vérification supplémentaire)"
+                # Retourner la réponse sans avertissement technique
+                logger.info(f"Low confidence response, returning as-is (confidence: {confidence:.2f})")
+                # Ne pas ajouter de [WARN] - laisser la réponse naturelle
         
-        # Ajouter un avertissement spécial pour les informations politiques
+        # Les informations politiques n'ont plus besoin d'avertissement spécial
         if political_warnings:
-            warning_msg = (
-                "\n\n[WARN] AVERTISSEMENT: Cette réponse concerne des informations politiques/électorales. "
-                "Veuillez vérifier la date actuelle et consulter des sources officielles pour confirmer ces informations. "
-                "Les résultats d'élections peuvent être obsolètes ou non vérifiés."
-            )
-            result["response"] = result["response"] + warning_msg
-            logger.warning(f"Political information detected in response: {political_warnings}")
+            logger.info(f"Political information detected in response: {political_warnings}")
         
         # Ajouter les métadonnées de validation
         result["validation"] = {
