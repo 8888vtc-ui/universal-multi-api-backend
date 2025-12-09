@@ -79,18 +79,39 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
         logger.info(f"Skipping API calls for chat-only query: '{query}' ({expert.id.value})")
         return "Contexte: Conversation simple, pas de données externes nécessaires.", []
     
-    # 2. For HEALTH expert: Check if DEEP search is needed
+    # 2. For HEALTH expert: Use intelligent API routing with intent detection
     if expert.id.value == "health":
+        from services.medical_intent_extractor import MedicalIntentExtractor
+        from services.external_apis.medical_mega_registry import MegaMedicalRegistry
+        
         search_mode = get_search_mode(query, expert.id.value)
         logger.info(f"Health expert search mode: {search_mode}")
         
+        # Extract query intent (symptoms, treatment, diagnosis, etc.)
+        intent_data = MedicalIntentExtractor.extract_intent(query)
+        primary_intent = intent_data["primary_intent"]
+        entities = intent_data["entities"]
+        
+        logger.info(
+            f"Medical intent: {primary_intent}, entities: {entities}, "
+            f"confidence: {intent_data['confidence']:.2f}"
+        )
+        
         if search_mode == "deep":
-            # Use DEEP medical search - comprehensive search across ALL APIs
+            # DEEP mode: Comprehensive search with intent-based filtering
             try:
                 from services.deep_medical_search import perform_deep_search
                 logger.info(f"Starting DEEP medical search for: {query}")
                 
                 context, search_result = await perform_deep_search(query)
+                
+                # Add intent header to context
+                intent_header = f"[RECHERCHE APPROFONDIE - {primary_intent.upper()}]\n"
+                if entities:
+                    intent_header += f"Entités détectées: {', '.join(entities)}\n"
+                intent_header += f"Focus: {', '.join(MedicalIntentExtractor.get_focus_fields(primary_intent))}\n\n"
+                
+                context = intent_header + context
                 
                 # Build sources from the search
                 sources = [f"[{api.upper()}]" for api in search_result.apis_with_data]
@@ -104,8 +125,92 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
                 return context, sources
                 
             except Exception as e:
-                logger.error(f"Deep search failed, falling back to standard: {e}")
-                # Fall through to standard search
+                logger.error(f"Deep search failed, falling back to intelligent routing: {e}")
+                # Fall through to intelligent routing
+        
+        # NORMAL mode: Intelligent API routing based on intent
+        try:
+            # Get relevant APIs from MegaMedicalRegistry
+            relevant_apis = MegaMedicalRegistry.get_relevant_apis(query)
+            
+            # Limit APIs for NORMAL mode (5-12 APIs)
+            api_limit = 12
+            selected_apis = relevant_apis[:api_limit]
+            
+            logger.info(f"Selected {len(selected_apis)} medical APIs for query")
+            
+            # Build context header with intent
+            context_parts = []
+            intent_header = f"[RECHERCHE CIBLÉE - {primary_intent.upper()}]"
+            if entities:
+                intent_header += f"\nEntité: {', '.join(entities)}"
+            context_parts.append(intent_header)
+            
+            # Call medical router for comprehensive health info
+            from services.external_apis.medical_router import medical_router
+            
+            # Determine query type based on intent
+            query_type_map = {
+                "symptoms": "disease",
+                "treatment": "drug",
+                "side_effects": "drug",
+                "diagnosis": "disease",
+                "causes": "disease",
+                "prevention": "disease",
+                "prognosis": "disease",
+                "general": "general"
+            }
+            query_type = query_type_map.get(primary_intent, "general")
+            
+            try:
+                medical_data = await medical_router.get_comprehensive_health_info(
+                    query, 
+                    query_type
+                )
+                
+                # Filter data by intent
+                if primary_intent != "general" and medical_data:
+                    filtered_data = MedicalIntentExtractor.filter_data_by_intent(
+                        medical_data, primary_intent
+                    )
+                    if filtered_data:
+                        medical_data = filtered_data
+                
+                # Format the medical data
+                if medical_data:
+                    for source, data in medical_data.items():
+                        if source == "sources":
+                            continue
+                        if data:
+                            data_str = str(data)[:600] if isinstance(data, (dict, list)) else str(data)[:600]
+                            context_parts.append(f"[{source.upper()}]: {data_str}")
+                
+                sources = list(medical_data.get("sources", {}).keys()) if medical_data else []
+                
+            except Exception as e:
+                logger.warning(f"Medical router failed: {e}")
+                # Fallback: try individual API calls
+                sources = []
+            
+            # If no data from router, try direct API endpoints
+            if len(context_parts) <= 1:
+                # Try the standard API endpoints as fallback
+                fallback_apis = ["medical", "pubmed", "openfda"]
+                for api_name in fallback_apis:
+                    try:
+                        result = await _fetch_from_api(api_name, query, {"query": query})
+                        if result:
+                            context_parts.append(f"[{api_name.upper()}]: {result[:500]}")
+                            sources.append(api_name)
+                    except Exception:
+                        continue
+            
+            context = "\n\n".join(context_parts) if context_parts else "Données médicales temporairement indisponibles."
+            return context, sources
+            
+        except Exception as e:
+            logger.error(f"Intelligent medical routing failed: {e}")
+            return "Contexte médical: Données temporairement indisponibles.", []
     
     # 3. For FINANCE expert, use intelligent detection
     if expert.id.value == "finance":
