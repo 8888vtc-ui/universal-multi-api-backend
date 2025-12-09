@@ -223,6 +223,8 @@ async def _fetch_from_api(api_name: str, query: str, query_params: Optional[dict
         "animals": f"{base_url}/animals/random",
         "history": f"{base_url}/history/today",
         "nameanalysis": f"{base_url}/nameanalysis/analyze?name={query}",
+        # Flights endpoint (AviationStack)
+        "flights": f"{base_url}/flights/search?query={query}",
         # Finance endpoints (new) - utiliser symbol si disponible
         "finance_stock": f"{base_url}/finance/stock/quote/{symbol or query.upper()}",
         "finance_company": f"{base_url}/finance/stock/company/{symbol or query.upper()}",
