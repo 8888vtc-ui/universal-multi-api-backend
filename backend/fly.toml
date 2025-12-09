@@ -1,6 +1,6 @@
 # Fly.io Configuration - Simplifié
 app = "universal-api-hub"
-primary_region = "cdg"
+primary_region = "iad"
 
 [build]
   dockerfile = "Dockerfile"
