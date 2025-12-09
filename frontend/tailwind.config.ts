@@ -8,17 +8,18 @@ const config: Config = {
     ],
     theme: {
         extend: {
-            colors: {
-                background: "var(--background)",
-                foreground: "var(--foreground)",
+            backgroundImage: {
+                'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                'conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
             },
-            fontFamily: {
-                hebrew: ['Assistant', 'Heebo', 'sans-serif'],
-                latin: ['Inter', 'sans-serif'],
-            },
+            animation: {
+                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            }
         },
     },
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/typography'),
+    ],
 };
 
 export default config;

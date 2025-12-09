@@ -3,51 +3,112 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #020617; /* slate-950 */
+  --foreground: #ffffff;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-latin), Arial, Helvetica, sans-serif;
-}
-
-.font-hebrew {
-  font-family: 'Assistant', 'Heebo', sans-serif;
-}
-
-.font-latin {
   font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-/* Custom scrollbar */
+/* Scrollbar minimale */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #0f172a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #334155;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #475569;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Glassmorphism utilities */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-panel {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Markdown Styles */
+.prose-invert {
+  color: #e2e8f0;
+  max-width: none;
+}
+
+.prose-invert h1, .prose-invert h2, .prose-invert h3 {
+  color: #fff;
+  font-weight: 700;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose-invert p {
+  line-height: 1.7;
+  margin-bottom: 1em;
+}
+
+.prose-invert ul, .prose-invert ol {
+  margin-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+.prose-invert li {
+  margin-bottom: 0.5em;
+}
+
+.prose-invert strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.prose-invert a {
+  color: #818cf8;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.prose-invert a:hover {
+  border-color: #818cf8;
+}
+
+.prose-invert code {
+  background: rgba(255,255,255,0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: monospace;
+}
+
+.prose-invert blockquote {
+  border-left: 4px solid #6366f1;
+  padding-left: 1em;
+  font-style: italic;
+  color: #94a3b8;
 }
