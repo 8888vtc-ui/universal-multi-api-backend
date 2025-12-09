@@ -296,6 +296,88 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
             fallback_msg = FinanceQueryDetector.get_fallback_message(query_type, symbol)
             return f"[FINANCE]: {fallback_msg}", []
     
+    # 4. For GENERAL expert: Intelligent routing with 26 APIs
+    if expert.id.value == "general":
+        from services.general_query_router import GeneralQueryRouter
+        
+        # Détecter le type de requête (culture, cinema, sport, etc.)
+        query_type, confidence, matched = GeneralQueryRouter.detect_query_type(query)
+        
+        logger.info(
+            f"General query detection: type={query_type}, "
+            f"confidence={confidence:.2f}, matched={matched[:3] if matched else []}"
+        )
+        
+        # Sélectionner les APIs pertinentes (max 8)
+        api_names = GeneralQueryRouter.get_relevant_apis(query, max_apis=8)
+        
+        logger.info(f"General APIs selected: {api_names} for query type: {query_type}")
+        
+        # Préparer les paramètres
+        query_params = {
+            "query": query,
+            "query_type": query_type
+        }
+        
+        # Appeler les APIs en parallèle
+        try:
+            tasks = [_fetch_from_api(api_name, query, query_params) for api_name in api_names]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            
+            context_parts = []
+            sources = []
+            
+            # Ajouter un header avec le type détecté
+            if query_type != "general" and confidence >= 0.3:
+                header = f"[TYPE DÉTECTÉ: {query_type.upper()}]"
+                header += f" (Confiance: {confidence:.0%})"
+                if matched:
+                    header += f"\nMots-clés: {', '.join(matched[:3])}"
+                context_parts.append(header)
+            
+            # Traiter chaque résultat
+            for api_name, result in zip(api_names, results):
+                if isinstance(result, Exception):
+                    logger.debug(f"General API {api_name} failed: {type(result).__name__}")
+                    continue
+                
+                if result:
+                    # Limiter la taille
+                    result_str = result[:500] if isinstance(result, str) else str(result)[:500]
+                    context_parts.append(f"[{api_name.upper()}]: {result_str}")
+                    sources.append(api_name)
+            
+            # Si aucune donnée, ajouter un fallback contextuel
+            if len(context_parts) <= 1:
+                fallback_msg = GeneralQueryRouter.get_fallback_message(query_type)
+                context_parts.append(f"[NOTE]: {fallback_msg}")
+                context_parts.append(
+                    "L'assistant répondra avec ses connaissances générales."
+                )
+            
+            context = "\n\n".join(context_parts)
+            return context, sources
+            
+        except Exception as e:
+            logger.error(f"General API routing failed: {e}", exc_info=True)
+            # Fallback vers APIs universelles
+            try:
+                fallback_apis = ["wikipedia", "news"]
+                tasks = [_fetch_from_api(api, query, {"query": query}) for api in fallback_apis]
+                results = await asyncio.gather(*tasks, return_exceptions=True)
+                
+                context_parts = []
+                sources = []
+                for api, result in zip(fallback_apis, results):
+                    if result and not isinstance(result, Exception):
+                        context_parts.append(f"[{api.upper()}]: {result[:500]}")
+                        sources.append(api)
+                
+                context = "\n\n".join(context_parts) if context_parts else "Données temporairement indisponibles."
+                return context, sources
+            except:
+                return "Contexte: Données temporairement indisponibles.", []
+    
     # Pour les autres experts, utiliser la méthode standard
     api_names = expert.data_apis[:3]
     query_params = {"query": query}
