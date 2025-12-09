@@ -63,7 +63,8 @@ from routers import (
     chat, embeddings, health, finance, medical, entertainment,
     translation, news, messaging, weather, space, sports,
     utilities, geocoding, nutrition, email, media, boltai,
-    aggregated, search, video, assistant, analytics, auth, health_check
+    aggregated, search, video, assistant, analytics, auth, health_check,
+    coincap, exchange, countries, wikipedia
 )
 from routers import health_deep, metrics, ai_search, expert_chat
 
@@ -191,8 +192,10 @@ app.include_router(expert_chat.router)  # Expert AI specialists (legacy)
 app.include_router(search.router)
 app.include_router(aggregated.router)
 
-# Finance
+# Finance & Crypto
 app.include_router(finance.router)
+app.include_router(coincap.router)
+app.include_router(exchange.router)
 
 # Media & Content
 app.include_router(news.router)
@@ -204,6 +207,8 @@ app.include_router(entertainment.router)
 app.include_router(weather.router)
 app.include_router(geocoding.router)
 app.include_router(space.router)
+app.include_router(countries.router)
+app.include_router(wikipedia.router)
 
 # Communication
 app.include_router(messaging.router)
