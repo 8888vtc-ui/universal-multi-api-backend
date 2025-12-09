@@ -60,8 +60,40 @@ class ExpertInfo(BaseModel):
 # ============================================
 
 
+def _extract_location_from_query(query: str) -> str:
+    """
+    Extract location name from weather query
+    Examples:
+        - "Météo Paris" -> "Paris"
+        - "Weather in New York" -> "New York"
+        - "Quel temps fait-il à Lyon" -> "Lyon"
+    """
+    import re
     
-
+    # Patterns to remove
+    weather_words = [
+        r'\b(météo|meteo|weather|temps|climat|climate)\b',
+        r'\b(quel|quelle|what|how|is|fait-il|fait il)\b',
+        r'\b(à|a|in|for|de|du|en)\b',
+        r'\?',
+    ]
+    
+    result = query.lower()
+    
+    for pattern in weather_words:
+        result = re.sub(pattern, '', result, flags=re.IGNORECASE)
+    
+    # Clean up whitespace
+    result = ' '.join(result.split()).strip()
+    
+    # If result is empty, return original query
+    if not result:
+        result = query
+    
+    # Capitalize first letter of each word (proper noun)
+    result = result.title()
+    
+    return result
 
 
 async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]]:
@@ -377,6 +409,54 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
                 return context, sources
             except:
                 return "Contexte: Données temporairement indisponibles.", []
+    
+    # 5. For WEATHER expert: Precise dual-API weather with geocoding
+    if expert.id.value == "weather":
+        from services.external_apis.weather.router import WeatherRouter, format_weather_context
+        from services.external_apis.geocoding import GeocodingRouter
+        
+        try:
+            # Extraire le nom du lieu de la requête
+            location_name = _extract_location_from_query(query)
+            logger.info(f"Weather query for location: {location_name}")
+            
+            # Géocodage - convertir lieu en coordonnées
+            geocoding_router = GeocodingRouter()
+            geo_result = await geocoding_router.search(location_name)
+            
+            if not geo_result or not geo_result.get("results"):
+                # Fallback: essayer avec la requête complète
+                geo_result = await geocoding_router.search(query)
+            
+            if not geo_result or not geo_result.get("results"):
+                return "[ERREUR]: Lieu non trouvé. Précisez le nom de la ville ou du pays.", []
+            
+            location = geo_result["results"][0]
+            lat = location.get("lat")
+            lon = location.get("lon")
+            
+            logger.info(f"Geocoded: {location.get('name')} -> ({lat}, {lon})")
+            
+            # Récupérer météo avec les 2 APIs en parallèle
+            weather_router = WeatherRouter()
+            weather_data = await weather_router.get_current_weather(lat, lon)
+            
+            # Formater le contexte pour l'IA
+            context = format_weather_context(weather_data, location)
+            
+            sources = weather_data.get("sources", ["weather"])
+            provider = weather_data.get("provider", "unknown")
+            
+            logger.info(
+                f"Weather data retrieved: provider={provider}, "
+                f"precision={weather_data.get('precision_level', 'unknown')}"
+            )
+            
+            return context, sources
+            
+        except Exception as e:
+            logger.error(f"Weather expert failed: {e}", exc_info=True)
+            return "[ERREUR]: Service météo temporairement indisponible.", []
     
     # Pour les autres experts, utiliser la méthode standard
     api_names = expert.data_apis[:3]
