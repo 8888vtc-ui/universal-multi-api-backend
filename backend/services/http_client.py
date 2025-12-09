@@ -5,6 +5,29 @@ Réutilise les connexions HTTP pour de meilleures performances
 import httpx
 from typing import Optional, Dict, Any
 import asyncio
+import socket
+
+
+class CustomDNSResolver:
+    """Résolveur DNS personnalisé utilisant Google DNS"""
+    
+    @staticmethod
+    def resolve_dns(hostname: str) -> str:
+        """Résoudre le DNS en utilisant les serveurs Google"""
+        try:
+            # Utiliser les serveurs DNS Google
+            import dns.resolver
+            resolver = dns.resolver.Resolver()
+            resolver.nameservers = ['8.8.8.8', '8.8.4.4', '1.1.1.1']
+            resolver.lifetime = 5.0
+            answers = resolver.resolve(hostname, 'A')
+            return str(answers[0])
+        except Exception:
+            # Fallback sur la résolution système
+            try:
+                return socket.gethostbyname(hostname)
+            except Exception:
+                return hostname
 
 
 class HTTPClientPool:
@@ -28,7 +51,7 @@ class HTTPClientPool:
             if self._client is None or self._client.is_closed:
                 self._client = httpx.AsyncClient(
                     timeout=httpx.Timeout(
-                        connect=5.0,
+                        connect=10.0,  # Augmenté pour DNS lent
                         read=30.0,
                         write=10.0,
                         pool=5.0
@@ -39,6 +62,7 @@ class HTTPClientPool:
                         keepalive_expiry=30.0
                     ),
                     http2=True,  # Support HTTP/2 pour meilleures performances
+                    follow_redirects=True,  # Suivre les redirections
                 )
         return self._client
     
