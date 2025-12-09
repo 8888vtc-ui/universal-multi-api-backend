@@ -45,7 +45,7 @@ class AIProvider:
         """Check if provider can handle another request"""
         return cache_service.check_quota_available(self.name, self.daily_quota)
     
-    async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+    async def call(self, prompt: str, system_prompt: Optional[str] = None, max_tokens: int = 2048) -> str:
         """Call AI provider - to be implemented by subclasses"""
         raise NotImplementedError
 
@@ -71,8 +71,8 @@ class GroqProvider(AIProvider):
     
     @circuit_breaker(name="groq")
     @with_retry()
-    async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
-        """Call Groq API"""
+    async def call(self, prompt: str, system_prompt: Optional[str] = None, max_tokens: int = 8000) -> str:
+        """Call Groq API - supports up to 8000 tokens for DEEP mode"""
         try:
             messages = []
             
@@ -83,9 +83,9 @@ class GroqProvider(AIProvider):
             
             completion = self.client.chat.completions.create(
                 messages=messages,
-                model="llama-3.1-70b-versatile",
+                model="llama-3.3-70b-versatile",
                 temperature=0.7,
-                max_tokens=1024,
+                max_tokens=max_tokens,  # Dynamic: up to 8000 for DEEP mode
             )
             
             self.increment_usage()
@@ -117,7 +117,7 @@ class MistralProvider(AIProvider):
     
     @circuit_breaker(name="mistral")
     @with_retry()
-    async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+    async def call(self, prompt: str, system_prompt: Optional[str] = None, max_tokens: int = 4000) -> str:
         """Call Mistral API"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
@@ -133,7 +133,7 @@ class MistralProvider(AIProvider):
                         "model": "mistral-small-latest",
                         "messages": messages,
                         "temperature": 0.7,
-                        "max_tokens": 1024
+                        "max_tokens": max_tokens  # Dynamic
                     }
                 )
                 
@@ -169,7 +169,7 @@ class GeminiProvider(AIProvider):
     
     @circuit_breaker(name="gemini")
     @with_retry()
-    async def call(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+    async def call(self, prompt: str, system_prompt: Optional[str] = None, max_tokens: int = 8000) -> str:
         """Call Gemini API"""
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
@@ -181,7 +181,7 @@ class GeminiProvider(AIProvider):
                         "contents": [{"parts": [{"text": full_prompt}]}],
                         "generationConfig": {
                             "temperature": 0.7,
-                            "maxOutputTokens": 1024
+                            "maxOutputTokens": max_tokens  # Dynamic
                         }
                     }
                 )
