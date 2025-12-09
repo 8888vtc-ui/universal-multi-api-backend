@@ -212,23 +212,27 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
             logger.error(f"Intelligent medical routing failed: {e}")
             return "Contexte médical: Données temporairement indisponibles.", []
     
-    # 3. For FINANCE expert, use intelligent detection
+    # 3. For FINANCE expert, use intelligent detection with targeted APIs
     if expert.id.value == "finance":
         from services.finance_query_detector import FinanceQueryDetector
         
-        # Détecter le type de requête
+        # Détecter le type de requête (crypto, stock, forex, market)
         detection = FinanceQueryDetector.detect_query_type(query)
         query_type = detection["type"]
         symbol = detection.get("symbol")
         coin_id = detection.get("coin_id")
         
-        # Obtenir les APIs recommandées selon le type
+        logger.info(
+            f"Finance detection: type={query_type}, symbol={symbol}, "
+            f"coin_id={coin_id}, confidence={detection['confidence']:.2f}"
+        )
+        
+        # Obtenir les APIs ciblées selon le type
         recommended_apis = FinanceQueryDetector.get_recommended_apis(
             query_type, symbol, coin_id
         )
         
-        # Utiliser les APIs recommandées si disponibles, sinon fallback sur expert.data_apis
-        api_names = recommended_apis if recommended_apis else expert.data_apis[:3]
+        api_names = recommended_apis
         
         # Préparer les paramètres pour les appels API
         query_params = {
@@ -237,10 +241,64 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
             "coin_id": coin_id,
             "query_type": query_type
         }
-    else:
-        # Pour les autres experts, utiliser la méthode standard
-        api_names = expert.data_apis[:3]
-        query_params = {"query": query}
+        
+        # Log des APIs sélectionnées
+        logger.info(f"Finance APIs selected: {api_names} for query type: {query_type}")
+        
+        # Appeler les APIs sélectionnées
+        try:
+            tasks = [_fetch_from_api(api_name, query, query_params) for api_name in api_names]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            
+            context_parts = []
+            sources = []
+            
+            # Ajouter un header avec le type détecté
+            type_header = {
+                "crypto": "[CRYPTO]",
+                "stock": f"[BOURSE{' - ' + symbol if symbol else ''}]",
+                "forex": "[FOREX]",
+                "market": "[MARCHÉ]"
+            }.get(query_type, "[FINANCE]")
+            context_parts.append(type_header)
+            
+            for api_name, result in zip(api_names, results):
+                if isinstance(result, Exception):
+                    logger.debug(f"Finance API {api_name} failed: {type(result).__name__}")
+                    continue
+                
+                if result:
+                    # Limiter et formater le résultat
+                    result_str = result[:500] if isinstance(result, str) else str(result)[:500]
+                    context_parts.append(f"[{api_name.upper()}]: {result_str}")
+                    sources.append(api_name)
+            
+            # Si aucune donnée, ajouter un fallback contextuel
+            if len(context_parts) <= 1:
+                fallback_msg = FinanceQueryDetector.get_fallback_message(query_type, symbol)
+                context_parts.append(f"[NOTE]: {fallback_msg}")
+                
+                # Ajouter contexte utile pour l'IA
+                if query_type == "crypto" and coin_id:
+                    context_parts.append(f"L'utilisateur demande des informations sur la crypto {coin_id}.")
+                elif query_type == "stock" and symbol:
+                    context_parts.append(f"L'utilisateur demande des informations sur l'action {symbol}.")
+                elif query_type == "forex":
+                    context_parts.append("L'utilisateur demande des informations sur les taux de change.")
+                elif query_type == "market":
+                    context_parts.append("L'utilisateur demande des informations sur les marchés financiers.")
+            
+            context = "\n\n".join(context_parts)
+            return context, sources
+            
+        except Exception as e:
+            logger.error(f"Finance API routing failed: {e}")
+            fallback_msg = FinanceQueryDetector.get_fallback_message(query_type, symbol)
+            return f"[FINANCE]: {fallback_msg}", []
+    
+    # Pour les autres experts, utiliser la méthode standard
+    api_names = expert.data_apis[:3]
+    query_params = {"query": query}
     
     if not api_names:
         return "Pas de données supplémentaires disponibles.", []
@@ -264,22 +322,8 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
                 
     except Exception as e:
         logger.error(f"Error fetching context data: {e}")
-        # En cas d'erreur de contexte, on continue sans contexte plutôt que de planter
         context_parts = []
         sources = []
-    
-    # Pour l'expert financier, ajouter des informations contextuelles même si les APIs échouent
-    if expert.id.value == "finance" and not context_parts:
-        # Ajouter des informations basées sur la détection
-        detection_info = []
-        if query_params.get("query_type") == "stock" and query_params.get("symbol"):
-            symbol = query_params.get("symbol")
-            detection_info.append(f"L'utilisateur demande des informations sur {symbol} (indice/ETF).")
-        elif query_params.get("query_type") == "market":
-            detection_info.append("L'utilisateur demande des informations sur les marchés financiers en général.")
-        
-        if detection_info:
-            context_parts.append("[CONTEXTE]: " + " ".join(detection_info))
     
     context = "\n\n".join(context_parts) if context_parts else "Pas de données supplémentaires disponibles."
     return context, sources
