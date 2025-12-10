@@ -27,11 +27,15 @@ async def get_all_countries():
 
 @router.get("/search")
 async def search_countries(
-    query: str = Query(..., description="Country name to search")
+    query: str = Query(None, description="Country name to search"),
+    q: str = Query(None, description="Alias for query")
 ):
     """Search countries by name"""
+    search_term = query or q
+    if not search_term:
+        raise HTTPException(status_code=400, detail="Query parameter 'q' or 'query' is required")
     try:
-        countries = await provider.search_countries(query)
+        countries = await provider.search_countries(search_term)
         return {
             "success": True,
             "count": len(countries),
