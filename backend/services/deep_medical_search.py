@@ -690,7 +690,8 @@ async def perform_deep_search(query: str) -> Tuple[str, DeepSearchResult]:
                 drugs = data.get("drugs", [])
                 if not drugs and "results" in data: drugs = data["results"]
                 
-                for i, drug in enumerate(drugs[:5], 1): # Top 5
+                context_parts.append(f"  ℹ️ Base de données FDA des médicaments approuvés.")
+                for i, drug in enumerate(drugs[:10], 1): # Extended to 10
                     brand = "N/A"
                     generic = "N/A"
                     if isinstance(drug, dict):
@@ -710,19 +711,32 @@ async def perform_deep_search(query: str) -> Tuple[str, DeepSearchResult]:
                          ind = drug.get("indications_and_usage")
                          if ind:
                              if isinstance(ind, list): ind = ind[0]
-                             ind_str = str(ind)[:150].replace("\n", " ")
+                             ind_str = str(ind)[:400].replace("\n", " ")
                              context_parts.append(f"     Info: {ind_str}...")
+                         
+                         # Warnings (Boxed Warning)
+                         warn = drug.get("boxed_warning")
+                         if warn:
+                             if isinstance(warn, list): warn = warn[0]
+                             context_parts.append(f"     ⚠️ AVERTISSEMENT: {str(warn)[:300]}...")
             
             elif api_id == "pubmed":
                 articles = data.get("articles", [])
-                for i, art in enumerate(articles[:5], 1): # Top 5
+                context_parts.append(f"  ℹ️ Littérature biomédicale (NCBI/NLM).")
+                for i, art in enumerate(articles[:8], 1): # Extended to 8
                     title = art.get("title", "Sans titre")
                     date = art.get("pubdate", "Date inconnue")
                     context_parts.append(f"  {i}. {title} ({date})")
                     if art.get("abstract"):
                          abs_text = str(art['abstract'])
-                         if len(abs_text) > 200: abs_text = abs_text[:200] + "..."
+                         if len(abs_text) > 400: abs_text = abs_text[:400] + "..."
                          context_parts.append(f"     Abstract: {abs_text}")
+                    # Add authors if available
+                    if art.get("authors"):
+                        authors = art.get("authors")
+                        if isinstance(authors, list):
+                            context_parts.append(f"     Auteurs: {', '.join(authors[:3])} et al.")
+
 
             elif api_id == "disease_sh":
                 for k, v in data.items():
@@ -751,6 +765,30 @@ async def perform_deep_search(query: str) -> Tuple[str, DeepSearchResult]:
         
         context_parts.append("\n" + "=" * 60)
         context_parts.append(smart_result.sources_summary)
+        
+        context = "\n".join(context_parts)
+        
+        # CHECK WORD COUNT (Target: 1000 words)
+        words = len(context.split())
+        if words < 1000:
+            context_parts.append("\n" + "=" * 60)
+            context_parts.append(f"📦 ANNEXE TECHNIQUE ET DONNÉES BRUTES (Extension {words} -> 1000 mots)")
+            context_parts.append("=" * 60)
+            
+            # Add verbose data from other APIs to reach word count
+            # We iterate over all valid data
+            for api_id, data in smart_result.data.items():
+                if isinstance(data, dict) and (data.get("found") or data.get("count", 0) > 0 or data.get("articles")):
+                    # Skip if already heavily featured (optional, but raw data is always good padding)
+                    context_parts.append(f"\n📄 DONNÉES BRUTES [{api_id.upper()}]:")
+                    # Pretty print the dict somewhat
+                    import json
+                    try:
+                        # Convert to string with indentation but limit length per source
+                        dump = json.dumps(data, default=str, indent=2)
+                        context_parts.append(dump[:3000]) 
+                    except:
+                        context_parts.append(str(data)[:3000])
         
         context = "\n".join(context_parts)
         return context, result

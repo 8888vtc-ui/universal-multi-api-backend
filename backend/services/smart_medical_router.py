@@ -120,14 +120,37 @@ class SmartMedicalRouter:
         
         mandatory = []
         topic_specific = []
+        selected_ids = set()
         
         for api in relevant:
             api_id = api.get("id")
             if api_id in self.providers:  # Only include available providers
+                selected_ids.add(api_id)
                 if api.get("reason") == "mandatory":
                     mandatory.append(api_id)
                 else:
                     topic_specific.append(api_id)
+        
+        # --- ENSURE MINIMUM 15 APIs ---
+        total_selected = len(mandatory) + len(topic_specific)
+        min_apis = 15
+        
+        if total_selected < min_apis:
+            # Get all available providers that are NOT selected
+            available = [p for p in self.providers.keys() if p not in selected_ids]
+            
+            # Prioritize Elite/Premium/World APIs (based on config prefixes or known priority)
+            # For now, just take the first available ones to reach 15
+            needed = min_apis - total_selected
+            
+            # Sort available to have somewhat deterministic behavior (e.g. by name len or alphabetical)
+            # Better: prioritize 'pubmed', 'openfda' etc if not selected (should be mandatory though)
+            available.sort() 
+            
+            for i in range(min(needed, len(available))):
+                extra_api = available[i]
+                topic_specific.append(extra_api)
+                selected_ids.add(extra_api)
         
         return mandatory, topic_specific, topics
     

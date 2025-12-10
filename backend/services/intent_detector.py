@@ -29,7 +29,8 @@ class SmartQueryAnalyzer:
         # Explicit comprehensive requests
         "rapport", "report", "complet", "complete",
         "detaille", "detailed", "en detail", "in detail",
-        "approfondi", "in-depth", "exhaustif", "exhaustive",
+        "approfondi", "approfondie", "in-depth", "exhaustif", "exhaustive",
+        "thinking", "thinking mode", "mode thinking",
         "toutes les donnees", "all data", "tout savoir",
         "fiche", "document", "synthese", "synthesis",
         "resume complet", "full summary",
