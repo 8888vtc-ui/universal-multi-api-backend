@@ -69,13 +69,36 @@ from routers import (
 from routers import health_deep, metrics, ai_search, expert_chat
 
 # Import routers - optional (non-critical)
+# Countries
 try:
-    from routers import countries, exchange, coincap, jokes, wikipedia
-    OPTIONAL_ROUTERS = True
-except ImportError as e:
-    logger.warning(f"[WARN] Optional routers not loaded: {e}")
-    countries = exchange = coincap = jokes = wikipedia = None
-    OPTIONAL_ROUTERS = False
+    from routers import countries
+except ImportError:
+    countries = None
+
+# Exchange
+try:
+    from routers import exchange
+except ImportError:
+    exchange = None
+
+# CoinCap
+try:
+    from routers import coincap
+except ImportError:
+    coincap = None
+
+# Jokes
+try:
+    from routers import jokes
+except ImportError:
+    jokes = None
+
+# Wikipedia
+try:
+    from routers import wikipedia
+except ImportError:
+    wikipedia = None
+
 
 # Video router optionnel (dépendances lourdes)
 try:
