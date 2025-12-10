@@ -73,25 +73,44 @@ class HTTPClientPool:
                 await self._client.aclose()
                 self._client = None
     
-    async def get(self, url: str, **kwargs) -> httpx.Response:
-        """GET request avec connection pooling"""
+    async def _request(self, method: str, url: str, **kwargs) -> httpx.Response:
+        """Méthode générique avec résolution DNS personnalisée"""
+        from urllib.parse import urlparse
+        
+        # Résoudre le DNS manuellement pour contourner les problèmes de Fly.io
+        parsed = urlparse(url)
+        hostname = parsed.hostname
+        if hostname:
+            try:
+                ip_address = CustomDNSResolver.resolve_dns(hostname)
+                if ip_address != hostname:
+                    # Remplacer l'hostname par l'IP dans l'URL
+                    url = url.replace(hostname, ip_address, 1)
+                    # Ajouter le header Host
+                    headers = kwargs.get('headers', {})
+                    headers['Host'] = hostname
+                    kwargs['headers'] = headers
+            except Exception:
+                pass # Continuer avec l'URL originale si échec
+        
         client = await self.get_client()
-        return await client.get(url, **kwargs)
+        return await client.request(method, url, **kwargs)
+
+    async def get(self, url: str, **kwargs) -> httpx.Response:
+        """GET request avec connection pooling et résolution DNS"""
+        return await self._request('GET', url, **kwargs)
     
     async def post(self, url: str, **kwargs) -> httpx.Response:
-        """POST request avec connection pooling"""
-        client = await self.get_client()
-        return await client.post(url, **kwargs)
+        """POST request avec connection pooling et résolution DNS"""
+        return await self._request('POST', url, **kwargs)
     
     async def put(self, url: str, **kwargs) -> httpx.Response:
-        """PUT request avec connection pooling"""
-        client = await self.get_client()
-        return await client.put(url, **kwargs)
+        """PUT request avec connection pooling et résolution DNS"""
+        return await self._request('PUT', url, **kwargs)
     
     async def delete(self, url: str, **kwargs) -> httpx.Response:
-        """DELETE request avec connection pooling"""
-        client = await self.get_client()
-        return await client.delete(url, **kwargs)
+        """DELETE request avec connection pooling et résolution DNS"""
+        return await self._request('DELETE', url, **kwargs)
 
 
 # Singleton instance
