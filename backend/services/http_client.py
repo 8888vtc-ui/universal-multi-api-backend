@@ -41,10 +41,10 @@ class HTTPClientPool:
                         max_keepalive_connections=20,
                         keepalive_expiry=30.0
                     ),
-                    http2=True,
+                    http2=False,  # Désactivé - peut causer des problèmes sur Fly.io
                     follow_redirects=True,
                 )
-                logger.info("✅ HTTPClientPool initialized")
+                logger.info("✅ HTTPClientPool initialized (HTTP/1.1 mode)")
         return self._client
     
     async def close(self):
