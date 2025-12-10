@@ -130,12 +130,27 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
         )
         
         if search_mode == "deep":
+            # Clean trigger words from query to avoid polluting API search
+            clean_query = query
+            triggers_to_remove = ["thinking", "recherche approfondie", "deep search", "mode thinking", "analyse complete", "exhaustif"]
+            
+            lower_q = query.lower()
+            for trigger in triggers_to_remove:
+                if lower_q.startswith(trigger):
+                    clean_query = query[len(trigger):].strip()
+                    if clean_query.startswith(":") or clean_query.startswith("-"): 
+                        clean_query = clean_query[1:].strip()
+                    break
+            
+            # Additional cleaning if query is still messy
+            if not clean_query: clean_query = query # Fallback
+            
             # DEEP mode: Comprehensive search with intent-based filtering
             try:
                 from services.deep_medical_search import perform_deep_search
-                logger.info(f"Starting DEEP medical search for: {query}")
+                logger.info(f"Starting DEEP medical search for: {clean_query}")
                 
-                context, search_result = await perform_deep_search(query)
+                context, search_result = await perform_deep_search(clean_query)
                 
                 # Add intent header to context
                 intent_header = f"[RECHERCHE APPROFONDIE - {primary_intent.upper()}]\n"
