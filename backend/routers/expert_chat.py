@@ -262,11 +262,12 @@ async def fetch_context_data(expert: Expert, query: str, search_mode_override: O
             logger.error(f"Intelligent medical routing failed: {e}")
             return "Contexte médical: Données temporairement indisponibles.", []
     
-    # 3. For FINANCE expert, use intelligent detection with targeted APIs
+    # 3. For FINANCE expert, use DEEP mode (always comprehensive)
     if expert.id.value == "finance":
         from services.finance_query_detector import FinanceQueryDetector
+        from services.deep_finance_search import perform_deep_finance_search
         
-        # Détecter le type de requête (crypto, stock, forex, market)
+        # Détecter le type de requête
         detection = FinanceQueryDetector.detect_query_type(query)
         query_type = detection["type"]
         symbol = detection.get("symbol")
@@ -277,74 +278,59 @@ async def fetch_context_data(expert: Expert, query: str, search_mode_override: O
             f"coin_id={coin_id}, confidence={detection['confidence']:.2f}"
         )
         
-        # Obtenir les APIs ciblées selon le type
-        recommended_apis = FinanceQueryDetector.get_recommended_apis(
-            query_type, symbol, coin_id
-        )
-        
-        api_names = recommended_apis
-        
-        # Préparer les paramètres pour les appels API
-        query_params = {
-            "query": query,
-            "symbol": symbol,
-            "coin_id": coin_id,
-            "query_type": query_type
-        }
-        
-        # Log des APIs sélectionnées
-        logger.info(f"Finance APIs selected: {api_names} for query type: {query_type}")
-        
-        # Appeler les APIs sélectionnées
+        # TOUJOURS utiliser le mode Deep pour Finance
         try:
-            tasks = [_fetch_from_api(api_name, query, query_params) for api_name in api_names]
-            results = await asyncio.gather(*tasks, return_exceptions=True)
+            logger.info(f"Starting DEEP finance search for: {query} (type: {query_type})")
             
-            context_parts = []
-            sources = []
+            context, search_result = await perform_deep_finance_search(
+                query,
+                query_type,
+                symbol,
+                coin_id
+            )
             
-            # Ajouter un header avec le type détecté
-            type_header = {
-                "crypto": "[CRYPTO]",
-                "stock": f"[BOURSE{' - ' + symbol if symbol else ''}]",
-                "forex": "[FOREX]",
-                "market": "[MARCHÉ]"
-            }.get(query_type, "[FINANCE]")
-            context_parts.append(type_header)
+            # Build sources from the search
+            sources = [f"[{api.upper()}]" for api in search_result.apis_with_data]
             
-            for api_name, result in zip(api_names, results):
-                if isinstance(result, Exception):
-                    logger.debug(f"Finance API {api_name} failed: {type(result).__name__}")
-                    continue
-                
-                if result:
-                    # Limiter et formater le résultat
-                    result_str = result[:500] if isinstance(result, str) else str(result)[:500]
-                    context_parts.append(f"[{api_name.upper()}]: {result_str}")
-                    sources.append(api_name)
+            logger.info(
+                f"DEEP finance search completed: {len(search_result.apis_searched)} APIs searched, "
+                f"{len(search_result.apis_with_data)} with data, "
+                f"context length: {search_result.context_length} chars"
+            )
             
-            # Si aucune donnée, ajouter un fallback contextuel
-            if len(context_parts) <= 1:
-                fallback_msg = FinanceQueryDetector.get_fallback_message(query_type, symbol)
-                context_parts.append(f"[NOTE]: {fallback_msg}")
-                
-                # Ajouter contexte utile pour l'IA
-                if query_type == "crypto" and coin_id:
-                    context_parts.append(f"L'utilisateur demande des informations sur la crypto {coin_id}.")
-                elif query_type == "stock" and symbol:
-                    context_parts.append(f"L'utilisateur demande des informations sur l'action {symbol}.")
-                elif query_type == "forex":
-                    context_parts.append("L'utilisateur demande des informations sur les taux de change.")
-                elif query_type == "market":
-                    context_parts.append("L'utilisateur demande des informations sur les marchés financiers.")
-            
-            context = "\n\n".join(context_parts)
             return context, sources
             
         except Exception as e:
-            logger.error(f"Finance API routing failed: {e}")
-            fallback_msg = FinanceQueryDetector.get_fallback_message(query_type, symbol)
-            return f"[FINANCE]: {fallback_msg}", []
+            logger.error(f"Deep finance search failed: {e}", exc_info=True)
+            # Fallback vers méthode simple (mais avec plus d'APIs)
+            fallback_apis = FinanceQueryDetector.get_recommended_apis(query_type, symbol, coin_id)
+            # Ajouter des APIs supplémentaires même en fallback
+            if query_type == "crypto":
+                fallback_apis.extend(["news", "exchange"])
+            elif query_type == "stock":
+                fallback_apis.extend(["news", "exchange"])
+                
+            query_params = {
+                "query": query,
+                "symbol": symbol,
+                "coin_id": coin_id,
+                "query_type": query_type
+            }
+            
+            tasks = [_fetch_from_api(api_name, query, query_params) for api_name in fallback_apis]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            
+            context_parts = [f"[{query_type.upper()}]"]
+            sources = []
+            
+            for api_name, result in zip(fallback_apis, results):
+                if result and not isinstance(result, Exception):
+                    # NE PAS tronquer à 500 - garder toutes les données
+                    context_parts.append(f"[{api_name.upper()}]: {result}")
+                    sources.append(api_name)
+                    
+            context = "\n\n".join(context_parts) if context_parts else "Données financières temporairement indisponibles."
+            return context, sources
     
     # 4. For GENERAL expert: Intelligent routing with 26 APIs
     if expert.id.value == "general":
@@ -560,7 +546,7 @@ async def _fetch_from_api(api_name: str, query: str, query_params: Optional[dict
         "wikipedia": f"{base_url}/wikipedia/search?q={query}&limit=2",
         "weather": f"{base_url}/weather/current?location={query}",
         "countries": f"{base_url}/countries/search?q={query}",
-        "finance": f"{base_url}/finance/crypto/{coin_id or query.lower()}",
+        "finance": f"{base_url}/finance/crypto/price/{coin_id or query.lower()}",
         "coincap": f"{base_url}/coincap/assets?search={coin_id or query}",
         "sports": f"{base_url}/sports/news?q={query}",
         "news": f"{base_url}/news/search?q={query}&limit=3",
