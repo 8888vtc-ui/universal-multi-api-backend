@@ -22,14 +22,6 @@ logger = logging.getLogger(__name__)
 from services.startup_validator import validate_startup
 startup_results = validate_startup(fail_on_error=False)
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# PATCH HTTP CLIENT GLOBAL - Active DNS personnalisé pour toutes les APIs
-# Résout les problèmes de résolution DNS sur Fly.io pour les APIs externes
-# ═══════════════════════════════════════════════════════════════════════════════
-from services.http_client_wrapper import patch_httpx
-patch_httpx()
-logger.info("✅ DNS personnalisé (Google DNS) activé pour toutes les APIs")
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

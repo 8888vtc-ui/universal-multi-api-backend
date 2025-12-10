@@ -1,89 +1,18 @@
 """
-HTTP Client avec Connection Pooling et DNS personnalisé
-Réutilise les connexions HTTP pour éviter l'overhead de création
+HTTP Client avec Connection Pooling
+Client HTTP simplifié qui utilise le DNS système (fonctionne sur Fly.io)
 """
 import httpx
-from typing import Optional, Dict, Any, Tuple
+from typing import Optional
 import asyncio
-import socket
 import logging
-from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
 
-class CustomDNSResolver:
-    """Résolveur DNS personnalisé utilisant Google DNS"""
-    
-    @staticmethod
-    def resolve_dns(hostname: str) -> str:
-        """Résoudre le DNS en utilisant les serveurs Google"""
-        try:
-            # Utiliser les serveurs DNS Google
-            import dns.resolver
-            resolver = dns.resolver.Resolver()
-            resolver.nameservers = ['8.8.8.8', '8.8.4.4', '1.1.1.1']
-            resolver.lifetime = 5.0
-            
-            # ✅ LOG: Tentative de résolution
-            logger.debug(f"[DNS] Résolution de {hostname} avec Google DNS...")
-            
-            answers = resolver.resolve(hostname, 'A')
-            ip = str(answers[0])
-            
-            # ✅ LOG: Résolution réussie
-            logger.info(f"[DNS] ✅ {hostname} → {ip}")
-            
-            return ip
-        except Exception as e:
-            # ✅ LOG: Erreur DNS
-            logger.warning(f"[DNS] ⚠️ Résolution Google DNS échouée pour {hostname}: {e}")
-            
-            # Fallback sur la résolution système
-            try:
-                ip = socket.gethostbyname(hostname)
-                logger.info(f"[DNS] ✅ Fallback système: {hostname} → {ip}")
-                return ip
-            except Exception as e2:
-                logger.error(f"[DNS] ❌ Résolution système échouée pour {hostname}: {e2}")
-                return hostname
-    
-    @staticmethod
-    def resolve_url(url: str) -> Tuple[str, Optional[str]]:
-        """
-        Résoudre le DNS d'une URL et retourner (url_avec_ip, hostname_original)
-        Si le DNS échoue, retourne l'URL originale
-        """
-        try:
-            parsed = urlparse(url)
-            hostname = parsed.hostname
-            
-            if not hostname:
-                return url, None
-            
-            # Ne pas résoudre localhost ou IPs
-            if hostname in ['localhost', '127.0.0.1'] or hostname.replace('.', '').isdigit():
-                return url, None
-            
-            # Résoudre le DNS
-            ip_address = CustomDNSResolver.resolve_dns(hostname)
-            
-            # Si résolution réussie et différente du hostname
-            if ip_address != hostname:
-                # Reconstruire l'URL avec l'IP
-                new_url = url.replace(hostname, ip_address)
-                logger.info(f"[DNS] 🔄 URL résolue: {url} → {new_url} (Host: {hostname})")
-                return new_url, hostname
-            
-            return url, None
-        except Exception as e:
-            logger.warning(f"[DNS] Erreur lors de la résolution de {url}: {e}")
-            return url, None
-
-
 class HTTPClientPool:
     """
-    Pool de connexions HTTP asynchrones avec DNS personnalisé
+    Pool de connexions HTTP asynchrones
     Réutilise les connexions pour éviter l'overhead de création
     """
     
@@ -102,7 +31,7 @@ class HTTPClientPool:
             if self._client is None or self._client.is_closed:
                 self._client = httpx.AsyncClient(
                     timeout=httpx.Timeout(
-                        connect=10.0,  # Augmenté pour DNS lent
+                        connect=10.0,
                         read=30.0,
                         write=10.0,
                         pool=5.0
@@ -112,9 +41,10 @@ class HTTPClientPool:
                         max_keepalive_connections=20,
                         keepalive_expiry=30.0
                     ),
-                    http2=True,  # Support HTTP/2 pour meilleures performances
-                    follow_redirects=True,  # Suivre les redirections
+                    http2=True,
+                    follow_redirects=True,
                 )
+                logger.info("✅ HTTPClientPool initialized")
         return self._client
     
     async def close(self):
@@ -125,21 +55,10 @@ class HTTPClientPool:
                 self._client = None
     
     async def get(self, url: str, **kwargs) -> httpx.Response:
-        """GET request avec DNS personnalisé et connection pooling"""
-        # ✅ RÉSOLUTION DNS AVANT L'APPEL
-        resolved_url, original_host = CustomDNSResolver.resolve_url(url)
-        
+        """GET request avec connection pooling"""
         client = await self.get_client()
-        
-        # ✅ Ajouter le header Host si on utilise l'IP
-        headers = kwargs.get('headers', {})
-        if original_host:
-            headers['Host'] = original_host
-            kwargs['headers'] = headers
-            logger.debug(f"[DNS] Utilisation de l'IP avec header Host: {original_host}")
-        
         try:
-            response = await client.get(resolved_url, **kwargs)
+            response = await client.get(url, **kwargs)
             logger.debug(f"[HTTP] GET {url} → {response.status_code}")
             return response
         except Exception as e:
@@ -147,45 +66,25 @@ class HTTPClientPool:
             raise
     
     async def post(self, url: str, **kwargs) -> httpx.Response:
-        """POST request avec DNS personnalisé et connection pooling"""
-        # ✅ RÉSOLUTION DNS AVANT L'APPEL
-        resolved_url, original_host = CustomDNSResolver.resolve_url(url)
-        
+        """POST request avec connection pooling"""
         client = await self.get_client()
-        
-        # ✅ Ajouter le header Host si on utilise l'IP
-        headers = kwargs.get('headers', {})
-        if original_host:
-            headers['Host'] = original_host
-            kwargs['headers'] = headers
-            logger.debug(f"[DNS] Utilisation de l'IP avec header Host: {original_host}")
-        
         try:
-            response = await client.post(resolved_url, **kwargs)
+            response = await client.post(url, **kwargs)
+            logger.debug(f"[HTTP] POST {url} → {response.status_code}")
             return response
         except Exception as e:
             logger.error(f"[HTTP] Erreur POST {url}: {e}")
             raise
     
     async def put(self, url: str, **kwargs) -> httpx.Response:
-        """PUT request avec DNS personnalisé et connection pooling"""
-        resolved_url, original_host = CustomDNSResolver.resolve_url(url)
+        """PUT request avec connection pooling"""
         client = await self.get_client()
-        headers = kwargs.get('headers', {})
-        if original_host:
-            headers['Host'] = original_host
-            kwargs['headers'] = headers
-        return await client.put(resolved_url, **kwargs)
+        return await client.put(url, **kwargs)
     
     async def delete(self, url: str, **kwargs) -> httpx.Response:
-        """DELETE request avec DNS personnalisé et connection pooling"""
-        resolved_url, original_host = CustomDNSResolver.resolve_url(url)
+        """DELETE request avec connection pooling"""
         client = await self.get_client()
-        headers = kwargs.get('headers', {})
-        if original_host:
-            headers['Host'] = original_host
-            kwargs['headers'] = headers
-        return await client.delete(resolved_url, **kwargs)
+        return await client.delete(url, **kwargs)
 
 
 # Singleton instance
