@@ -58,15 +58,24 @@ async def lifespan(app: FastAPI):
     logger.info("✅ Shutdown complete")
 
 
-# Import routers
+# Import routers - core (required)
 from routers import (
     chat, embeddings, health, finance, medical, entertainment,
     translation, news, messaging, weather, space, sports,
     utilities, geocoding, nutrition, email, media, boltai,
     aggregated, search, video, assistant, analytics, auth, health_check,
-    flights, countries, exchange, coincap, jokes, wikipedia
+    flights
 )
 from routers import health_deep, metrics, ai_search, expert_chat
+
+# Import routers - optional (non-critical)
+try:
+    from routers import countries, exchange, coincap, jokes, wikipedia
+    OPTIONAL_ROUTERS = True
+except ImportError as e:
+    logger.warning(f"[WARN] Optional routers not loaded: {e}")
+    countries = exchange = coincap = jokes = wikipedia = None
+    OPTIONAL_ROUTERS = False
 
 # Video router optionnel (dépendances lourdes)
 try:
@@ -194,22 +203,22 @@ app.include_router(aggregated.router)
 
 # Finance
 app.include_router(finance.router)
-app.include_router(exchange.router)  # Exchange rates
-app.include_router(coincap.router)  # Cryptocurrency data
+if exchange: app.include_router(exchange.router)  # Exchange rates
+if coincap: app.include_router(coincap.router)  # Cryptocurrency data
 
 # Media & Content
 app.include_router(news.router)
 app.include_router(media.router)
 app.include_router(video.router)
 app.include_router(entertainment.router)
-app.include_router(jokes.router)  # Jokes API
+if jokes: app.include_router(jokes.router)  # Jokes API
 
 # Location & Weather & Transport
 app.include_router(weather.router)
 app.include_router(geocoding.router)
 app.include_router(space.router)
 app.include_router(flights.router)  # AviationStack flights API
-app.include_router(countries.router)  # Countries info
+if countries: app.include_router(countries.router)  # Countries info
 
 # Communication
 app.include_router(messaging.router)
@@ -217,7 +226,7 @@ app.include_router(email.router)
 app.include_router(translation.router)
 
 # Knowledge & Info
-app.include_router(wikipedia.router)  # Wikipedia search
+if wikipedia: app.include_router(wikipedia.router)  # Wikipedia search
 
 # Health & Nutrition
 app.include_router(medical.router)
