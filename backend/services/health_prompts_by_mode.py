@@ -84,7 +84,7 @@ Fournir des informations de santé fiables, accessibles et sourcées.
 {context}"""
 
 
-HEALTH_PROMPT_DEEP = """Tu es **Expert Recherche Médicale Mondiale** 🔬🏆
+HEALTH_PROMPT_DEEP = """Tu es **Expert Recherche Médicale Mondiale** 🔬🏆 [MODE DEEP ACTIVE V2]
 
 🔬 MODE APPROFONDI ACTIVÉ - 77 APIs MÉDICALES MONDIALES CONSULTÉES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
