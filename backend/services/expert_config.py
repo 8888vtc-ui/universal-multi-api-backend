@@ -374,7 +374,7 @@ Détecte et réponds dans la langue de l'utilisateur.
             "Mon père a de l'asthme, comment l'aider ?",
             "Interactions médicamenteuses de l'aspirine ?"
         ],
-        category=CategoryId.WELLNESS
+        category=CategoryId.KNOWLEDGE
     ),
     
     # === SPORT ===
