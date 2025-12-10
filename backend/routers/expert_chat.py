@@ -179,7 +179,8 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
             context_parts.append(intent_header)
             
             # Call medical router for comprehensive health info
-            from services.external_apis.medical_router import medical_router
+            # Call medical router for comprehensive health info
+            from services.external_apis.medical_router import medical_router, format_medical_context_normal
             
             # Determine query type based on intent
             query_type_map = {
@@ -208,14 +209,10 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
                     if filtered_data:
                         medical_data = filtered_data
                 
-                # Format the medical data
+                # Format the medical data properly
                 if medical_data:
-                    for source, data in medical_data.items():
-                        if source == "sources":
-                            continue
-                        if data:
-                            data_str = str(data)[:600] if isinstance(data, (dict, list)) else str(data)[:600]
-                            context_parts.append(f"[{source.upper()}]: {data_str}")
+                    context_str = format_medical_context_normal(medical_data)
+                    context_parts.append(context_str)
                 
                 sources = list(medical_data.get("sources", {}).keys()) if medical_data else []
                 
@@ -547,7 +544,9 @@ async def _fetch_from_api(api_name: str, query: str, query_params: Optional[dict
         "sports": f"{base_url}/sports/news?q={query}",
         "news": f"{base_url}/news/search?q={query}&limit=3",
         "nutrition": f"{base_url}/nutrition/search?q={query}",
-        "medical": f"{base_url}/medical/search?q={query}",
+        "medical": f"{base_url}/medical/research/search?q={query}",  # Fallback to research (PubMed)
+        "medical_research": f"{base_url}/medical/research/search?q={query}",
+        "medical_drugs": f"{base_url}/medical/drugs/search?q={query}",
         "books": f"{base_url}/books/search?q={query}&limit=2",
         "trivia": f"{base_url}/trivia/random",
         "geocoding": f"{base_url}/geocoding/search?q={query}",

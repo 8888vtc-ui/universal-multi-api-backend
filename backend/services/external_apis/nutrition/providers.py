@@ -14,10 +14,13 @@ class Spoonacular:
     def __init__(self):
         self.api_key = os.getenv('SPOONACULAR_API_KEY')
         if not self.api_key:
-            raise ValueError("SPOONACULAR_API_KEY not found")
-        
-        self.base_url = "https://api.spoonacular.com"
-        self.available = True
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning("⚠️ SPOONACULAR_API_KEY not found - provider disabled")
+            self.available = False
+        else:
+            self.base_url = "https://api.spoonacular.com"
+            self.available = True
     
     async def search_recipes(
         self,
@@ -25,6 +28,9 @@ class Spoonacular:
         number: int = 10
     ) -> Dict[str, Any]:
         """Search recipes"""
+        if not self.available:
+            return {'recipes': [], 'total': 0, 'error': 'Provider disabled'}
+        
         url = f"{self.base_url}/recipes/complexSearch"
         params = {
             'apiKey': self.api_key,
@@ -71,10 +77,13 @@ class Edamam:
         self.app_key = os.getenv('EDAMAM_APP_KEY')
         
         if not self.app_id or not self.app_key:
-            raise ValueError("EDAMAM_APP_ID and EDAMAM_APP_KEY required")
-        
-        self.base_url = "https://api.edamam.com"
-        self.available = True
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning("⚠️ EDAMAM_APP_ID/KEY not found - provider disabled")
+            self.available = False
+        else:
+            self.base_url = "https://api.edamam.com"
+            self.available = True
     
     async def search_recipes(
         self,
@@ -82,6 +91,9 @@ class Edamam:
         number: int = 10
     ) -> Dict[str, Any]:
         """Search recipes"""
+        if not self.available:
+            return {'recipes': [], 'total': 0, 'error': 'Provider disabled'}
+            
         url = f"{self.base_url}/api/recipes/v2"
         params = {
             'type': 'public',

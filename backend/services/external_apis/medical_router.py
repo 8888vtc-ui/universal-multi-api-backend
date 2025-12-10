@@ -268,6 +268,111 @@ async def get_drug_info(drug_name: str) -> Dict[str, Any]:
     return await medical_router.get_comprehensive_health_info(drug_name, "drug")
 
 
+
 async def get_disease_info(disease: str) -> Dict[str, Any]:
     """Quick access to disease information"""
     return await medical_router.get_comprehensive_health_info(disease, "disease")
+
+
+def format_medical_context_normal(medical_data: Dict[str, Any]) -> str:
+    """Format medical data for normal chat mode"""
+    parts = []
+    
+    sources_data = medical_data.get("sources", {})
+    combined_info = medical_data.get("combined_info", {})
+    
+    # 1. OpenFDA (Drugs)
+    if "openfda" in sources_data:
+        data = sources_data["openfda"]
+        parts.append("💊 MÉDICAMENTS (OpenFDA):")
+        
+        if isinstance(data, dict):
+            drugs = data.get("drugs", [])
+            if not drugs and "results" in data: # Fallback structure raw
+                drugs = data["results"]
+                
+            for drug in drugs[:5]:
+                brand = "N/A"
+                generic = "N/A"
+                
+                # Try flattened format
+                if isinstance(drug, dict):
+                    if "brand_name" in drug:
+                        brand = drug.get("brand_name") 
+                        if isinstance(brand, list): brand = brand[0]
+                    elif "openfda" in drug and "brand_name" in drug["openfda"]:
+                        brand = drug["openfda"]["brand_name"][0]
+                        
+                    if "generic_name" in drug:
+                        generic = drug.get("generic_name")
+                        if isinstance(generic, list): generic = generic[0]
+                    elif "openfda" in drug and "generic_name" in drug["openfda"]:
+                        generic = drug["openfda"]["generic_name"][0]
+                        
+                parts.append(f"• Marque: {brand} | Générique: {generic}")
+                
+                # Indications
+                if isinstance(drug, dict) and "indications_and_usage" in drug:
+                    ind = str(drug["indications_and_usage"])[:100].replace("\n", " ")
+                    parts.append(f"  Info: {ind}...")
+
+    # 2. PubMed (Research)
+    if "pubmed" in sources_data:
+        data = sources_data["pubmed"]
+        parts.append("📚 RECHERCHE (PubMed):")
+        
+        articles = data.get("articles", [])
+        if not articles and isinstance(data, list): # Fallback si liste directe
+             articles = data
+             
+        for article in articles[:3]:
+            if isinstance(article, dict):
+                title = article.get("title", "Titre inconnu")
+                date = article.get("pubdate", "")
+                parts.append(f"• {title} ({date})")
+            else:
+                parts.append(f"• {str(article)[:100]}")
+    
+    # 3. Disease / Info Local
+    if "local_database" in sources_data:
+        data = sources_data["local_database"]
+        parts.append("🏥 INFO MÉDICALE (Interne):")
+        parts.append(str(data)[:800])
+
+    # 4. RxNorm (Interactions)
+    if "rxnorm_interactions" in sources_data:
+        data = sources_data["rxnorm_interactions"]
+        parts.append("⚠️ INTERACTIONS (RxNorm):")
+        count = data.get("interaction_count", 0)
+        parts.append(f"• Interactions détectées: {count}")
+    
+    # 5. Symptom Analysis
+    if "symptom_analysis" in sources_data:
+         data = sources_data["symptom_analysis"]
+         parts.append("🔍 ANALYSE SYMPTÔMES:")
+         conditions = data.get("possible_conditions", [])
+         if conditions:
+             parts.append(f"• Conditions possibles: {', '.join(conditions)}")
+
+    # 6. Fallback pour tout ce qui reste dans sources
+    known_sources = ["openfda", "pubmed", "local_database", "rxnorm", "rxnorm_interactions", "symptom_analysis"]
+    for source, data in sources_data.items():
+        if source not in known_sources and source != "sources":
+             parts.append(f"[{source.upper()}]: {str(data)[:500]}")
+    
+    # Combined Info (résumé)
+    if combined_info:
+        parts.append("📋 RÉSUMÉ DONNÉES:")
+        for k, v in combined_info.items():
+            if isinstance(v, (str, int, float, bool)):
+                parts.append(f"• {k}: {v}")
+            elif isinstance(v, list):
+                parts.append(f"• {k}: {', '.join(map(str, v[:5]))}")
+
+    # Disclaimer
+    parts.append("\n⚠️ DISCLAIMER: Ces informations sont fournies à titre indicatif par des sources externes (OpenFDA, PubMed). Consultez toujours un professionnel de santé.")
+    
+    if not parts:
+        return "Pas de données médicales structurées disponibles."
+        
+    return "\n\n".join(parts)
