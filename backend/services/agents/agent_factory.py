@@ -76,7 +76,9 @@ class GenericAgent(ConversationalQualityAgent):
             "quotes": "/quotes/random",
             # Health & Nutrition
             "nutrition": "/nutrition/search?q={query}",
-            "medical": "/medical/search?q={query}",
+            "medical": "/medical/research/search?q={query}",
+            "medical_research": "/medical/research/search?q={query}",
+            "medical_drugs": "/medical/drugs/search?q={query}",
             # Content
             "books": "/books/search?q={query}&limit=2",
             "trivia": "/trivia/random",

@@ -669,17 +669,85 @@ async def perform_deep_search(query: str) -> Tuple[str, DeepSearchResult]:
         context_parts.append("")
         
         # Add data from each source
-        for api_id, data in smart_result.data.items():
-            if isinstance(data, dict) and (data.get("found") or data.get("count", 0) > 0):
-                context_parts.append(f"\n📌 [{api_id.upper()}]:")
-                # Format data
-                if isinstance(data, dict):
-                    for key, value in list(data.items())[:5]:
-                        if key not in ["_latency_ms", "_source", "source", "found"]:
-                            if isinstance(value, str) and len(value) < 300:
-                                context_parts.append(f"  {key}: {value}")
-                            elif isinstance(value, list) and len(value) > 0:
-                                context_parts.append(f"  {key}: {', '.join(str(v)[:50] for v in value[:3])}")
+        # Add data from each source with RICH formatting
+        context_parts.append("\n📚 DONNÉES DÉTAILLÉES PAR SOURCE:")
+        
+        # Sort APIs: Priority ones first
+        priority_order = ["openfda", "pubmed", "rxnorm", "disease_sh", "who_gho", "open_disease"]
+        sorted_apis = sorted(smart_result.data.keys(), key=lambda x: priority_order.index(x) if x in priority_order else 999)
+        
+        for api_id in sorted_apis:
+            data = smart_result.data[api_id]
+            # Check for validity
+            if not isinstance(data, dict): continue
+            has_content = data.get("found") or data.get("count", 0) > 0 or data.get("total", 0) > 0 or data.get("articles") or data.get("drugs")
+            if not has_content: continue
+
+            context_parts.append(f"\n📌 [{api_id.upper()}]")
+            
+            # --- Specific Formatting ---
+            if api_id == "openfda":
+                drugs = data.get("drugs", [])
+                if not drugs and "results" in data: drugs = data["results"]
+                
+                for i, drug in enumerate(drugs[:5], 1): # Top 5
+                    brand = "N/A"
+                    generic = "N/A"
+                    if isinstance(drug, dict):
+                         # Try flattened or nested
+                         brand_raw = drug.get("brand_name")
+                         if not brand_raw and "openfda" in drug: brand_raw = drug["openfda"].get("brand_name")
+                         if isinstance(brand_raw, list): brand = brand_raw[0]
+                         else: brand = str(brand_raw) if brand_raw else "N/A"
+                         
+                         gen_raw = drug.get("generic_name")
+                         if not gen_raw and "openfda" in drug: gen_raw = drug["openfda"].get("generic_name")
+                         if isinstance(gen_raw, list): generic = gen_raw[0]
+                         else: generic = str(gen_raw) if gen_raw else "N/A"
+                         
+                         context_parts.append(f"  {i}. {brand} ({generic})")
+                         # Indications
+                         ind = drug.get("indications_and_usage")
+                         if ind:
+                             if isinstance(ind, list): ind = ind[0]
+                             ind_str = str(ind)[:150].replace("\n", " ")
+                             context_parts.append(f"     Info: {ind_str}...")
+            
+            elif api_id == "pubmed":
+                articles = data.get("articles", [])
+                for i, art in enumerate(articles[:5], 1): # Top 5
+                    title = art.get("title", "Sans titre")
+                    date = art.get("pubdate", "Date inconnue")
+                    context_parts.append(f"  {i}. {title} ({date})")
+                    if art.get("abstract"):
+                         abs_text = str(art['abstract'])
+                         if len(abs_text) > 200: abs_text = abs_text[:200] + "..."
+                         context_parts.append(f"     Abstract: {abs_text}")
+
+            elif api_id == "disease_sh":
+                for k, v in data.items():
+                    if k in ["cases", "deaths", "recovered", "active"]:
+                        context_parts.append(f"  {k}: {v}")
+                if not any(k in data for k in ["cases", "deaths"]):
+                     context_parts.append(f"  Data: {str(data)[:300]}")
+
+            else:
+                # Generic clean format
+                items_shown = 0
+                for k, v in data.items():
+                    if k in ["_latency_ms", "_source", "source", "found", "count", "total", "success"]: continue
+                    if items_shown >= 6: break # Max 6 fields
+                    
+                    if isinstance(v, (str, int, float, bool)):
+                        v_str = str(v)
+                        if len(v_str) > 300: v_str = v_str[:300] + "..."
+                        context_parts.append(f"  {k}: {v_str}")
+                        items_shown += 1
+                    elif isinstance(v, list):
+                        list_str = ', '.join(map(str, v[:3]))
+                        if list_str:
+                            context_parts.append(f"  {k}: {list_str}")
+                            items_shown += 1
         
         context_parts.append("\n" + "=" * 60)
         context_parts.append(smart_result.sources_summary)
