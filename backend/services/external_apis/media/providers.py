@@ -5,6 +5,7 @@ Unsplash, Pexels, Giphy
 import os
 import httpx
 from typing import Dict, Any, Optional, List
+from services.http_client import http_client
 
 
 class Unsplash:
@@ -24,36 +25,34 @@ class Unsplash:
         per_page: int = 10
     ) -> Dict[str, Any]:
         """Search photos"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/search/photos"
-            headers = {'Authorization': f'Client-ID {self.access_key}'}
-            params = {
-                'query': query,
-                'per_page': min(per_page, 30)
-            }
-            
-            response = await client.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            
-            data = response.json()
-            return {
-                'photos': data.get('results', []),
-                'total': data.get('total', 0)
-            }
+        url = f"{self.base_url}/search/photos"
+        headers = {'Authorization': f'Client-ID {self.access_key}'}
+        params = {
+            'query': query,
+            'per_page': min(per_page, 30)
+        }
+        
+        response = await http_client.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        
+        data = response.json()
+        return {
+            'photos': data.get('results', []),
+            'total': data.get('total', 0)
+        }
     
     async def get_random_photo(self, query: Optional[str] = None) -> Dict[str, Any]:
         """Get random photo"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/photos/random"
-            headers = {'Authorization': f'Client-ID {self.access_key}'}
-            params = {}
-            if query:
-                params['query'] = query
-            
-            response = await client.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            
-            return response.json()
+        url = f"{self.base_url}/photos/random"
+        headers = {'Authorization': f'Client-ID {self.access_key}'}
+        params = {}
+        if query:
+            params['query'] = query
+        
+        response = await http_client.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        
+        return response.json()
 
 
 class Pexels:
@@ -73,22 +72,21 @@ class Pexels:
         per_page: int = 10
     ) -> Dict[str, Any]:
         """Search photos"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/search"
-            headers = {'Authorization': self.api_key}
-            params = {
-                'query': query,
-                'per_page': min(per_page, 80)
-            }
-            
-            response = await client.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            
-            data = response.json()
-            return {
-                'photos': data.get('photos', []),
-                'total': data.get('total_results', 0)
-            }
+        url = f"{self.base_url}/search"
+        headers = {'Authorization': self.api_key}
+        params = {
+            'query': query,
+            'per_page': min(per_page, 80)
+        }
+        
+        response = await http_client.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        
+        data = response.json()
+        return {
+            'photos': data.get('photos', []),
+            'total': data.get('total_results', 0)
+        }
     
     async def search_videos(
         self,
@@ -96,22 +94,21 @@ class Pexels:
         per_page: int = 10
     ) -> Dict[str, Any]:
         """Search videos"""
-        async with httpx.AsyncClient() as client:
-            url = "https://api.pexels.com/videos/search"
-            headers = {'Authorization': self.api_key}
-            params = {
-                'query': query,
-                'per_page': min(per_page, 80)
-            }
-            
-            response = await client.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            
-            data = response.json()
-            return {
-                'videos': data.get('videos', []),
-                'total': data.get('total_results', 0)
-            }
+        url = "https://api.pexels.com/videos/search"
+        headers = {'Authorization': self.api_key}
+        params = {
+            'query': query,
+            'per_page': min(per_page, 80)
+        }
+        
+        response = await http_client.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        
+        data = response.json()
+        return {
+            'videos': data.get('videos', []),
+            'total': data.get('total_results', 0)
+        }
 
 
 class Giphy:
@@ -131,37 +128,35 @@ class Giphy:
         limit: int = 10
     ) -> Dict[str, Any]:
         """Search GIFs"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/search"
-            params = {
-                'api_key': self.api_key,
-                'q': query,
-                'limit': min(limit, 50)
-            }
-            
-            response = await client.get(url, params=params)
-            response.raise_for_status()
-            
-            data = response.json()
-            return {
-                'gifs': data.get('data', []),
-                'total': data.get('pagination', {}).get('total_count', 0)
-            }
+        url = f"{self.base_url}/search"
+        params = {
+            'api_key': self.api_key,
+            'q': query,
+            'limit': min(limit, 50)
+        }
+        
+        response = await http_client.get(url, params=params)
+        response.raise_for_status()
+        
+        data = response.json()
+        return {
+            'gifs': data.get('data', []),
+            'total': data.get('pagination', {}).get('total_count', 0)
+        }
     
     async def get_trending(self, limit: int = 10) -> Dict[str, Any]:
         """Get trending GIFs"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/trending"
-            params = {
-                'api_key': self.api_key,
-                'limit': min(limit, 50)
-            }
-            
-            response = await client.get(url, params=params)
-            response.raise_for_status()
-            
-            data = response.json()
-            return {
-                'gifs': data.get('data', []),
-                'total': len(data.get('data', []))
-            }
+        url = f"{self.base_url}/trending"
+        params = {
+            'api_key': self.api_key,
+            'limit': min(limit, 50)
+        }
+        
+        response = await http_client.get(url, params=params)
+        response.raise_for_status()
+        
+        data = response.json()
+        return {
+            'gifs': data.get('data', []),
+            'total': len(data.get('data', []))
+        }

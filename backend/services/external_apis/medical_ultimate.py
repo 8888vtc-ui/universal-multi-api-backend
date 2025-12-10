@@ -7,6 +7,7 @@ import httpx
 import asyncio
 from typing import Dict, Any, Optional, List
 from datetime import datetime
+from services.http_client import http_client
 
 
 class UltimateMedicalAPIs:
@@ -661,36 +662,35 @@ class SemanticScholarProvider:
     async def search_papers(self, query: str) -> Dict[str, Any]:
         """Search scientific papers with AI"""
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    "https://api.semanticscholar.org/graph/v1/paper/search",
-                    params={
-                        "query": query,
-                        "limit": 5,
-                        "fields": "title,year,authors,citationCount,abstract"
-                    }
-                )
+            response = await http_client.get(
+                "https://api.semanticscholar.org/graph/v1/paper/search",
+                params={
+                    "query": query,
+                    "limit": 5,
+                    "fields": "title,year,authors,citationCount,abstract"
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                papers = data.get("data", [])
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    papers = data.get("data", [])
-                    
-                    if papers:
-                        return {
-                            "found": True,
-                            "count": len(papers),
-                            "total": data.get("total", 0),
-                            "papers": [
-                                {
-                                    "title": p.get("title", ""),
-                                    "year": p.get("year"),
-                                    "citations": p.get("citationCount", 0),
-                                    "authors": ", ".join([a.get("name", "") for a in p.get("authors", [])[:3]])
-                                }
-                                for p in papers
-                            ],
-                            "source": "Semantic Scholar"
-                        }
+                if papers:
+                    return {
+                        "found": True,
+                        "count": len(papers),
+                        "total": data.get("total", 0),
+                        "papers": [
+                            {
+                                "title": p.get("title", ""),
+                                "year": p.get("year"),
+                                "citations": p.get("citationCount", 0),
+                                "authors": ", ".join([a.get("name", "") for a in p.get("authors", [])[:3]])
+                            }
+                            for p in papers
+                        ],
+                        "source": "Semantic Scholar"
+                    }
         except:
             pass
         return {"found": False, "source": "Semantic Scholar"}
@@ -704,26 +704,25 @@ class ClinVarProvider:
     async def search_variants(self, query: str) -> Dict[str, Any]:
         """Search genetic variants"""
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    f"{self.BASE_URL}/esearch.fcgi",
-                    params={
-                        "db": "clinvar",
-                        "term": query,
-                        "retmax": 5,
-                        "retmode": "json"
-                    }
-                )
+            response = await http_client.get(
+                f"{self.BASE_URL}/esearch.fcgi",
+                params={
+                    "db": "clinvar",
+                    "term": query,
+                    "retmax": 5,
+                    "retmode": "json"
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                count = int(data.get("esearchresult", {}).get("count", 0))
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    count = int(data.get("esearchresult", {}).get("count", 0))
-                    
-                    return {
-                        "found": count > 0,
-                        "count": count,
-                        "source": "ClinVar (NCBI)"
-                    }
+                return {
+                    "found": count > 0,
+                    "count": count,
+                    "source": "ClinVar (NCBI)"
+                }
         except:
             pass
         return {"found": False, "source": "ClinVar"}
@@ -735,27 +734,26 @@ class ReactomeProvider:
     async def search_pathways(self, query: str) -> Dict[str, Any]:
         """Search biological pathways"""
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    "https://reactome.org/ContentService/search/query",
-                    params={"query": query, "cluster": "true"}
-                )
+            response = await http_client.get(
+                "https://reactome.org/ContentService/search/query",
+                params={"query": query, "cluster": "true"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                results = data.get("results", [])
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    results = data.get("results", [])
-                    
-                    if results:
-                        entries = results[0].get("entries", [])
-                        return {
-                            "found": len(entries) > 0,
-                            "count": len(entries),
-                            "pathways": [
-                                {"name": e.get("name", ""), "id": e.get("stId", "")}
-                                for e in entries[:5]
-                            ],
-                            "source": "Reactome"
-                        }
+                if results:
+                    entries = results[0].get("entries", [])
+                    return {
+                        "found": len(entries) > 0,
+                        "count": len(entries),
+                        "pathways": [
+                            {"name": e.get("name", ""), "id": e.get("stId", "")}
+                            for e in entries[:5]
+                        ],
+                        "source": "Reactome"
+                    }
         except:
             pass
         return {"found": False, "source": "Reactome"}
@@ -767,34 +765,33 @@ class UniProtProvider:
     async def search_proteins(self, query: str) -> Dict[str, Any]:
         """Search protein information"""
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    "https://rest.uniprot.org/uniprotkb/search",
-                    params={
-                        "query": query,
-                        "size": 5,
-                        "format": "json"
-                    }
-                )
+            response = await http_client.get(
+                "https://rest.uniprot.org/uniprotkb/search",
+                params={
+                    "query": query,
+                    "size": 5,
+                    "format": "json"
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                results = data.get("results", [])
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    results = data.get("results", [])
-                    
-                    if results:
-                        return {
-                            "found": True,
-                            "count": len(results),
-                            "proteins": [
-                                {
-                                    "id": r.get("primaryAccession", ""),
-                                    "name": r.get("proteinDescription", {}).get("recommendedName", {}).get("fullName", {}).get("value", ""),
-                                    "organism": r.get("organism", {}).get("scientificName", "")
-                                }
-                                for r in results[:5]
-                            ],
-                            "source": "UniProt"
-                        }
+                if results:
+                    return {
+                        "found": True,
+                        "count": len(results),
+                        "proteins": [
+                            {
+                                "id": r.get("primaryAccession", ""),
+                                "name": r.get("proteinDescription", {}).get("recommendedName", {}).get("fullName", {}).get("value", ""),
+                                "organism": r.get("organism", {}).get("scientificName", "")
+                            }
+                            for r in results[:5]
+                        ],
+                        "source": "UniProt"
+                    }
         except:
             pass
         return {"found": False, "source": "UniProt"}

@@ -1,6 +1,7 @@
 """JSONPlaceholder Provider - Free fake REST API for testing"""
 import httpx
 from typing import List, Dict, Any, Optional
+from services.http_client import http_client
 
 class JSONPlaceholderProvider:
     """Provider for JSONPlaceholder API (free, unlimited)"""
@@ -12,63 +13,55 @@ class JSONPlaceholderProvider:
     
     async def get_posts(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """Get all posts"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(f"{self.base_url}/posts")
-            response.raise_for_status()
-            posts = response.json()
-            return posts[:limit] if limit else posts
+        response = await http_client.get(f"{self.base_url}/posts")
+        response.raise_for_status()
+        posts = response.json()
+        return posts[:limit] if limit else posts
     
     async def get_post(self, post_id: int) -> Dict[str, Any]:
         """Get a specific post by ID"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(f"{self.base_url}/posts/{post_id}")
-            response.raise_for_status()
-            return response.json()
+        response = await http_client.get(f"{self.base_url}/posts/{post_id}")
+        response.raise_for_status()
+        return response.json()
     
     async def get_users(self) -> List[Dict[str, Any]]:
         """Get all users"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(f"{self.base_url}/users")
-            response.raise_for_status()
-            return response.json()
+        response = await http_client.get(f"{self.base_url}/users")
+        response.raise_for_status()
+        return response.json()
     
     async def get_user(self, user_id: int) -> Dict[str, Any]:
         """Get a specific user by ID"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(f"{self.base_url}/users/{user_id}")
-            response.raise_for_status()
-            return response.json()
+        response = await http_client.get(f"{self.base_url}/users/{user_id}")
+        response.raise_for_status()
+        return response.json()
     
     async def get_comments(self, post_id: Optional[int] = None) -> List[Dict[str, Any]]:
         """Get comments, optionally filtered by post ID"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            url = f"{self.base_url}/posts/{post_id}/comments" if post_id else f"{self.base_url}/comments"
-            response = await client.get(url)
-            response.raise_for_status()
-            return response.json()
+        url = f"{self.base_url}/posts/{post_id}/comments" if post_id else f"{self.base_url}/comments"
+        response = await http_client.get(url)
+        response.raise_for_status()
+        return response.json()
     
     async def get_albums(self) -> List[Dict[str, Any]]:
         """Get all albums"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(f"{self.base_url}/albums")
-            response.raise_for_status()
-            return response.json()
+        response = await http_client.get(f"{self.base_url}/albums")
+        response.raise_for_status()
+        return response.json()
     
     async def get_photos(self, album_id: Optional[int] = None) -> List[Dict[str, Any]]:
         """Get photos, optionally filtered by album ID"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            url = f"{self.base_url}/albums/{album_id}/photos" if album_id else f"{self.base_url}/photos"
-            response = await client.get(url)
-            response.raise_for_status()
-            return response.json()
+        url = f"{self.base_url}/albums/{album_id}/photos" if album_id else f"{self.base_url}/photos"
+        response = await http_client.get(url)
+        response.raise_for_status()
+        return response.json()
     
     async def get_todos(self, user_id: Optional[int] = None) -> List[Dict[str, Any]]:
         """Get todos, optionally filtered by user ID"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            url = f"{self.base_url}/users/{user_id}/todos" if user_id else f"{self.base_url}/todos"
-            response = await client.get(url)
-            response.raise_for_status()
-            return response.json()
+        url = f"{self.base_url}/users/{user_id}/todos" if user_id else f"{self.base_url}/todos"
+        response = await http_client.get(url)
+        response.raise_for_status()
+        return response.json()
 
 
 

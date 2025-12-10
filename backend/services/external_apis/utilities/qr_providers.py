@@ -5,6 +5,7 @@ QuickChart, goQR, QRCoder
 import httpx
 from typing import Dict, Any, Optional
 import base64
+from services.http_client import http_client
 
 
 class QuickChart:
@@ -21,25 +22,24 @@ class QuickChart:
         format: str = 'png'
     ) -> Dict[str, Any]:
         """Generate QR code"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/qr"
-            params = {
-                'text': text,
-                'size': size,
-                'format': format
-            }
-            
-            response = await client.get(url, params=params)
-            response.raise_for_status()
-            
-            # Return image URL
-            image_url = f"{url}?text={text}&size={size}&format={format}"
-            
-            return {
-                'image_url': image_url,
-                'size': size,
-                'format': format
-            }
+        url = f"{self.base_url}/qr"
+        params = {
+            'text': text,
+            'size': size,
+            'format': format
+        }
+        
+        response = await http_client.get(url, params=params)
+        response.raise_for_status()
+        
+        # Return image URL
+        image_url = f"{url}?text={text}&size={size}&format={format}"
+        
+        return {
+            'image_url': image_url,
+            'size': size,
+            'format': format
+        }
 
 
 class GoQR:

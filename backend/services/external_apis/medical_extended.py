@@ -5,6 +5,7 @@ Free APIs for comprehensive medical data
 import httpx
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from services.http_client import http_client
 
 
 class DiseaseSHProvider:
@@ -17,66 +18,63 @@ class DiseaseSHProvider:
     async def get_covid_global(self) -> Dict[str, Any]:
         """Get global COVID-19 statistics"""
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(f"{self.base_url}/covid-19/all")
-                if response.status_code == 200:
-                    data = response.json()
-                    return {
-                        "cases": data.get("cases", 0),
-                        "deaths": data.get("deaths", 0),
-                        "recovered": data.get("recovered", 0),
-                        "active": data.get("active", 0),
-                        "critical": data.get("critical", 0),
-                        "today_cases": data.get("todayCases", 0),
-                        "today_deaths": data.get("todayDeaths", 0),
-                        "updated": datetime.fromtimestamp(data.get("updated", 0)/1000).isoformat()
-                    }
-                raise Exception(f"Disease.sh returned {response.status_code}")
+            response = await http_client.get(f"{self.base_url}/covid-19/all")
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    "cases": data.get("cases", 0),
+                    "deaths": data.get("deaths", 0),
+                    "recovered": data.get("recovered", 0),
+                    "active": data.get("active", 0),
+                    "critical": data.get("critical", 0),
+                    "today_cases": data.get("todayCases", 0),
+                    "today_deaths": data.get("todayDeaths", 0),
+                    "updated": datetime.fromtimestamp(data.get("updated", 0)/1000).isoformat()
+                }
+            raise Exception(f"Disease.sh returned {response.status_code}")
         except Exception as e:
             raise Exception(f"Disease.sh error: {e}")
     
     async def get_covid_country(self, country: str) -> Dict[str, Any]:
         """Get COVID-19 stats for a specific country"""
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(f"{self.base_url}/covid-19/countries/{country}")
-                if response.status_code == 200:
-                    data = response.json()
-                    return {
-                        "country": data.get("country"),
-                        "cases": data.get("cases", 0),
-                        "deaths": data.get("deaths", 0),
-                        "recovered": data.get("recovered", 0),
-                        "active": data.get("active", 0),
-                        "critical": data.get("critical", 0),
-                        "cases_per_million": data.get("casesPerOneMillion", 0),
-                        "deaths_per_million": data.get("deathsPerOneMillion", 0),
-                        "population": data.get("population", 0),
-                        "continent": data.get("continent"),
-                        "updated": datetime.fromtimestamp(data.get("updated", 0)/1000).isoformat()
-                    }
-                raise Exception(f"Country not found or API error: {response.status_code}")
+            response = await http_client.get(f"{self.base_url}/covid-19/countries/{country}")
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    "country": data.get("country"),
+                    "cases": data.get("cases", 0),
+                    "deaths": data.get("deaths", 0),
+                    "recovered": data.get("recovered", 0),
+                    "active": data.get("active", 0),
+                    "critical": data.get("critical", 0),
+                    "cases_per_million": data.get("casesPerOneMillion", 0),
+                    "deaths_per_million": data.get("deathsPerOneMillion", 0),
+                    "population": data.get("population", 0),
+                    "continent": data.get("continent"),
+                    "updated": datetime.fromtimestamp(data.get("updated", 0)/1000).isoformat()
+                }
+            raise Exception(f"Country not found or API error: {response.status_code}")
         except Exception as e:
             raise Exception(f"Disease.sh country error: {e}")
     
     async def get_disease_info(self, disease: str = "covid-19") -> Dict[str, Any]:
         """Get information about infectious diseases"""
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                # Get historical data for context
-                response = await client.get(
-                    f"{self.base_url}/covid-19/historical/all",
-                    params={"lastdays": 30}
-                )
-                if response.status_code == 200:
-                    data = response.json()
-                    return {
-                        "disease": disease,
-                        "historical_cases": data.get("cases", {}),
-                        "historical_deaths": data.get("deaths", {}),
-                        "historical_recovered": data.get("recovered", {})
-                    }
-                return {"disease": disease, "data": "limited"}
+            # Get historical data for context
+            response = await http_client.get(
+                f"{self.base_url}/covid-19/historical/all",
+                params={"lastdays": 30}
+            )
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    "disease": disease,
+                    "historical_cases": data.get("cases", {}),
+                    "historical_deaths": data.get("deaths", {}),
+                    "historical_recovered": data.get("recovered", {})
+                }
+            return {"disease": disease, "data": "limited"}
         except Exception as e:
             raise Exception(f"Disease.sh historical error: {e}")
 
@@ -91,97 +89,94 @@ class RxNormProvider:
     async def search_drug(self, drug_name: str) -> Dict[str, Any]:
         """Search for drug information by name"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                # Get drug concepts
-                response = await client.get(
-                    f"{self.base_url}/drugs.json",
-                    params={"name": drug_name}
-                )
+            # Get drug concepts
+            response = await http_client.get(
+                f"{self.base_url}/drugs.json",
+                params={"name": drug_name}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                drug_group = data.get("drugGroup", {})
+                concept_group = drug_group.get("conceptGroup", [])
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    drug_group = data.get("drugGroup", {})
-                    concept_group = drug_group.get("conceptGroup", [])
-                    
-                    drugs = []
-                    for group in concept_group:
-                        for prop in group.get("conceptProperties", []):
-                            drugs.append({
-                                "rxcui": prop.get("rxcui"),
-                                "name": prop.get("name"),
-                                "synonym": prop.get("synonym"),
-                                "tty": prop.get("tty")  # Term type
-                            })
-                    
-                    return {
-                        "query": drug_name,
-                        "count": len(drugs),
-                        "drugs": drugs[:10]  # Limit to 10
-                    }
-                raise Exception(f"RxNorm returned {response.status_code}")
+                drugs = []
+                for group in concept_group:
+                    for prop in group.get("conceptProperties", []):
+                        drugs.append({
+                            "rxcui": prop.get("rxcui"),
+                            "name": prop.get("name"),
+                            "synonym": prop.get("synonym"),
+                            "tty": prop.get("tty")  # Term type
+                        })
+                
+                return {
+                    "query": drug_name,
+                    "count": len(drugs),
+                    "drugs": drugs[:10]  # Limit to 10
+                }
+            raise Exception(f"RxNorm returned {response.status_code}")
         except Exception as e:
             raise Exception(f"RxNorm search error: {e}")
     
     async def get_drug_interactions(self, rxcui: str) -> Dict[str, Any]:
         """Get drug interactions by RxCUI"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/interaction/interaction.json",
-                    params={"rxcui": rxcui}
-                )
+            response = await http_client.get(
+                f"{self.base_url}/interaction/interaction.json",
+                params={"rxcui": rxcui}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                interactions = []
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    interactions = []
-                    
-                    for group in data.get("interactionTypeGroup", []):
-                        for itype in group.get("interactionType", []):
-                            for pair in itype.get("interactionPair", []):
-                                interactions.append({
-                                    "severity": pair.get("severity"),
-                                    "description": pair.get("description"),
-                                    "drugs_involved": [
-                                        c.get("minConceptItem", {}).get("name")
-                                        for c in pair.get("interactionConcept", [])
-                                    ]
-                                })
-                    
-                    return {
-                        "rxcui": rxcui,
-                        "interaction_count": len(interactions),
-                        "interactions": interactions[:10]
-                    }
-                return {"rxcui": rxcui, "interactions": []}
+                for group in data.get("interactionTypeGroup", []):
+                    for itype in group.get("interactionType", []):
+                        for pair in itype.get("interactionPair", []):
+                            interactions.append({
+                                "severity": pair.get("severity"),
+                                "description": pair.get("description"),
+                                "drugs_involved": [
+                                    c.get("minConceptItem", {}).get("name")
+                                    for c in pair.get("interactionConcept", [])
+                                ]
+                            })
+                
+                return {
+                    "rxcui": rxcui,
+                    "interaction_count": len(interactions),
+                    "interactions": interactions[:10]
+                }
+            return {"rxcui": rxcui, "interactions": []}
         except Exception as e:
             raise Exception(f"RxNorm interactions error: {e}")
     
     async def get_drug_class(self, rxcui: str) -> Dict[str, Any]:
         """Get therapeutic class of a drug"""
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/rxclass/class/byRxcui.json",
-                    params={"rxcui": rxcui}
-                )
+            response = await http_client.get(
+                f"{self.base_url}/rxclass/class/byRxcui.json",
+                params={"rxcui": rxcui}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                classes = []
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    classes = []
-                    
-                    for entry in data.get("rxclassDrugInfoList", {}).get("rxclassDrugInfo", []):
-                        class_info = entry.get("rxclassMinConceptItem", {})
-                        classes.append({
-                            "class_id": class_info.get("classId"),
-                            "class_name": class_info.get("className"),
-                            "class_type": class_info.get("classType")
-                        })
-                    
-                    return {
-                        "rxcui": rxcui,
-                        "classes": classes
-                    }
-                return {"rxcui": rxcui, "classes": []}
+                for entry in data.get("rxclassDrugInfoList", {}).get("rxclassDrugInfo", []):
+                    class_info = entry.get("rxclassMinConceptItem", {})
+                    classes.append({
+                        "class_id": class_info.get("classId"),
+                        "class_name": class_info.get("className"),
+                        "class_type": class_info.get("classType")
+                    })
+                
+                return {
+                    "rxcui": rxcui,
+                    "classes": classes
+                }
+            return {"rxcui": rxcui, "classes": []}
         except Exception as e:
             raise Exception(f"RxNorm class error: {e}")
 
@@ -196,59 +191,57 @@ class WHOGHOProvider:
     async def get_indicators(self, limit: int = 20) -> Dict[str, Any]:
         """Get list of available health indicators"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/Indicator",
-                    params={"$top": limit}
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    indicators = [
-                        {
-                            "code": ind.get("IndicatorCode"),
-                            "name": ind.get("IndicatorName"),
-                            "language": ind.get("Language")
-                        }
-                        for ind in data.get("value", [])
-                    ]
-                    return {
-                        "count": len(indicators),
-                        "indicators": indicators
+            response = await http_client.get(
+                f"{self.base_url}/Indicator",
+                params={"$top": limit}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                indicators = [
+                    {
+                        "code": ind.get("IndicatorCode"),
+                        "name": ind.get("IndicatorName"),
+                        "language": ind.get("Language")
                     }
-                raise Exception(f"WHO API returned {response.status_code}")
+                    for ind in data.get("value", [])
+                ]
+                return {
+                    "count": len(indicators),
+                    "indicators": indicators
+                }
+            raise Exception(f"WHO API returned {response.status_code}")
         except Exception as e:
             raise Exception(f"WHO indicators error: {e}")
     
     async def get_country_health_stats(self, country_code: str, indicator: str = "WHOSIS_000001") -> Dict[str, Any]:
         """Get health statistics for a country"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/{indicator}",
-                    params={
-                        "$filter": f"SpatialDim eq '{country_code}'",
-                        "$top": 10
+            response = await http_client.get(
+                f"{self.base_url}/{indicator}",
+                params={
+                    "$filter": f"SpatialDim eq '{country_code}'",
+                    "$top": 10
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                stats = [
+                    {
+                        "year": stat.get("TimeDim"),
+                        "value": stat.get("NumericValue"),
+                        "dimension": stat.get("Dim1"),
+                        "indicator": indicator
                     }
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    stats = [
-                        {
-                            "year": stat.get("TimeDim"),
-                            "value": stat.get("NumericValue"),
-                            "dimension": stat.get("Dim1"),
-                            "indicator": indicator
-                        }
-                        for stat in data.get("value", [])
-                    ]
-                    return {
-                        "country": country_code,
-                        "indicator": indicator,
-                        "stats": stats
-                    }
-                return {"country": country_code, "stats": []}
+                    for stat in data.get("value", [])
+                ]
+                return {
+                    "country": country_code,
+                    "indicator": indicator,
+                    "stats": stats
+                }
+            return {"country": country_code, "stats": []}
         except Exception as e:
             raise Exception(f"WHO country stats error: {e}")
     
@@ -268,39 +261,38 @@ class MedlinePlusProvider:
     async def search_health_topic(self, query: str, language: str = "en") -> Dict[str, Any]:
         """Search for health topics"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                # MedlinePlus uses ICD codes, but we can search by problem
-                response = await client.get(
-                    f"{self.base_url}",
-                    params={
-                        "mainSearchCriteria.v.c": query,
-                        "mainSearchCriteria.v.cs": "2.16.840.1.113883.6.103",  # ICD-9
-                        "informationRecipient.languageCode.c": language,
-                        "knowledgeResponseType": "application/json"
-                    }
-                )
+            # MedlinePlus uses ICD codes, but we can search by problem
+            response = await http_client.get(
+                f"{self.base_url}",
+                params={
+                    "mainSearchCriteria.v.c": query,
+                    "mainSearchCriteria.v.cs": "2.16.840.1.113883.6.103",  # ICD-9
+                    "informationRecipient.languageCode.c": language,
+                    "knowledgeResponseType": "application/json"
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                entries = data.get("feed", {}).get("entry", [])
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    entries = data.get("feed", {}).get("entry", [])
-                    
-                    topics = []
-                    for entry in entries:
-                        topics.append({
-                            "title": entry.get("title", {}).get("_value"),
-                            "summary": entry.get("summary", {}).get("_value"),
-                            "link": next(
-                                (l.get("href") for l in entry.get("link", []) if l.get("rel") == "alternate"),
-                                None
-                            )
-                        })
-                    
-                    return {
-                        "query": query,
-                        "count": len(topics),
-                        "topics": topics
-                    }
-                return {"query": query, "topics": []}
+                topics = []
+                for entry in entries:
+                    topics.append({
+                        "title": entry.get("title", {}).get("_value"),
+                        "summary": entry.get("summary", {}).get("_value"),
+                        "link": next(
+                            (l.get("href") for l in entry.get("link", []) if l.get("rel") == "alternate"),
+                            None
+                        )
+                    })
+                
+                return {
+                    "query": query,
+                    "count": len(topics),
+                    "topics": topics
+                }
+            return {"query": query, "topics": []}
         except Exception as e:
             # MedlinePlus can be finicky, return empty gracefully
             return {"query": query, "topics": [], "error": str(e)}

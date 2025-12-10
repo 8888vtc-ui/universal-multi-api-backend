@@ -1,6 +1,7 @@
 """TinyURL Provider - URL shortener"""
 import httpx
 from typing import Dict, Any
+from services.http_client import http_client
 
 class TinyURLProvider:
     """Provider for TinyURL API (free, unlimited)"""
@@ -12,18 +13,17 @@ class TinyURLProvider:
     
     async def shorten_url(self, url: str, alias: str = None) -> Dict[str, Any]:
         """Shorten a URL"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            params = {"url": url}
-            if alias:
-                params["alias"] = alias
-            response = await client.get(self.base_url, params=params)
-            response.raise_for_status()
-            short_url = response.text.strip()
-            return {
-                "original_url": url,
-                "short_url": short_url,
-                "alias": alias
-            }
+        params = {"url": url}
+        if alias:
+            params["alias"] = alias
+        response = await http_client.get(self.base_url, params=params)
+        response.raise_for_status()
+        short_url = response.text.strip()
+        return {
+            "original_url": url,
+            "short_url": short_url,
+            "alias": alias
+        }
 
 
 

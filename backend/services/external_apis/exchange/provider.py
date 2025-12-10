@@ -1,6 +1,7 @@
 """Exchange Rate Provider"""
 import httpx
 from typing import Dict, Any, List, Optional
+from services.http_client import http_client
 
 class ExchangeRateProvider:
     """Provider for ExchangeRate-API (free, 1,500/month)"""
@@ -12,17 +13,16 @@ class ExchangeRateProvider:
     
     async def get_rates(self, base_currency: str = "USD") -> Dict[str, Any]:
         """Get exchange rates for a base currency"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(f"{self.base_url}/latest/{base_currency}")
-            response.raise_for_status()
-            data = response.json()
-            
-            return {
-                "base": data.get("base_code"),
-                "rates": data.get("rates", {}),
-                "time_last_updated": data.get("time_last_update_utc"),
-                "time_next_update": data.get("time_next_update_utc")
-            }
+        response = await http_client.get(f"{self.base_url}/latest/{base_currency}")
+        response.raise_for_status()
+        data = response.json()
+        
+        return {
+            "base": data.get("base_code"),
+            "rates": data.get("rates", {}),
+            "time_last_updated": data.get("time_last_update_utc"),
+            "time_next_update": data.get("time_next_update_utc")
+        }
     
     async def convert(
         self,

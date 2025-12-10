@@ -6,6 +6,7 @@ import httpx
 import asyncio
 from typing import Dict, Any, Optional, List
 from datetime import datetime
+from services.http_client import http_client
 
 
 class MedicalAPIRegistry:
@@ -141,28 +142,27 @@ class MeSHProvider:
         """Search MeSH for medical terms"""
         try:
             # Use NLM's MeSH lookup API
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    "https://id.nlm.nih.gov/mesh/lookup/descriptor",
-                    params={"label": query, "match": "contains", "limit": 5}
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    if data:
-                        return {
-                            "found": True,
-                            "count": len(data),
-                            "terms": [
-                                {
-                                    "id": item.get("resource", "").split("/")[-1],
-                                    "label": item.get("label", ""),
-                                    "uri": item.get("resource", "")
-                                }
-                                for item in data[:5]
-                            ],
-                            "source": "MeSH (NLM)"
-                        }
+            response = await http_client.get(
+                "https://id.nlm.nih.gov/mesh/lookup/descriptor",
+                params={"label": query, "match": "contains", "limit": 5}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data:
+                    return {
+                        "found": True,
+                        "count": len(data),
+                        "terms": [
+                            {
+                                "id": item.get("resource", "").split("/")[-1],
+                                "label": item.get("label", ""),
+                                "uri": item.get("resource", "")
+                            }
+                            for item in data[:5]
+                        ],
+                        "source": "MeSH (NLM)"
+                    }
         except Exception as e:
             pass
         
@@ -177,54 +177,53 @@ class NCBIGeneProvider:
     async def search_gene(self, query: str) -> Dict[str, Any]:
         """Search for genes related to a condition"""
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                # Search for genes
-                search_response = await client.get(
-                    f"{self.BASE_URL}/esearch.fcgi",
-                    params={
-                        "db": "gene",
-                        "term": f"{query}[All Fields]",
-                        "retmax": 5,
-                        "retmode": "json"
-                    }
-                )
+            # Search for genes
+            search_response = await http_client.get(
+                f"{self.BASE_URL}/esearch.fcgi",
+                params={
+                    "db": "gene",
+                    "term": f"{query}[All Fields]",
+                    "retmax": 5,
+                    "retmode": "json"
+                }
+            )
+            
+            if search_response.status_code == 200:
+                search_data = search_response.json()
+                ids = search_data.get("esearchresult", {}).get("idlist", [])
                 
-                if search_response.status_code == 200:
-                    search_data = search_response.json()
-                    ids = search_data.get("esearchresult", {}).get("idlist", [])
+                if ids:
+                    # Get details
+                    summary_response = await http_client.get(
+                        f"{self.BASE_URL}/esummary.fcgi",
+                        params={
+                            "db": "gene",
+                            "id": ",".join(ids[:5]),
+                            "retmode": "json"
+                        }
+                    )
                     
-                    if ids:
-                        # Get details
-                        summary_response = await client.get(
-                            f"{self.BASE_URL}/esummary.fcgi",
-                            params={
-                                "db": "gene",
-                                "id": ",".join(ids[:5]),
-                                "retmode": "json"
-                            }
-                        )
+                    if summary_response.status_code == 200:
+                        summary_data = summary_response.json()
+                        result = summary_data.get("result", {})
                         
-                        if summary_response.status_code == 200:
-                            summary_data = summary_response.json()
-                            result = summary_data.get("result", {})
-                            
-                            genes = []
-                            for gene_id in ids[:5]:
-                                if gene_id in result:
-                                    gene = result[gene_id]
-                                    genes.append({
-                                        "id": gene_id,
-                                        "symbol": gene.get("name", ""),
-                                        "description": gene.get("description", ""),
-                                        "chromosome": gene.get("chromosome", "")
-                                    })
-                            
-                            return {
-                                "found": True,
-                                "count": len(genes),
-                                "genes": genes,
-                                "source": "NCBI Gene"
-                            }
+                        genes = []
+                        for gene_id in ids[:5]:
+                            if gene_id in result:
+                                gene = result[gene_id]
+                                genes.append({
+                                    "id": gene_id,
+                                    "symbol": gene.get("name", ""),
+                                    "description": gene.get("description", ""),
+                                    "chromosome": gene.get("chromosome", "")
+                                })
+                        
+                        return {
+                            "found": True,
+                            "count": len(genes),
+                            "genes": genes,
+                            "source": "NCBI Gene"
+                        }
         except Exception as e:
             pass
         

@@ -6,6 +6,7 @@ import os
 import httpx
 from typing import Dict, Any, Optional
 import base64
+from services.http_client import http_client
 
 
 class OCRSpace:
@@ -23,38 +24,37 @@ class OCRSpace:
         language: str = 'eng'
     ) -> Dict[str, Any]:
         """Extract text from image"""
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            data = {
-                'apikey': self.api_key,
-                'language': language,
-                'isOverlayRequired': False
-            }
-            
-            if image_url:
-                data['url'] = image_url
-            elif image_base64:
-                data['base64Image'] = f"data:image/png;base64,{image_base64}"
-            else:
-                raise ValueError("Either image_url or image_base64 required")
-            
-            response = await client.post(self.base_url, data=data)
-            response.raise_for_status()
-            
-            result = response.json()
-            
-            if result.get('IsErroredOnProcessing'):
-                raise Exception(result.get('ErrorMessage', ['Unknown error'])[0])
-            
-            # Extract all text
-            text_results = []
-            for parsed_result in result.get('ParsedResults', []):
-                text_results.append(parsed_result.get('ParsedText', ''))
-            
-            return {
-                'text': '\n'.join(text_results),
-                'language': language,
-                'processing_time': result.get('ProcessingTimeInMilliseconds', 0)
-            }
+        data = {
+            'apikey': self.api_key,
+            'language': language,
+            'isOverlayRequired': False
+        }
+        
+        if image_url:
+            data['url'] = image_url
+        elif image_base64:
+            data['base64Image'] = f"data:image/png;base64,{image_base64}"
+        else:
+            raise ValueError("Either image_url or image_base64 required")
+        
+        response = await http_client.post(self.base_url, data=data)
+        response.raise_for_status()
+        
+        result = response.json()
+        
+        if result.get('IsErroredOnProcessing'):
+            raise Exception(result.get('ErrorMessage', ['Unknown error'])[0])
+        
+        # Extract all text
+        text_results = []
+        for parsed_result in result.get('ParsedResults', []):
+            text_results.append(parsed_result.get('ParsedText', ''))
+        
+        return {
+            'text': '\n'.join(text_results),
+            'language': language,
+            'processing_time': result.get('ProcessingTimeInMilliseconds', 0)
+        }
 
 
 class Optiic:
@@ -71,20 +71,19 @@ class Optiic:
         language: str = 'eng'
     ) -> Dict[str, Any]:
         """Extract text from image"""
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            if image_url:
-                data = {'url': image_url}
-            elif image_base64:
-                data = {'image': image_base64}
-            else:
-                raise ValueError("Either image_url or image_base64 required")
-            
-            response = await client.post(self.base_url, json=data)
-            response.raise_for_status()
-            
-            result = response.json()
-            
-            return {
-                'text': result.get('text', ''),
-                'language': language
-            }
+        if image_url:
+            data = {'url': image_url}
+        elif image_base64:
+            data = {'image': image_base64}
+        else:
+            raise ValueError("Either image_url or image_base64 required")
+        
+        response = await http_client.post(self.base_url, json=data)
+        response.raise_for_status()
+        
+        result = response.json()
+        
+        return {
+            'text': result.get('text', ''),
+            'language': language
+        }

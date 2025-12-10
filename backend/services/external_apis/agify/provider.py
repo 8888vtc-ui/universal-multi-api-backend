@@ -1,6 +1,7 @@
 """Agify, Genderize, Nationalize Providers"""
 import httpx
 from typing import Dict, Any, List, Optional
+from services.http_client import http_client
 
 class NameAnalysisProvider:
     """Provider for Agify, Genderize, Nationalize APIs (free, 1,000/day each)"""
@@ -11,63 +12,60 @@ class NameAnalysisProvider:
     
     async def predict_age(self, name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
         """Predict age from name (Agify API)"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            params = {"name": name}
-            if country_id:
-                params["country_id"] = country_id
-            
-            response = await client.get("https://api.agify.io", params=params)
-            response.raise_for_status()
-            data = response.json()
-            
-            return {
-                "name": data.get("name"),
-                "predicted_age": data.get("age"),
-                "count": data.get("count"),
-                "country_id": country_id
-            }
+        params = {"name": name}
+        if country_id:
+            params["country_id"] = country_id
+        
+        response = await http_client.get("https://api.agify.io", params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        return {
+            "name": data.get("name"),
+            "predicted_age": data.get("age"),
+            "count": data.get("count"),
+            "country_id": country_id
+        }
     
     async def predict_gender(self, name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
         """Predict gender from name (Genderize API)"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            params = {"name": name}
-            if country_id:
-                params["country_id"] = country_id
-            
-            response = await client.get("https://api.genderize.io", params=params)
-            response.raise_for_status()
-            data = response.json()
-            
-            return {
-                "name": data.get("name"),
-                "gender": data.get("gender"),
-                "probability": data.get("probability"),
-                "count": data.get("count"),
-                "country_id": country_id
-            }
+        params = {"name": name}
+        if country_id:
+            params["country_id"] = country_id
+        
+        response = await http_client.get("https://api.genderize.io", params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        return {
+            "name": data.get("name"),
+            "gender": data.get("gender"),
+            "probability": data.get("probability"),
+            "count": data.get("count"),
+            "country_id": country_id
+        }
     
     async def predict_nationality(self, name: str) -> Dict[str, Any]:
         """Predict nationality from name (Nationalize API)"""
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(
-                "https://api.nationalize.io",
-                params={"name": name}
-            )
-            response.raise_for_status()
-            data = response.json()
-            
-            countries = []
-            for c in data.get("country", [])[:5]:
-                countries.append({
-                    "country_id": c.get("country_id"),
-                    "probability": round(c.get("probability", 0) * 100, 1)
-                })
-            
-            return {
-                "name": data.get("name"),
-                "countries": countries,
-                "count": data.get("count")
-            }
+        response = await http_client.get(
+            "https://api.nationalize.io",
+            params={"name": name}
+        )
+        response.raise_for_status()
+        data = response.json()
+        
+        countries = []
+        for c in data.get("country", [])[:5]:
+            countries.append({
+                "country_id": c.get("country_id"),
+                "probability": round(c.get("probability", 0) * 100, 1)
+            })
+        
+        return {
+            "name": data.get("name"),
+            "countries": countries,
+            "count": data.get("count")
+        }
     
     async def analyze_name(self, name: str, country_id: Optional[str] = None) -> Dict[str, Any]:
         """Full name analysis: age, gender, nationality"""

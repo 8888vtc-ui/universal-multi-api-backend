@@ -1,6 +1,7 @@
 """CoinCap Provider - Cryptocurrency data from CoinCap API"""
 import aiohttp
 from typing import Dict, Any, Optional
+from services.http_client import http_client
 
 
 class CoinCapProvider:
@@ -79,95 +80,92 @@ class CoinCapProvider:
     async def get_asset_history(self, asset_id: str, interval: str = "d1") -> Dict[str, Any]:
         """Get asset price history"""
         try:
-            async with httpx.AsyncClient(timeout=self.timeout) as client:
-                response = await client.get(
-                    f"{self.BASE_URL}/assets/{asset_id}/history",
-                    params={"interval": interval}
-                )
+            response = await http_client.get(
+                f"{self.BASE_URL}/assets/{asset_id}/history",
+                params={"interval": interval}
+            )
+            
+            if response.status_code == 200:
+                data = response.json().get("data", [])
                 
-                if response.status_code == 200:
-                    data = response.json().get("data", [])
-                    
-                    # Return last 30 data points
-                    history = []
-                    for point in data[-30:]:
-                        history.append({
-                            "price_usd": float(point.get("priceUsd", 0)) if point.get("priceUsd") else None,
-                            "time": point.get("time"),
-                            "date": point.get("date")
-                        })
-                    
-                    return {
-                        "asset_id": asset_id,
-                        "interval": interval,
-                        "history": history,
-                        "source": "CoinCap"
-                    }
-                else:
-                    return {"error": f"History not found for {asset_id}", "history": []}
-                    
+                # Return last 30 data points
+                history = []
+                for point in data[-30:]:
+                    history.append({
+                        "price_usd": float(point.get("priceUsd", 0)) if point.get("priceUsd") else None,
+                        "time": point.get("time"),
+                        "date": point.get("date")
+                    })
+                
+                return {
+                    "asset_id": asset_id,
+                    "interval": interval,
+                    "history": history,
+                    "source": "CoinCap"
+                }
+            else:
+                return {"error": f"History not found for {asset_id}", "history": []}
+                
         except Exception as e:
             return {"error": str(e), "history": []}
     
     async def get_markets(self, limit: int = 100) -> Dict[str, Any]:
         """Get cryptocurrency markets"""
         try:
-            async with httpx.AsyncClient(timeout=self.timeout) as client:
-                response = await client.get(
-                    f"{self.BASE_URL}/markets",
-                    params={"limit": limit}
-                )
+            response = await http_client.get(
+                f"{self.BASE_URL}/markets",
+                params={"limit": limit}
+            )
+            
+            if response.status_code == 200:
+                data = response.json().get("data", [])
                 
-                if response.status_code == 200:
-                    data = response.json().get("data", [])
-                    
-                    markets = []
-                    for market in data[:limit]:
-                        markets.append({
-                            "exchange_id": market.get("exchangeId"),
-                            "base_symbol": market.get("baseSymbol"),
-                            "quote_symbol": market.get("quoteSymbol"),
-                            "price_usd": float(market.get("priceUsd", 0)) if market.get("priceUsd") else None,
-                            "volume_24h": float(market.get("volumeUsd24Hr", 0)) if market.get("volumeUsd24Hr") else None,
-                        })
-                    
-                    return {
-                        "count": len(markets),
-                        "markets": markets,
-                        "source": "CoinCap"
-                    }
-                else:
-                    return {"error": "Markets not available", "markets": []}
-                    
+                markets = []
+                for market in data[:limit]:
+                    markets.append({
+                        "exchange_id": market.get("exchangeId"),
+                        "base_symbol": market.get("baseSymbol"),
+                        "quote_symbol": market.get("quoteSymbol"),
+                        "price_usd": float(market.get("priceUsd", 0)) if market.get("priceUsd") else None,
+                        "volume_24h": float(market.get("volumeUsd24Hr", 0)) if market.get("volumeUsd24Hr") else None,
+                    })
+                
+                return {
+                    "count": len(markets),
+                    "markets": markets,
+                    "source": "CoinCap"
+                }
+            else:
+                return {"error": "Markets not available", "markets": []}
+                
         except Exception as e:
             return {"error": str(e), "markets": []}
     
     async def get_exchanges(self) -> Dict[str, Any]:
         """Get cryptocurrency exchanges"""
         try:
-            async with httpx.AsyncClient(timeout=self.timeout) as client:
-                response = await client.get(f"{self.BASE_URL}/exchanges")
+            response = await http_client.get(f"{self.BASE_URL}/exchanges")
+            
+            if response.status_code == 200:
+                data = response.json().get("data", [])
                 
-                if response.status_code == 200:
-                    data = response.json().get("data", [])
-                    
-                    exchanges = []
-                    for exchange in data[:50]:  # Top 50
-                        exchanges.append({
-                            "id": exchange.get("exchangeId"),
-                            "name": exchange.get("name"),
-                            "rank": int(exchange.get("rank", 0)) if exchange.get("rank") else None,
-                            "volume_usd": float(exchange.get("volumeUsd", 0)) if exchange.get("volumeUsd") else None,
-                            "trading_pairs": int(exchange.get("tradingPairs", 0)) if exchange.get("tradingPairs") else None,
-                        })
-                    
-                    return {
-                        "count": len(exchanges),
-                        "exchanges": exchanges,
-                        "source": "CoinCap"
-                    }
-                else:
-                    return {"error": "Exchanges not available", "exchanges": []}
-                    
+                exchanges = []
+                for exchange in data[:50]:  # Top 50
+                    exchanges.append({
+                        "id": exchange.get("exchangeId"),
+                        "name": exchange.get("name"),
+                        "rank": int(exchange.get("rank", 0)) if exchange.get("rank") else None,
+                        "volume_usd": float(exchange.get("volumeUsd", 0)) if exchange.get("volumeUsd") else None,
+                        "trading_pairs": int(exchange.get("tradingPairs", 0)) if exchange.get("tradingPairs") else None,
+                    })
+                
+                return {
+                    "count": len(exchanges),
+                    "exchanges": exchanges,
+                    "source": "CoinCap"
+                }
+            else:
+                return {"error": "Exchanges not available", "exchanges": []}
+                
         except Exception as e:
             return {"error": str(e), "exchanges": []}

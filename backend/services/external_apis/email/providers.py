@@ -5,6 +5,7 @@ SendGrid, Mailgun, Mailjet
 import os
 import httpx
 from typing import Dict, Any, Optional, List
+from services.http_client import http_client
 
 
 class SendGrid:
@@ -27,33 +28,32 @@ class SendGrid:
         content_type: str = 'text/plain'
     ) -> Dict[str, Any]:
         """Send email via SendGrid"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/mail/send"
-            headers = {
-                'Authorization': f'Bearer {self.api_key}',
-                'Content-Type': 'application/json'
-            }
-            
-            data = {
-                'personalizations': [{
-                    'to': [{'email': to_email}]
-                }],
-                'from': {'email': from_email},
-                'subject': subject,
-                'content': [{
-                    'type': content_type,
-                    'value': content
-                }]
-            }
-            
-            response = await client.post(url, json=data, headers=headers)
-            response.raise_for_status()
-            
-            return {
-                'sent': True,
-                'to': to_email,
-                'subject': subject
-            }
+        url = f"{self.base_url}/mail/send"
+        headers = {
+            'Authorization': f'Bearer {self.api_key}',
+            'Content-Type': 'application/json'
+        }
+        
+        data = {
+            'personalizations': [{
+                'to': [{'email': to_email}]
+            }],
+            'from': {'email': from_email},
+            'subject': subject,
+            'content': [{
+                'type': content_type,
+                'value': content
+            }]
+        }
+        
+        response = await http_client.post(url, json=data, headers=headers)
+        response.raise_for_status()
+        
+        return {
+            'sent': True,
+            'to': to_email,
+            'subject': subject
+        }
 
 
 class Mailgun:
@@ -78,34 +78,33 @@ class Mailgun:
         content_type: str = 'text/plain'
     ) -> Dict[str, Any]:
         """Send email via Mailgun"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/messages"
-            
-            data = {
-                'from': from_email,
-                'to': to_email,
-                'subject': subject
-            }
-            
-            if content_type == 'text/html':
-                data['html'] = content
-            else:
-                data['text'] = content
-            
-            response = await client.post(
-                url,
-                auth=('api', self.api_key),
-                data=data
-            )
-            response.raise_for_status()
-            
-            result = response.json()
-            return {
-                'sent': True,
-                'to': to_email,
-                'subject': subject,
-                'id': result.get('id')
-            }
+        url = f"{self.base_url}/messages"
+        
+        data = {
+            'from': from_email,
+            'to': to_email,
+            'subject': subject
+        }
+        
+        if content_type == 'text/html':
+            data['html'] = content
+        else:
+            data['text'] = content
+        
+        response = await http_client.post(
+            url,
+            auth=('api', self.api_key),
+            data=data
+        )
+        response.raise_for_status()
+        
+        result = response.json()
+        return {
+            'sent': True,
+            'to': to_email,
+            'subject': subject,
+            'id': result.get('id')
+        }
 
 
 class Mailjet:
@@ -130,33 +129,32 @@ class Mailjet:
         content_type: str = 'text/plain'
     ) -> Dict[str, Any]:
         """Send email via Mailjet"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/send"
-            
-            message = {
-                'From': {'Email': from_email},
-                'To': [{'Email': to_email}],
-                'Subject': subject
-            }
-            
-            if content_type == 'text/html':
-                message['HTMLPart'] = content
-            else:
-                message['TextPart'] = content
-            
-            data = {'Messages': [message]}
-            
-            response = await client.post(
-                url,
-                auth=(self.api_key, self.api_secret),
-                json=data
-            )
-            response.raise_for_status()
-            
-            result = response.json()
-            return {
-                'sent': True,
-                'to': to_email,
-                'subject': subject,
-                'message_id': result['Messages'][0]['To'][0]['MessageID']
-            }
+        url = f"{self.base_url}/send"
+        
+        message = {
+            'From': {'Email': from_email},
+            'To': [{'Email': to_email}],
+            'Subject': subject
+        }
+        
+        if content_type == 'text/html':
+            message['HTMLPart'] = content
+        else:
+            message['TextPart'] = content
+        
+        data = {'Messages': [message]}
+        
+        response = await http_client.post(
+            url,
+            auth=(self.api_key, self.api_secret),
+            json=data
+        )
+        response.raise_for_status()
+        
+        result = response.json()
+        return {
+            'sent': True,
+            'to': to_email,
+            'subject': subject,
+            'message_id': result['Messages'][0]['To'][0]['MessageID']
+        }

@@ -5,6 +5,7 @@ Spoonacular, Edamam, USDA FoodData
 import os
 import httpx
 from typing import Dict, Any, Optional, List
+from services.http_client import http_client
 
 
 class Spoonacular:
@@ -24,45 +25,42 @@ class Spoonacular:
         number: int = 10
     ) -> Dict[str, Any]:
         """Search recipes"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/recipes/complexSearch"
-            params = {
-                'apiKey': self.api_key,
-                'query': query,
-                'number': number
-            }
-            
-            response = await client.get(url, params=params)
-            response.raise_for_status()
-            
-            data = response.json()
-            return {
-                'recipes': data.get('results', []),
-                'total': data.get('totalResults', 0)
-            }
+        url = f"{self.base_url}/recipes/complexSearch"
+        params = {
+            'apiKey': self.api_key,
+            'query': query,
+            'number': number
+        }
+        
+        response = await http_client.get(url, params=params)
+        response.raise_for_status()
+        
+        data = response.json()
+        return {
+            'recipes': data.get('results', []),
+            'total': data.get('totalResults', 0)
+        }
     
     async def get_recipe_info(self, recipe_id: int) -> Dict[str, Any]:
         """Get detailed recipe information"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/recipes/{recipe_id}/information"
-            params = {'apiKey': self.api_key}
-            
-            response = await client.get(url, params=params)
-            response.raise_for_status()
-            
-            return response.json()
+        url = f"{self.base_url}/recipes/{recipe_id}/information"
+        params = {'apiKey': self.api_key}
+        
+        response = await http_client.get(url, params=params)
+        response.raise_for_status()
+        
+        return response.json()
     
     async def analyze_nutrition(self, text: str) -> Dict[str, Any]:
         """Analyze nutrition from text"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/recipes/analyzeInstructions"
-            params = {'apiKey': self.api_key}
-            data = {'text': text}
-            
-            response = await client.post(url, params=params, data=data)
-            response.raise_for_status()
-            
-            return response.json()
+        url = f"{self.base_url}/recipes/analyzeInstructions"
+        params = {'apiKey': self.api_key}
+        data = {'text': text}
+        
+        response = await http_client.post(url, params=params, data=data)
+        response.raise_for_status()
+        
+        return response.json()
 
 
 class Edamam:
@@ -84,42 +82,40 @@ class Edamam:
         number: int = 10
     ) -> Dict[str, Any]:
         """Search recipes"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/api/recipes/v2"
-            params = {
-                'type': 'public',
-                'app_id': self.app_id,
-                'app_key': self.app_key,
-                'q': query,
-                'to': number
-            }
-            
-            response = await client.get(url, params=params)
-            response.raise_for_status()
-            
-            data = response.json()
-            return {
-                'recipes': data.get('hits', []),
-                'total': data.get('count', 0)
-            }
+        url = f"{self.base_url}/api/recipes/v2"
+        params = {
+            'type': 'public',
+            'app_id': self.app_id,
+            'app_key': self.app_key,
+            'q': query,
+            'to': number
+        }
+        
+        response = await http_client.get(url, params=params)
+        response.raise_for_status()
+        
+        data = response.json()
+        return {
+            'recipes': data.get('hits', []),
+            'total': data.get('count', 0)
+        }
     
     async def analyze_nutrition(self, ingredients: List[str]) -> Dict[str, Any]:
         """Analyze nutrition from ingredients"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/api/nutrition-details"
-            params = {
-                'app_id': self.app_id,
-                'app_key': self.app_key
-            }
-            data = {
-                'title': 'Recipe',
-                'ingr': ingredients
-            }
-            
-            response = await client.post(url, params=params, json=data)
-            response.raise_for_status()
-            
-            return response.json()
+        url = f"{self.base_url}/api/nutrition-details"
+        params = {
+            'app_id': self.app_id,
+            'app_key': self.app_key
+        }
+        data = {
+            'title': 'Recipe',
+            'ingr': ingredients
+        }
+        
+        response = await http_client.post(url, params=params, json=data)
+        response.raise_for_status()
+        
+        return response.json()
 
 
 class USDAFoodData:
@@ -136,30 +132,28 @@ class USDAFoodData:
         page_size: int = 10
     ) -> Dict[str, Any]:
         """Search food database"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/foods/search"
-            params = {
-                'api_key': self.api_key,
-                'query': query,
-                'pageSize': page_size
-            }
-            
-            response = await client.get(url, params=params)
-            response.raise_for_status()
-            
-            data = response.json()
-            return {
-                'foods': data.get('foods', []),
-                'total': data.get('totalHits', 0)
-            }
+        url = f"{self.base_url}/foods/search"
+        params = {
+            'api_key': self.api_key,
+            'query': query,
+            'pageSize': page_size
+        }
+        
+        response = await http_client.get(url, params=params)
+        response.raise_for_status()
+        
+        data = response.json()
+        return {
+            'foods': data.get('foods', []),
+            'total': data.get('totalHits', 0)
+        }
     
     async def get_food_details(self, fdc_id: int) -> Dict[str, Any]:
         """Get detailed food information"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/food/{fdc_id}"
-            params = {'api_key': self.api_key}
-            
-            response = await client.get(url, params=params)
-            response.raise_for_status()
-            
-            return response.json()
+        url = f"{self.base_url}/food/{fdc_id}"
+        params = {'api_key': self.api_key}
+        
+        response = await http_client.get(url, params=params)
+        response.raise_for_status()
+        
+        return response.json()

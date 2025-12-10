@@ -1,6 +1,7 @@
 """Slack Webhook Provider"""
 import httpx
 from typing import Dict, Any, Optional
+from services.http_client import http_client
 
 class SlackWebhookProvider:
     """Provider for Slack Webhooks (free, unlimited)"""
@@ -17,10 +18,9 @@ class SlackWebhookProvider:
         if username:
             payload["username"] = username
         
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.post(webhook_url, json=payload)
-            response.raise_for_status()
-            return {"success": True, "status_code": response.status_code}
+        response = await http_client.post(webhook_url, json=payload)
+        response.raise_for_status()
+        return {"success": True, "status_code": response.status_code}
     
     async def send_rich_message(self, webhook_url: str, blocks: list, channel: Optional[str] = None) -> Dict[str, Any]:
         """Send a rich message with blocks to Slack"""
@@ -28,10 +28,9 @@ class SlackWebhookProvider:
         if channel:
             payload["channel"] = channel
         
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.post(webhook_url, json=payload)
-            response.raise_for_status()
-            return {"success": True, "status_code": response.status_code}
+        response = await http_client.post(webhook_url, json=payload)
+        response.raise_for_status()
+        return {"success": True, "status_code": response.status_code}
 
 
 

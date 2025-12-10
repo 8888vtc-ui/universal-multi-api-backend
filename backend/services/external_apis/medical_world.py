@@ -6,6 +6,7 @@ import httpx
 import os
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from services.http_client import http_client
 
 
 # ============================================
@@ -22,40 +23,39 @@ class ClinicalTrialsProvider:
     async def search_trials(self, condition: str, max_results: int = 10) -> Dict[str, Any]:
         """Search clinical trials by condition"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/studies",
-                    params={
-                        "query.cond": condition,
-                        "pageSize": max_results,
-                        "format": "json"
-                    }
-                )
+            response = await http_client.get(
+                f"{self.base_url}/studies",
+                params={
+                    "query.cond": condition,
+                    "pageSize": max_results,
+                    "format": "json"
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                studies = data.get("studies", [])
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    studies = data.get("studies", [])
+                trials = []
+                for study in studies:
+                    protocol = study.get("protocolSection", {})
+                    id_module = protocol.get("identificationModule", {})
+                    status_module = protocol.get("statusModule", {})
                     
-                    trials = []
-                    for study in studies:
-                        protocol = study.get("protocolSection", {})
-                        id_module = protocol.get("identificationModule", {})
-                        status_module = protocol.get("statusModule", {})
-                        
-                        trials.append({
-                            "nct_id": id_module.get("nctId"),
-                            "title": id_module.get("briefTitle"),
-                            "status": status_module.get("overallStatus"),
-                            "phase": protocol.get("designModule", {}).get("phases", []),
-                            "conditions": protocol.get("conditionsModule", {}).get("conditions", [])
-                        })
-                    
-                    return {
-                        "source": "ClinicalTrials.gov",
-                        "count": len(trials),
-                        "trials": trials
-                    }
-                return {"source": "ClinicalTrials.gov", "trials": [], "error": f"Status {response.status_code}"}
+                    trials.append({
+                        "nct_id": id_module.get("nctId"),
+                        "title": id_module.get("briefTitle"),
+                        "status": status_module.get("overallStatus"),
+                        "phase": protocol.get("designModule", {}).get("phases", []),
+                        "conditions": protocol.get("conditionsModule", {}).get("conditions", [])
+                    })
+                
+                return {
+                    "source": "ClinicalTrials.gov",
+                    "count": len(trials),
+                    "trials": trials
+                }
+            return {"source": "ClinicalTrials.gov", "trials": [], "error": f"Status {response.status_code}"}
         except Exception as e:
             return {"source": "ClinicalTrials.gov", "trials": [], "error": str(e)}
 
@@ -74,20 +74,19 @@ class OrphanetProvider:
     async def search_disease(self, query: str) -> Dict[str, Any]:
         """Search rare diseases"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/EN/ClinicalEntity/ApproximateName/{query}",
-                    headers={"Accept": "application/json"}
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    return {
-                        "source": "Orphanet (EU)",
-                        "diseases": data if isinstance(data, list) else [data],
-                        "count": len(data) if isinstance(data, list) else 1
-                    }
-                return {"source": "Orphanet", "diseases": []}
+            response = await http_client.get(
+                f"{self.base_url}/EN/ClinicalEntity/ApproximateName/{query}",
+                headers={"Accept": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    "source": "Orphanet (EU)",
+                    "diseases": data if isinstance(data, list) else [data],
+                    "count": len(data) if isinstance(data, list) else 1
+                }
+            return {"source": "Orphanet", "diseases": []}
         except Exception as e:
             return {"source": "Orphanet", "diseases": [], "error": str(e)}
 
@@ -118,21 +117,20 @@ class OpenTargetsProvider:
         }
         """
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.post(
-                    self.base_url,
-                    json={"query": query, "variables": {"query": disease}}
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    hits = data.get("data", {}).get("search", {}).get("hits", [])
-                    return {
-                        "source": "Open Targets",
-                        "results": hits,
-                        "count": len(hits)
-                    }
-                return {"source": "Open Targets", "results": []}
+            response = await http_client.post(
+                self.base_url,
+                json={"query": query, "variables": {"query": disease}}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                hits = data.get("data", {}).get("search", {}).get("hits", [])
+                return {
+                    "source": "Open Targets",
+                    "results": hits,
+                    "count": len(hits)
+                }
+            return {"source": "Open Targets", "results": []}
         except Exception as e:
             return {"source": "Open Targets", "results": [], "error": str(e)}
 
@@ -236,32 +234,31 @@ class SNOMEDProvider:
     async def search_concept(self, term: str) -> Dict[str, Any]:
         """Search SNOMED CT concepts"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/MAIN/concepts",
-                    params={
-                        "term": term,
-                        "activeFilter": True,
-                        "limit": 10
-                    }
-                )
+            response = await http_client.get(
+                f"{self.base_url}/MAIN/concepts",
+                params={
+                    "term": term,
+                    "activeFilter": True,
+                    "limit": 10
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                items = data.get("items", [])
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    items = data.get("items", [])
-                    
-                    concepts = [{
-                        "concept_id": item.get("conceptId"),
-                        "term": item.get("pt", {}).get("term"),
-                        "fsn": item.get("fsn", {}).get("term")
-                    } for item in items]
-                    
-                    return {
-                        "source": "SNOMED CT International",
-                        "count": len(concepts),
-                        "concepts": concepts
-                    }
-                return {"source": "SNOMED CT", "concepts": []}
+                concepts = [{
+                    "concept_id": item.get("conceptId"),
+                    "term": item.get("pt", {}).get("term"),
+                    "fsn": item.get("fsn", {}).get("term")
+                } for item in items]
+                
+                return {
+                    "source": "SNOMED CT International",
+                    "count": len(concepts),
+                    "concepts": concepts
+                }
+            return {"source": "SNOMED CT", "concepts": []}
         except Exception as e:
             return {"source": "SNOMED CT", "concepts": [], "error": str(e)}
 
@@ -280,33 +277,32 @@ class ICD11Provider:
     async def search_disease(self, query: str) -> Dict[str, Any]:
         """Search ICD-11 classifications"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/entity/search",
-                    params={
-                        "q": query,
-                        "subtreesFilter": "http://id.who.int/icd/entity/455013390",  # MMS
-                        "linearizationHasAncestorFilter": "http://id.who.int/icd/release/11/mms"
-                    },
-                    headers={"Accept": "application/json"}
-                )
+            response = await http_client.get(
+                f"{self.base_url}/entity/search",
+                params={
+                    "q": query,
+                    "subtreesFilter": "http://id.who.int/icd/entity/455013390",  # MMS
+                    "linearizationHasAncestorFilter": "http://id.who.int/icd/release/11/mms"
+                },
+                headers={"Accept": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                entities = data.get("destinationEntities", [])
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    entities = data.get("destinationEntities", [])
-                    
-                    results = [{
-                        "id": e.get("id"),
-                        "title": e.get("title"),
-                        "code": e.get("theCode")
-                    } for e in entities[:10]]
-                    
-                    return {
-                        "source": "ICD-11 (OMS/WHO)",
-                        "count": len(results),
-                        "classifications": results
-                    }
-                return {"source": "ICD-11", "classifications": []}
+                results = [{
+                    "id": e.get("id"),
+                    "title": e.get("title"),
+                    "code": e.get("theCode")
+                } for e in entities[:10]]
+                
+                return {
+                    "source": "ICD-11 (OMS/WHO)",
+                    "count": len(results),
+                    "classifications": results
+                }
+            return {"source": "ICD-11", "classifications": []}
         except Exception as e:
             return {"source": "ICD-11", "classifications": [], "error": str(e)}
 
@@ -325,38 +321,37 @@ class EuropePMCProvider:
     async def search_articles(self, query: str, max_results: int = 10) -> Dict[str, Any]:
         """Search biomedical literature"""
         try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/search",
-                    params={
-                        "query": query,
-                        "format": "json",
-                        "pageSize": max_results,
-                        "resultType": "core"
-                    }
-                )
+            response = await http_client.get(
+                f"{self.base_url}/search",
+                params={
+                    "query": query,
+                    "format": "json",
+                    "pageSize": max_results,
+                    "resultType": "core"
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                results = data.get("resultList", {}).get("result", [])
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    results = data.get("resultList", {}).get("result", [])
-                    
-                    articles = [{
-                        "pmid": r.get("pmid"),
-                        "title": r.get("title"),
-                        "authors": r.get("authorString"),
-                        "journal": r.get("journalTitle"),
-                        "year": r.get("pubYear"),
-                        "abstract": r.get("abstractText", "")[:300] + "..." if r.get("abstractText") else None,
-                        "doi": r.get("doi"),
-                        "is_open_access": r.get("isOpenAccess") == "Y"
-                    } for r in results]
-                    
-                    return {
-                        "source": "Europe PMC",
-                        "count": len(articles),
-                        "articles": articles
-                    }
-                return {"source": "Europe PMC", "articles": []}
+                articles = [{
+                    "pmid": r.get("pmid"),
+                    "title": r.get("title"),
+                    "authors": r.get("authorString"),
+                    "journal": r.get("journalTitle"),
+                    "year": r.get("pubYear"),
+                    "abstract": r.get("abstractText", "")[:300] + "..." if r.get("abstractText") else None,
+                    "doi": r.get("doi"),
+                    "is_open_access": r.get("isOpenAccess") == "Y"
+                } for r in results]
+                
+                return {
+                    "source": "Europe PMC",
+                    "count": len(articles),
+                    "articles": articles
+                }
+            return {"source": "Europe PMC", "articles": []}
         except Exception as e:
             return {"source": "Europe PMC", "articles": [], "error": str(e)}
 

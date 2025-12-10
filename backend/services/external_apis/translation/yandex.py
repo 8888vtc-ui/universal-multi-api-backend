@@ -5,6 +5,7 @@ Free tier: ~100,000 characters/month
 import os
 import httpx
 from typing import Dict, Any
+from services.http_client import http_client
 
 
 class YandexTranslate:
@@ -25,51 +26,49 @@ class YandexTranslate:
         target_lang: str = 'en'
     ) -> Dict[str, Any]:
         """Translate text using Yandex Translate API"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/translate"
-            
-            headers = {
-                'Authorization': f'Api-Key {self.api_key}',
-                'Content-Type': 'application/json'
-            }
-            
-            data = {
-                'texts': [text],
-                'targetLanguageCode': target_lang
-            }
-            
-            if source_lang != 'auto':
-                data['sourceLanguageCode'] = source_lang
-            
-            response = await client.post(url, json=data, headers=headers)
-            response.raise_for_status()
-            
-            result = response.json()
-            translation = result['translations'][0]
-            
-            return {
-                'translation': translation['text'],
-                'source_lang': translation.get('detectedLanguageCode', source_lang)
-            }
+        url = f"{self.base_url}/translate"
+        
+        headers = {
+            'Authorization': f'Api-Key {self.api_key}',
+            'Content-Type': 'application/json'
+        }
+        
+        data = {
+            'texts': [text],
+            'targetLanguageCode': target_lang
+        }
+        
+        if source_lang != 'auto':
+            data['sourceLanguageCode'] = source_lang
+        
+        response = await http_client.post(url, json=data, headers=headers)
+        response.raise_for_status()
+        
+        result = response.json()
+        translation = result['translations'][0]
+        
+        return {
+            'translation': translation['text'],
+            'source_lang': translation.get('detectedLanguageCode', source_lang)
+        }
     
     async def detect_language(self, text: str) -> Dict[str, Any]:
         """Detect language using Yandex API"""
-        async with httpx.AsyncClient() as client:
-            url = f"{self.base_url}/detect"
-            
-            headers = {
-                'Authorization': f'Api-Key {self.api_key}',
-                'Content-Type': 'application/json'
-            }
-            
-            data = {'text': text}
-            
-            response = await client.post(url, json=data, headers=headers)
-            response.raise_for_status()
-            
-            result = response.json()
-            
-            return {
-                'language': result['languageCode'],
-                'confidence': 1.0  # Yandex doesn't provide confidence
-            }
+        url = f"{self.base_url}/detect"
+        
+        headers = {
+            'Authorization': f'Api-Key {self.api_key}',
+            'Content-Type': 'application/json'
+        }
+        
+        data = {'text': text}
+        
+        response = await http_client.post(url, json=data, headers=headers)
+        response.raise_for_status()
+        
+        result = response.json()
+        
+        return {
+            'language': result['languageCode'],
+            'confidence': 1.0  # Yandex doesn't provide confidence
+        }

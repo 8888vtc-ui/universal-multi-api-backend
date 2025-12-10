@@ -6,6 +6,7 @@ import os
 import httpx
 from typing import Dict, Any, Optional
 from dotenv import load_dotenv
+from services.http_client import http_client
 
 load_dotenv()
 
@@ -24,19 +25,18 @@ class TMDBProvider:
             raise Exception("TMDB API key not configured")
         
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/search/movie",
-                    params={
-                        "api_key": self.api_key,
-                        "query": query
-                    }
-                )
-                
-                if response.status_code == 200:
-                    return response.json()
-                else:
-                    raise Exception(f"TMDB returned status {response.status_code}")
+            response = await http_client.get(
+                f"{self.base_url}/search/movie",
+                params={
+                    "api_key": self.api_key,
+                    "query": query
+                }
+            )
+            
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"TMDB returned status {response.status_code}")
         
         except Exception as e:
             raise Exception(f"TMDB API error: {e}")
@@ -47,16 +47,15 @@ class TMDBProvider:
             raise Exception("TMDB API key not configured")
         
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/trending/{media_type}/{time_window}",
-                    params={"api_key": self.api_key}
-                )
-                
-                if response.status_code == 200:
-                    return response.json()
-                else:
-                    raise Exception(f"TMDB returned status {response.status_code}")
+            response = await http_client.get(
+                f"{self.base_url}/trending/{media_type}/{time_window}",
+                params={"api_key": self.api_key}
+            )
+            
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"TMDB returned status {response.status_code}")
         
         except Exception as e:
             raise Exception(f"TMDB API error: {e}")
@@ -76,21 +75,20 @@ class YelpProvider:
             raise Exception("Yelp API key not configured")
         
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/businesses/search",
-                    headers={"Authorization": f"Bearer {self.api_key}"},
-                    params={
-                        "term": term,
-                        "location": location,
-                        "limit": limit
-                    }
-                )
-                
-                if response.status_code == 200:
-                    return response.json()
-                else:
-                    raise Exception(f"Yelp returned status {response.status_code}")
+            response = await http_client.get(
+                f"{self.base_url}/businesses/search",
+                headers={"Authorization": f"Bearer {self.api_key}"},
+                params={
+                    "term": term,
+                    "location": location,
+                    "limit": limit
+                }
+            )
+            
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"Yelp returned status {response.status_code}")
         
         except Exception as e:
             raise Exception(f"Yelp API error: {e}")
@@ -101,16 +99,15 @@ class YelpProvider:
             raise Exception("Yelp API key not configured")
         
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/businesses/{business_id}",
-                    headers={"Authorization": f"Bearer {self.api_key}"}
-                )
-                
-                if response.status_code == 200:
-                    return response.json()
-                else:
-                    raise Exception(f"Yelp returned status {response.status_code}")
+            response = await http_client.get(
+                f"{self.base_url}/businesses/{business_id}",
+                headers={"Authorization": f"Bearer {self.api_key}"}
+            )
+            
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"Yelp returned status {response.status_code}")
         
         except Exception as e:
             raise Exception(f"Yelp API error: {e}")
@@ -132,19 +129,18 @@ class SpotifyProvider:
             return self.access_token
         
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.post(
-                    "https://accounts.spotify.com/api/token",
-                    data={"grant_type": "client_credentials"},
-                    auth=(self.client_id, self.client_secret)
-                )
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    self.access_token = data["access_token"]
-                    return self.access_token
-                else:
-                    raise Exception(f"Spotify auth failed: {response.status_code}")
+            response = await http_client.post(
+                "https://accounts.spotify.com/api/token",
+                data={"grant_type": "client_credentials"},
+                auth=(self.client_id, self.client_secret)
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.access_token = data["access_token"]
+                return self.access_token
+            else:
+                raise Exception(f"Spotify auth failed: {response.status_code}")
         
         except Exception as e:
             raise Exception(f"Spotify auth error: {e}")
@@ -157,21 +153,20 @@ class SpotifyProvider:
         try:
             token = await self._get_access_token()
             
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                response = await client.get(
-                    f"{self.base_url}/search",
-                    headers={"Authorization": f"Bearer {token}"},
-                    params={
-                        "q": query,
-                        "type": "track",
-                        "limit": limit
-                    }
-                )
-                
-                if response.status_code == 200:
-                    return response.json()
-                else:
-                    raise Exception(f"Spotify returned status {response.status_code}")
+            response = await http_client.get(
+                f"{self.base_url}/search",
+                headers={"Authorization": f"Bearer {token}"},
+                params={
+                    "q": query,
+                    "type": "track",
+                    "limit": limit
+                }
+            )
+            
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"Spotify returned status {response.status_code}")
         
         except Exception as e:
             raise Exception(f"Spotify API error: {e}")

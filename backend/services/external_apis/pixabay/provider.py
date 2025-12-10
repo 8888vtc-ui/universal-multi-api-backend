@@ -2,6 +2,7 @@
 import os
 import httpx
 from typing import List, Dict, Any, Optional
+from services.http_client import http_client
 
 class PixabayProvider:
     """Provider for Pixabay API (free, 5,000 req/day)"""
@@ -20,30 +21,28 @@ class PixabayProvider:
         """Search for images"""
         if not self.available:
             raise Exception("Pixabay API not available: API key not configured.")
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(
-                self.base_url,
-                params={
-                    "key": self.api_key,
-                    "q": query,
-                    "image_type": image_type,
-                    "per_page": min(limit, 200)
-                }
-            )
-            response.raise_for_status()
-            return response.json()
+        response = await http_client.get(
+            self.base_url,
+            params={
+                "key": self.api_key,
+                "q": query,
+                "image_type": image_type,
+                "per_page": min(limit, 200)
+            }
+        )
+        response.raise_for_status()
+        return response.json()
     
     async def get_image(self, image_id: int) -> Dict[str, Any]:
         """Get image details by ID"""
         if not self.available:
             raise Exception("Pixabay API not available: API key not configured.")
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(
-                self.base_url,
-                params={"key": self.api_key, "id": image_id}
-            )
-            response.raise_for_status()
-            return response.json()
+        response = await http_client.get(
+            self.base_url,
+            params={"key": self.api_key, "id": image_id}
+        )
+        response.raise_for_status()
+        return response.json()
 
 
 
