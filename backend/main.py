@@ -63,7 +63,8 @@ from routers import (
     chat, embeddings, health, finance, medical, entertainment,
     translation, news, messaging, weather, space, sports,
     utilities, geocoding, nutrition, email, media, boltai,
-    aggregated, search, video, assistant, analytics, auth, health_check
+    aggregated, search, video, assistant, analytics, auth, health_check,
+    flights
 )
 from routers import health_deep, metrics, ai_search, expert_chat
 
@@ -200,10 +201,11 @@ app.include_router(media.router)
 app.include_router(video.router)
 app.include_router(entertainment.router)
 
-# Location & Weather
+# Location & Weather & Transport
 app.include_router(weather.router)
 app.include_router(geocoding.router)
 app.include_router(space.router)
+app.include_router(flights.router)  # AviationStack flights API
 
 # Communication
 app.include_router(messaging.router)

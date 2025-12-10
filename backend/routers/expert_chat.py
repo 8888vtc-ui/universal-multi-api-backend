@@ -458,6 +458,33 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
             logger.error(f"Weather expert failed: {e}", exc_info=True)
             return "[ERREUR]: Service météo temporairement indisponible.", []
     
+    # 6. For TOURISM expert: Intelligent routing with intent detection
+    if expert.id.value == "tourism":
+        from services.tourism_query_router import tourism_router, format_tourism_context
+        
+        try:
+            logger.info(f"[TOURISM] Processing query: {query}")
+            
+            # Récupérer les données complètes avec routage intelligent
+            tourism_data = await tourism_router.get_comprehensive_tourism_info(query)
+            
+            # Formater le contexte pour l'IA
+            context = format_tourism_context(tourism_data)
+            
+            # Extraire les sources
+            sources = [k for k, v in tourism_data.get("data", {}).items() if not v.get("error")]
+            
+            logger.info(
+                f"[TOURISM] Data retrieved: intent={tourism_data.get('intent')}, "
+                f"sources={sources}"
+            )
+            
+            return context, sources
+            
+        except Exception as e:
+            logger.error(f"Tourism expert failed: {e}", exc_info=True)
+            return "[ERREUR]: Service tourisme temporairement indisponible.", []
+    
     # Pour les autres experts, utiliser la méthode standard
     api_names = expert.data_apis[:3]
     query_params = {"query": query}

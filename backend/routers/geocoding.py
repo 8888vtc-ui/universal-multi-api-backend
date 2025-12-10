@@ -11,16 +11,22 @@ geocoding_router = GeocodingRouter()
 
 
 @router.get("/forward")
+@router.get("/search")  # Alias for compatibility
 async def geocode_address(
-    address: str = Query(..., description="Address to geocode")
+    address: str = Query(None, description="Address to geocode"),
+    q: str = Query(None, description="Query (alias for address)")
 ):
     """
     Convert address to coordinates (geocoding)
     
     Supports: Nominatim (OSM - free), OpenCage (2.5k/day), Positionstack (25k/month)
     """
+    query = address or q
+    if not query:
+        raise HTTPException(status_code=400, detail="Address or q parameter required")
+    
     try:
-        result = await geocoding_router.geocode(address)
+        result = await geocoding_router.search(query)
         return {"success": True, **result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

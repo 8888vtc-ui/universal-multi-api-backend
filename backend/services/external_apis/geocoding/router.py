@@ -84,6 +84,20 @@ class GeocodingRouter:
         logger.error(f"❌ {error_msg}")
         raise Exception(error_msg)
     
+    async def search(self, query: str) -> Dict[str, Any]:
+        """
+        Search for a location - wrapper for geocode with standardized output
+        Returns format compatible with tourism router
+        """
+        result = await self.geocode(query)
+        
+        # Standardize output format
+        return {
+            "results": [result] if result else [],
+            "provider": result.get("provider", "unknown"),
+            "query": query
+        }
+    
     async def reverse_geocode(self, lat: float, lon: float) -> Dict[str, Any]:
         """Reverse geocode with fallback"""
         errors = []
