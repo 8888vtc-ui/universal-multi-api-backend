@@ -628,15 +628,37 @@ async def perform_deep_search(query: str) -> Tuple[str, DeepSearchResult]:
     - Intelligent topic detection
     - Mandatory APIs ALWAYS queried
     - Topic-specific APIs added based on query
+    - FORCE ALL MODE: Use all available APIs if possible
     
     Returns (formatted_context, full_result)
     """
     try:
+        # Query Expansion for short queries
+        search_query = query
+        words = query.split()
+        if len(words) < 5:
+            # Add broad medical terms to ensure wide coverage
+            search_query = f"{query} symptoms treatment diagnosis research guidelines clinical trials epidemiology statistics mechanism"
+            print(f"[Deep] Expanded query: '{query}' -> '{search_query}'")
+
         # Try to use SmartMedicalRouter with 77 APIs
-        from services.smart_medical_router import SmartMedicalRouter
+        from services.smart_medical_router import SmartMedicalRouter, smart_router
         
-        smart_router = SmartMedicalRouter()
-        smart_result = await smart_router.smart_search(query)
+        # smart_router singleton is already imported as smart_router usually, 
+        # but let's use the instance method on the class if needed or just the global one if accessible.
+        # Actually in deep_medical_search.py we import it inside the function.
+        # Let's assume we can get the singleton from the module or just instantiate provided one.
+        # Oh wait, perform_deep_search import it inside try block.
+        
+        # We need to access the singleton instance 'smart_router' from the module
+        # smart_router.smart_search is the method.
+        
+        # FORCE ALL APIs = True
+        smart_result = await smart_router.smart_search(search_query, force_all=True)
+        
+        # Update result query to original query for display, or keep expanded?
+        # Let's keep original query in the result object for UI
+        smart_result.query = query
         
         # Convert to DeepSearchResult format
         result = DeepSearchResult(

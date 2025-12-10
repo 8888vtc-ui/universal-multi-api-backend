@@ -103,10 +103,11 @@ class SmartMedicalRouter:
         
         print(f"[OK] Smart Router: {len(self.providers)} providers ready")
     
-    def get_relevant_apis(self, query: str) -> Tuple[List[str], List[str], List[str]]:
+    def get_relevant_apis(self, query: str, force_all: bool = False) -> Tuple[List[str], List[str], List[str]]:
         """
         Get relevant APIs for a query.
         Returns: (mandatory_apis, topic_apis, detected_topics)
+        ENSURES AT LEAST 15 APIs, or ALL if force_all=True.
         """
         if not self.registry:
             # Fallback: return all available providers
@@ -131,26 +132,31 @@ class SmartMedicalRouter:
                 else:
                     topic_specific.append(api_id)
         
-        # --- ENSURE MINIMUM 15 APIs ---
+        # --- ENSURE MINIMUM OR FORCE ALL ---
         total_selected = len(mandatory) + len(topic_specific)
-        min_apis = 15
         
-        if total_selected < min_apis:
-            # Get all available providers that are NOT selected
-            available = [p for p in self.providers.keys() if p not in selected_ids]
-            
-            # Prioritize Elite/Premium/World APIs (based on config prefixes or known priority)
-            # For now, just take the first available ones to reach 15
-            needed = min_apis - total_selected
-            
-            # Sort available to have somewhat deterministic behavior (e.g. by name len or alphabetical)
-            # Better: prioritize 'pubmed', 'openfda' etc if not selected (should be mandatory though)
-            available.sort() 
-            
-            for i in range(min(needed, len(available))):
-                extra_api = available[i]
-                topic_specific.append(extra_api)
-                selected_ids.add(extra_api)
+        if force_all:
+             # FORCE ALL AVAILABLE PROVIDERS
+             available = [p for p in self.providers.keys() if p not in selected_ids]
+             # Add strictly all
+             for p in available:
+                 topic_specific.append(p)
+                 selected_ids.add(p)
+                 
+        else:
+            # Min 15 logic
+            min_apis = 15
+            if total_selected < min_apis:
+                # Get all available providers that are NOT selected
+                available = [p for p in self.providers.keys() if p not in selected_ids]
+                
+                # Sort available to have somewhat deterministic behavior
+                available.sort() 
+                
+                for i in range(min(min_apis - total_selected, len(available))):
+                    extra_api = available[i]
+                    topic_specific.append(extra_api)
+                    selected_ids.add(extra_api)
         
         return mandatory, topic_specific, topics
     
@@ -178,7 +184,7 @@ class SmartMedicalRouter:
         except Exception as e:
             return api_id, {"found": False, "error": str(e)}
     
-    async def smart_search(self, query: str) -> SmartSearchResult:
+    async def smart_search(self, query: str, force_all: bool = False) -> SmartSearchResult:
         """
         Perform intelligent search:
         1. Detect topics
@@ -193,11 +199,13 @@ class SmartMedicalRouter:
         progress_log.append("=" * 60)
         progress_log.append("🧠 RECHERCHE MEDICALE INTELLIGENTE")
         progress_log.append(f"📋 Requete: {query[:100]}...")
+        if force_all:
+            progress_log.append("🚀 MODE MAXIMAL: 74 APIs ACTIVÉES")
         progress_log.append("=" * 60)
         progress_log.append("")
         
         # Get relevant APIs
-        mandatory, topic_specific, topics = self.get_relevant_apis(query)
+        mandatory, topic_specific, topics = self.get_relevant_apis(query, force_all=force_all)
         
         progress_log.append(f"🎯 Sujets detectes: {', '.join(topics)}")
         progress_log.append(f"⭐ APIs obligatoires: {len(mandatory)}")
