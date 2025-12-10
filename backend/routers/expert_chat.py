@@ -32,6 +32,7 @@ class ExpertChatRequest(BaseModel):
     message: str = Field(..., min_length=1, max_length=2000)
     language: Optional[str] = None  # Auto-detect if not provided
     session_id: Optional[str] = None  # ID de session pour la mémoire conversationnelle
+    search_mode: Optional[Literal["fast", "normal", "deep"]] = None  # Mode de recherche demandé par l'utilisateur
 
 
 class ExpertChatResponse(BaseModel):
@@ -96,7 +97,7 @@ def _extract_location_from_query(query: str) -> str:
     return result
 
 
-async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]]:
+async def fetch_context_data(expert: Expert, query: str, search_mode_override: Optional[str] = None) -> tuple[str, List[str]]:
     """
     Fetch relevant data from expert's connected APIs (parallélisé pour performance)
     Uses intelligent query detection to skip APIs if not needed.
@@ -107,7 +108,7 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
     # 1. Detect Intent: Should we even call APIs?
     intent = IntentDetector.detect_intent(query, expert.id.value)
     
-    if intent == "chat_only":
+    if intent == "chat_only" and not search_mode_override:
         logger.info(f"Skipping API calls for chat-only query: '{query}' ({expert.id.value})")
         return "Contexte: Conversation simple, pas de données externes nécessaires.", []
     
@@ -116,8 +117,13 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
         from services.medical_intent_extractor import MedicalIntentExtractor
         from services.external_apis.medical_mega_registry import MegaMedicalRegistry
         
-        search_mode = get_search_mode(query, expert.id.value)
-        logger.info(f"Health expert search mode: {search_mode}")
+        # PRIORITÉ: Utiliser le search_mode fourni par l'utilisateur (frontend)
+        if search_mode_override:
+            search_mode = search_mode_override
+            logger.info(f"Health expert search mode OVERRIDE: {search_mode} (from user selection)")
+        else:
+            search_mode = get_search_mode(query, expert.id.value)
+            logger.info(f"Health expert search mode: {search_mode} (auto-detected)")
         
         # Extract query intent (symptoms, treatment, diagnosis, etc.)
         intent_data = MedicalIntentExtractor.extract_intent(query)
@@ -144,7 +150,7 @@ async def fetch_context_data(expert: Expert, query: str) -> tuple[str, List[str]
             
             # Additional cleaning if query is still messy
             if not clean_query: clean_query = query # Fallback
-            
+
             # DEEP mode: Comprehensive search with intent-based filtering
             try:
                 from services.deep_medical_search import perform_deep_search
@@ -1598,7 +1604,8 @@ async def chat_with_expert(expert_id: str, body: ExpertChatRequest):
     )
     
     # Fetch context data from expert's APIs
-    context, sources = await fetch_context_data(expert, body.message)
+    # PASSER le search_mode fourni par l'utilisateur
+    context, sources = await fetch_context_data(expert, body.message, search_mode_override=body.search_mode)
     
     # Auto-detect language: prioriser la langue du message si détectable, sinon utiliser celle fournie
     # Si le message est clairement dans une langue différente de celle fournie, utiliser la langue du message
@@ -1622,8 +1629,34 @@ async def chat_with_expert(expert_id: str, body: ExpertChatRequest):
     if history_context:
         context = history_context + "\n\n" + context
     
+    # Determin System Prompt Base
+    base_system_prompt = expert.system_prompt
+    
+    # SPECIAL HANDLING FOR HEALTH EXPERT: Use mode-specific prompts
+    if expert_id == "health":
+        try:
+            from services.intent_detector import get_search_mode
+            from services.health_prompts_by_mode import get_health_prompt_by_mode, get_mode_from_search
+            
+            # Use user override or auto-detect
+            if body.search_mode:
+                search_mode = body.search_mode
+                logger.info(f"Health prompt using USER override: {search_mode}")
+            else:
+                search_mode = get_search_mode(body.message, expert_id)
+                logger.info(f"Health prompt auto-detect: {search_mode}")
+            
+            mode = get_mode_from_search(search_mode)
+            base_system_prompt = get_health_prompt_by_mode(mode)
+            logger.info(f"Health Expert switched to prompt mode: {mode}")
+            
+        except ImportError:
+            logger.warning("health_prompts_by_mode module not found, using default prompt")
+        except Exception as e:
+            logger.error(f"Error switching health prompt: {e}")
+
     # Build system prompt with context
-    system_prompt = expert.system_prompt.replace("{context}", context)
+    system_prompt = base_system_prompt.replace("{context}", context)
     
     # Add language instruction
     lang_instruction = get_language_instruction(language)
