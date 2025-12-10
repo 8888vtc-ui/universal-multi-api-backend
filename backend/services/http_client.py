@@ -126,8 +126,10 @@ class HTTPClientPool:
     
     async def get(self, url: str, **kwargs) -> httpx.Response:
         """GET request avec DNS personnalisé et connection pooling"""
-        # ✅ RÉSOLUTION DNS AVANT L'APPEL
-        resolved_url, original_host = CustomDNSResolver.resolve_url(url)
+        # ✅ TEMPORAIRE: Désactiver la résolution DNS pour test
+        # resolved_url, original_host = CustomDNSResolver.resolve_url(url)
+        resolved_url = url
+        original_host = None
         
         client = await self.get_client()
         
@@ -139,7 +141,9 @@ class HTTPClientPool:
             logger.debug(f"[DNS] Utilisation de l'IP avec header Host: {original_host}")
         
         try:
+            logger.info(f"[HTTP] GET {resolved_url}")
             response = await client.get(resolved_url, **kwargs)
+            logger.info(f"[HTTP] Response: {response.status_code}")
             return response
         except Exception as e:
             logger.error(f"[HTTP] Erreur GET {url}: {e}")
