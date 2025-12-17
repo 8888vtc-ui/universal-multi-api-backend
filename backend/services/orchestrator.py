@@ -21,7 +21,8 @@ from collections import defaultdict
 from .agents import (
     ArchitectAgent, DeveloperAgent, DebuggerAgent,
     TesterAgent, MonitorAgent, TradingAgent, DocumenterAgent,
-    SecurityAgent, PerformanceAgent, DevOpsAgent, DataAgent
+    SecurityAgent, PerformanceAgent, DevOpsAgent, DataAgent,
+    NotificationAgent, ApiAgent
 )
 from .agents.config import WORKFLOWS
 
@@ -67,16 +68,16 @@ class OrchestratorMetrics:
 
 class Orchestrator:
     """
-    Central Intelligence - Coordinates all AI agents - FULL EDITION.
-    11 specialized agents, runs 24/7, managing tasks and workflows.
+    Central Intelligence - Coordinates all AI agents - ULTRA EDITION.
+    13 specialized agents, Redis cache, all free-tier fallbacks.
     """
     
     HEALTH_CHECK_INTERVAL = 300  # 5 minutes
-    MAX_CONCURRENT_TASKS = 5  # Increased for more parallelism
+    MAX_CONCURRENT_TASKS = 8  # Increased for more parallelism
     AUTO_START = True
     
     def __init__(self):
-        # Initialize ALL 11 agents
+        # Initialize ALL 13 agents
         self.agents = {
             "architect": ArchitectAgent(),
             "developer": DeveloperAgent(),
@@ -89,6 +90,8 @@ class Orchestrator:
             "performance": PerformanceAgent(),
             "devops": DevOpsAgent(),
             "data": DataAgent(),
+            "notification": NotificationAgent(),
+            "api": ApiAgent(),
         }
         
         # GitHub connection

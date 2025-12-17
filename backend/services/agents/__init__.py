@@ -1,8 +1,9 @@
 """
-🤖 AGENT TEAM - The Autonomous AI Workforce - FULL EDITION
+🤖 AGENT TEAM - The Autonomous AI Workforce - ULTRA EDITION
 
-All available agents for the orchestrator.
-11 specialized agents for complete automation.
+13 specialized agents for complete automation.
+All free-tier AI models used as fallbacks.
+Redis caching enabled.
 """
 from .architect_agent import ArchitectAgent
 from .developer_agent import DeveloperAgent
@@ -15,6 +16,8 @@ from .security_agent import SecurityAgent
 from .performance_agent import PerformanceAgent
 from .devops_agent import DevOpsAgent
 from .data_agent import DataAgent
+from .notification_agent import NotificationAgent
+from .api_agent import ApiAgent
 
 # Agent registry for dynamic loading
 AGENT_REGISTRY = {
@@ -29,6 +32,8 @@ AGENT_REGISTRY = {
     "performance": PerformanceAgent,
     "devops": DevOpsAgent,
     "data": DataAgent,
+    "notification": NotificationAgent,
+    "api": ApiAgent,
 }
 
 __all__ = [
@@ -43,5 +48,7 @@ __all__ = [
     "PerformanceAgent",
     "DevOpsAgent",
     "DataAgent",
+    "NotificationAgent",
+    "ApiAgent",
     "AGENT_REGISTRY"
 ]

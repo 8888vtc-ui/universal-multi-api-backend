@@ -1,59 +1,94 @@
 """
-🤖 BASE AGENT CLASS - OPTIMIZED VERSION
+🤖 BASE AGENT CLASS - ULTRA OPTIMIZED VERSION
 All agents inherit from this base class.
 
-OPTIMIZATIONS:
-- Retry logic with exponential backoff
-- Fallback between AI models
-- Response caching
+FEATURES:
+- Redis cache for persistent caching
+- ALL free-tier AI models as fallbacks
+- Gemini, Mistral, Perplexity, Cohere support
+- Smart model selection
 - Performance metrics
-- Better error handling
 """
 import os
 import logging
 import httpx
 import hashlib
 import asyncio
+import json
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timedelta
-from functools import lru_cache
 
 logger = logging.getLogger(__name__)
 
 
-class ResponseCache:
-    """Simple in-memory cache for AI responses"""
+class RedisCache:
+    """Redis-based cache for AI responses (with fallback to in-memory)"""
     
-    def __init__(self, ttl_seconds: int = 300):
-        self.cache: Dict[str, tuple] = {}  # key -> (response, timestamp)
-        self.ttl = timedelta(seconds=ttl_seconds)
+    def __init__(self, ttl_seconds: int = 600):
+        self.ttl = ttl_seconds
+        self.redis_client = None
+        self.memory_cache: Dict[str, tuple] = {}  # Fallback
+        self._init_redis()
+    
+    def _init_redis(self):
+        """Initialize Redis connection"""
+        try:
+            import redis
+            redis_url = os.getenv("REDIS_URL", os.getenv("UPSTASH_REDIS_REST_URL"))
+            if redis_url:
+                self.redis_client = redis.from_url(redis_url, decode_responses=True)
+                self.redis_client.ping()
+                logger.info("✅ Redis cache connected")
+            else:
+                logger.info("⚠️ Redis not configured, using in-memory cache")
+        except Exception as e:
+            logger.warning(f"Redis connection failed, using memory cache: {e}")
+            self.redis_client = None
     
     def _hash_key(self, prompt: str, model: str) -> str:
-        """Create a hash key from prompt and model"""
-        content = f"{model}:{prompt}"
-        return hashlib.md5(content.encode()).hexdigest()
+        content = f"{model}:{prompt[:500]}"  # Limit prompt for key
+        return f"agent_cache:{hashlib.md5(content.encode()).hexdigest()}"
     
-    def get(self, prompt: str, model: str) -> Optional[str]:
-        """Get cached response if valid"""
+    async def get(self, prompt: str, model: str) -> Optional[str]:
         key = self._hash_key(prompt, model)
-        if key in self.cache:
-            response, timestamp = self.cache[key]
-            if datetime.now() - timestamp < self.ttl:
-                logger.debug(f"Cache HIT for {model}")
+        
+        # Try Redis first
+        if self.redis_client:
+            try:
+                data = self.redis_client.get(key)
+                if data:
+                    logger.debug(f"Redis cache HIT for {model}")
+                    return data
+            except Exception as e:
+                logger.warning(f"Redis get error: {e}")
+        
+        # Fallback to memory
+        if key in self.memory_cache:
+            response, timestamp = self.memory_cache[key]
+            if datetime.now() - timestamp < timedelta(seconds=self.ttl):
+                logger.debug(f"Memory cache HIT for {model}")
                 return response
-            else:
-                del self.cache[key]  # Expired
+            del self.memory_cache[key]
+        
         return None
     
-    def set(self, prompt: str, model: str, response: str):
-        """Cache a response"""
+    async def set(self, prompt: str, model: str, response: str):
         key = self._hash_key(prompt, model)
-        self.cache[key] = (response, datetime.now())
-        # Clean old entries (max 100)
-        if len(self.cache) > 100:
-            oldest_key = min(self.cache, key=lambda k: self.cache[k][1])
-            del self.cache[oldest_key]
+        
+        # Try Redis first
+        if self.redis_client:
+            try:
+                self.redis_client.setex(key, self.ttl, response)
+                return
+            except Exception as e:
+                logger.warning(f"Redis set error: {e}")
+        
+        # Fallback to memory
+        self.memory_cache[key] = (response, datetime.now())
+        if len(self.memory_cache) > 200:
+            oldest = min(self.memory_cache, key=lambda k: self.memory_cache[k][1])
+            del self.memory_cache[oldest]
 
 
 class AgentMetrics:
@@ -66,12 +101,15 @@ class AgentMetrics:
         self.total_response_time = 0.0
         self.cache_hits = 0
         self.fallback_count = 0
+        self.models_used: Dict[str, int] = {}
         self.errors_by_type: Dict[str, int] = {}
     
-    def record_request(self, success: bool, response_time: float, cached: bool = False, error_type: str = None):
+    def record_request(self, success: bool, response_time: float, model_used: str = None, cached: bool = False, error_type: str = None):
         self.total_requests += 1
         if success:
             self.successful_requests += 1
+            if model_used:
+                self.models_used[model_used] = self.models_used.get(model_used, 0) + 1
         else:
             self.failed_requests += 1
             if error_type:
@@ -85,15 +123,11 @@ class AgentMetrics:
     
     @property
     def avg_response_time(self) -> float:
-        if self.total_requests == 0:
-            return 0
-        return self.total_response_time / self.total_requests
+        return self.total_response_time / max(self.total_requests, 1)
     
     @property
     def success_rate(self) -> float:
-        if self.total_requests == 0:
-            return 0
-        return self.successful_requests / self.total_requests * 100
+        return self.successful_requests / max(self.total_requests, 1) * 100
     
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -104,27 +138,44 @@ class AgentMetrics:
             "avg_response_time": f"{self.avg_response_time:.2f}s",
             "cache_hits": self.cache_hits,
             "fallbacks": self.fallback_count,
+            "models_used": self.models_used,
             "errors_by_type": self.errors_by_type
         }
 
 
-# Global cache shared by all agents
-_global_cache = ResponseCache(ttl_seconds=300)
+# Global Redis cache
+_global_cache = RedisCache(ttl_seconds=600)
 
 
 class BaseAgent(ABC):
-    """Base class for all AI agents - OPTIMIZED"""
+    """Base class for all AI agents - ULTRA OPTIMIZED with all free-tier fallbacks"""
     
-    # Fallback chain for each primary model
+    # Complete fallback chain using FREE TIER models
     FALLBACK_MODELS = {
-        "gpt-4o": ["gpt-4o-mini", "groq", "deepseek"],
-        "claude-3.5-sonnet": ["groq", "gpt-4o-mini", "deepseek"],
-        "deepseek-coder": ["groq", "gpt-4o-mini", "claude-3.5-sonnet"],
-        "groq-llama3": ["deepseek", "gpt-4o-mini", "claude-3.5-sonnet"],
+        "gpt-4o": ["gpt-4o-mini", "groq", "gemini", "mistral", "deepseek", "cohere", "perplexity"],
+        "gpt-4o-mini": ["groq", "gemini", "mistral", "deepseek", "cohere"],
+        "claude-3.5-sonnet": ["groq", "gemini", "mistral", "deepseek", "gpt-4o-mini", "cohere"],
+        "deepseek-coder": ["groq", "gemini", "mistral", "gpt-4o-mini", "cohere"],
+        "groq-llama3": ["gemini", "mistral", "deepseek", "gpt-4o-mini", "cohere"],
+        "gemini": ["groq", "mistral", "deepseek", "gpt-4o-mini", "cohere"],
+        "mistral": ["groq", "gemini", "deepseek", "gpt-4o-mini", "cohere"],
     }
     
-    MAX_RETRIES = 3
-    RETRY_DELAY = 1.0  # Initial delay in seconds
+    # Model info for smart selection (speed, cost)
+    MODEL_INFO = {
+        "groq": {"speed": "ultra-fast", "cost": "free", "quality": "high"},
+        "gemini": {"speed": "fast", "cost": "free", "quality": "high"},
+        "mistral": {"speed": "fast", "cost": "free", "quality": "high"},
+        "deepseek": {"speed": "medium", "cost": "cheap", "quality": "high"},
+        "cohere": {"speed": "medium", "cost": "free", "quality": "medium"},
+        "perplexity": {"speed": "medium", "cost": "free", "quality": "high"},
+        "gpt-4o-mini": {"speed": "fast", "cost": "cheap", "quality": "high"},
+        "gpt-4o": {"speed": "medium", "cost": "expensive", "quality": "ultra"},
+        "claude-3.5-sonnet": {"speed": "medium", "cost": "expensive", "quality": "ultra"},
+    }
+    
+    MAX_RETRIES = 2
+    RETRY_DELAY = 0.5
     
     def __init__(self, name: str, model: str, role: str):
         self.name = name
@@ -134,46 +185,49 @@ class BaseAgent(ABC):
         self.last_action = None
         self.task_history: List[Dict] = []
         self.metrics = AgentMetrics()
-        self.use_cache = True  # Enable caching by default
+        self.use_cache = True
         
     async def think(self, prompt: str, context: Optional[Dict] = None, use_cache: bool = True) -> str:
-        """Use the AI model to think/reason about a task - WITH RETRY AND FALLBACK"""
+        """Use the AI model with smart fallback chain"""
         start_time = datetime.now()
+        model_used = self.model
         
-        # Check cache first
+        # Check cache
         if use_cache and self.use_cache:
-            cached = _global_cache.get(prompt, self.model)
+            cached = await _global_cache.get(prompt, self.model)
             if cached:
-                self.metrics.record_request(True, 0.01, cached=True)
+                self.metrics.record_request(True, 0.01, model_used, cached=True)
                 return cached
         
-        # Try primary model with retries
+        # Try primary model
         result = await self._call_with_retry(self.model, prompt, context)
         
-        # If failed, try fallback models
+        # If failed, try all fallbacks in order
         if result.startswith("ERROR:"):
-            self.metrics.record_fallback()
-            fallbacks = self.FALLBACK_MODELS.get(self.model, ["groq"])
+            fallbacks = self.FALLBACK_MODELS.get(self.model, ["groq", "gemini", "mistral"])
             
             for fallback_model in fallbacks:
-                logger.warning(f"[{self.name}] Falling back to {fallback_model}")
+                self.metrics.record_fallback()
+                logger.warning(f"[{self.name}] Trying fallback: {fallback_model}")
                 result = await self._call_with_retry(fallback_model, prompt, context)
                 if not result.startswith("ERROR:"):
+                    model_used = fallback_model
                     break
         
         # Record metrics
         response_time = (datetime.now() - start_time).total_seconds()
         success = not result.startswith("ERROR:")
-        self.metrics.record_request(success, response_time, error_type=result[:50] if not success else None)
+        self.metrics.record_request(success, response_time, model_used if success else None, 
+                                   error_type=result[:50] if not success else None)
         
         # Cache successful responses
         if success and use_cache and self.use_cache:
-            _global_cache.set(prompt, self.model, result)
+            await _global_cache.set(prompt, self.model, result)
         
         return result
     
     async def _call_with_retry(self, model: str, prompt: str, context: Optional[Dict] = None) -> str:
-        """Call AI model with retry logic"""
+        """Call AI model with retry"""
         last_error = None
         
         for attempt in range(self.MAX_RETRIES):
@@ -184,12 +238,9 @@ class BaseAgent(ABC):
                 last_error = result
             except Exception as e:
                 last_error = f"ERROR: {str(e)}"
-                logger.warning(f"[{self.name}] Attempt {attempt + 1} failed: {e}")
             
-            # Exponential backoff
             if attempt < self.MAX_RETRIES - 1:
-                delay = self.RETRY_DELAY * (2 ** attempt)
-                await asyncio.sleep(delay)
+                await asyncio.sleep(self.RETRY_DELAY * (attempt + 1))
         
         return last_error or "ERROR: All retries failed"
     
@@ -203,11 +254,19 @@ class BaseAgent(ABC):
             return await self._call_deepseek(prompt, context)
         elif "groq" in model or "llama" in model:
             return await self._call_groq(prompt, context)
+        elif "gemini" in model:
+            return await self._call_gemini(prompt, context)
+        elif "mistral" in model:
+            return await self._call_mistral(prompt, context)
+        elif "cohere" in model:
+            return await self._call_cohere(prompt, context)
+        elif "perplexity" in model:
+            return await self._call_perplexity(prompt, context)
         else:
             return await self._call_groq(prompt, context)
     
     async def _call_openai(self, prompt: str, context: Optional[Dict] = None, model: str = "gpt-4o") -> str:
-        """Call OpenAI GPT with configurable model"""
+        """Call OpenAI API"""
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             return "ERROR: Missing OpenAI API key"
@@ -234,13 +293,11 @@ class BaseAgent(ABC):
                 return data.get("choices", [{}])[0].get("message", {}).get("content", "No response")
         except httpx.TimeoutException:
             return "ERROR: OpenAI timeout"
-        except httpx.HTTPStatusError as e:
-            return f"ERROR: OpenAI HTTP {e.response.status_code}"
         except Exception as e:
             return f"ERROR: OpenAI {str(e)}"
     
     async def _call_anthropic(self, prompt: str, context: Optional[Dict] = None) -> str:
-        """Call Anthropic Claude"""
+        """Call Anthropic Claude API"""
         api_key = os.getenv("ANTHROPIC_API_KEY")
         if not api_key:
             return "ERROR: Missing Anthropic API key"
@@ -266,43 +323,11 @@ class BaseAgent(ABC):
                 return data.get("content", [{}])[0].get("text", "No response")
         except httpx.TimeoutException:
             return "ERROR: Anthropic timeout"
-        except httpx.HTTPStatusError as e:
-            return f"ERROR: Anthropic HTTP {e.response.status_code}"
         except Exception as e:
             return f"ERROR: Anthropic {str(e)}"
     
-    async def _call_deepseek(self, prompt: str, context: Optional[Dict] = None) -> str:
-        """Call DeepSeek"""
-        api_key = os.getenv("DEEPSEEK_API_KEY")
-        if not api_key:
-            return "ERROR: Missing DeepSeek API key"
-        
-        try:
-            async with httpx.AsyncClient(timeout=90.0) as client:
-                response = await client.post(
-                    "https://api.deepseek.com/v1/chat/completions",
-                    headers={"Authorization": f"Bearer {api_key}"},
-                    json={
-                        "model": "deepseek-coder",
-                        "messages": [
-                            {"role": "system", "content": f"You are {self.name}. Role: {self.role}"},
-                            {"role": "user", "content": prompt}
-                        ],
-                        "max_tokens": 4000
-                    }
-                )
-                response.raise_for_status()
-                data = response.json()
-                return data.get("choices", [{}])[0].get("message", {}).get("content", "No response")
-        except httpx.TimeoutException:
-            return "ERROR: DeepSeek timeout"
-        except httpx.HTTPStatusError as e:
-            return f"ERROR: DeepSeek HTTP {e.response.status_code}"
-        except Exception as e:
-            return f"ERROR: DeepSeek {str(e)}"
-    
     async def _call_groq(self, prompt: str, context: Optional[Dict] = None) -> str:
-        """Call Groq (Llama 3) - FASTEST"""
+        """Call Groq API (FASTEST - FREE)"""
         api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
             return "ERROR: Missing Groq API key"
@@ -324,22 +349,143 @@ class BaseAgent(ABC):
                 response.raise_for_status()
                 data = response.json()
                 return data.get("choices", [{}])[0].get("message", {}).get("content", "No response")
-        except httpx.TimeoutException:
-            return "ERROR: Groq timeout"
-        except httpx.HTTPStatusError as e:
-            return f"ERROR: Groq HTTP {e.response.status_code}"
         except Exception as e:
             return f"ERROR: Groq {str(e)}"
     
+    async def _call_gemini(self, prompt: str, context: Optional[Dict] = None) -> str:
+        """Call Google Gemini API (FREE)"""
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            return "ERROR: Missing Gemini API key"
+        
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                response = await client.post(
+                    f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}",
+                    json={
+                        "contents": [{
+                            "parts": [{"text": f"You are {self.name}. Role: {self.role}\n\n{prompt}"}]
+                        }],
+                        "generationConfig": {
+                            "maxOutputTokens": 4000,
+                            "temperature": 0.7
+                        }
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "No response")
+        except Exception as e:
+            return f"ERROR: Gemini {str(e)}"
+    
+    async def _call_mistral(self, prompt: str, context: Optional[Dict] = None) -> str:
+        """Call Mistral API (FREE tier)"""
+        api_key = os.getenv("MISTRAL_API_KEY")
+        if not api_key:
+            return "ERROR: Missing Mistral API key"
+        
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                response = await client.post(
+                    "https://api.mistral.ai/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                    json={
+                        "model": "mistral-small-latest",
+                        "messages": [
+                            {"role": "system", "content": f"You are {self.name}. Role: {self.role}"},
+                            {"role": "user", "content": prompt}
+                        ],
+                        "max_tokens": 4000
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+        except Exception as e:
+            return f"ERROR: Mistral {str(e)}"
+    
+    async def _call_deepseek(self, prompt: str, context: Optional[Dict] = None) -> str:
+        """Call DeepSeek API"""
+        api_key = os.getenv("DEEPSEEK_API_KEY")
+        if not api_key:
+            return "ERROR: Missing DeepSeek API key"
+        
+        try:
+            async with httpx.AsyncClient(timeout=90.0) as client:
+                response = await client.post(
+                    "https://api.deepseek.com/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                    json={
+                        "model": "deepseek-chat",
+                        "messages": [
+                            {"role": "system", "content": f"You are {self.name}. Role: {self.role}"},
+                            {"role": "user", "content": prompt}
+                        ],
+                        "max_tokens": 4000
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+        except Exception as e:
+            return f"ERROR: DeepSeek {str(e)}"
+    
+    async def _call_cohere(self, prompt: str, context: Optional[Dict] = None) -> str:
+        """Call Cohere API (FREE tier)"""
+        api_key = os.getenv("COHERE_API_KEY")
+        if not api_key:
+            return "ERROR: Missing Cohere API key"
+        
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                response = await client.post(
+                    "https://api.cohere.ai/v1/chat",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                    json={
+                        "model": "command-r",
+                        "message": prompt,
+                        "preamble": f"You are {self.name}. Role: {self.role}"
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("text", "No response")
+        except Exception as e:
+            return f"ERROR: Cohere {str(e)}"
+    
+    async def _call_perplexity(self, prompt: str, context: Optional[Dict] = None) -> str:
+        """Call Perplexity API (for web search)"""
+        api_key = os.getenv("PERPLEXITY_API_KEY")
+        if not api_key:
+            return "ERROR: Missing Perplexity API key"
+        
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                response = await client.post(
+                    "https://api.perplexity.ai/chat/completions",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                    json={
+                        "model": "llama-3.1-sonar-small-128k-online",
+                        "messages": [
+                            {"role": "system", "content": f"You are {self.name}. Role: {self.role}"},
+                            {"role": "user", "content": prompt}
+                        ]
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+        except Exception as e:
+            return f"ERROR: Perplexity {str(e)}"
+    
     async def execute(self, task: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a task with enhanced error handling"""
+        """Execute a task"""
         self.status = "working"
         self.last_action = datetime.now()
         start_time = datetime.now()
         
         try:
             result = await self._do_task(task)
-            
             execution_time = (datetime.now() - start_time).total_seconds()
             
             self.task_history.append({
@@ -349,7 +495,6 @@ class BaseAgent(ABC):
                 "execution_time": execution_time
             })
             
-            # Keep only last 20 tasks in history
             if len(self.task_history) > 20:
                 self.task_history = self.task_history[-20:]
             
@@ -360,20 +505,13 @@ class BaseAgent(ABC):
         except Exception as e:
             self.status = "error"
             logger.error(f"[{self.name}] Task failed: {e}")
-            return {
-                "success": False, 
-                "error": str(e),
-                "agent": self.name,
-                "timestamp": datetime.now().isoformat()
-            }
+            return {"success": False, "error": str(e)}
     
     @abstractmethod
     async def _do_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
-        """Actual task implementation - override in subclasses"""
         pass
     
     def get_status(self) -> Dict[str, Any]:
-        """Get agent status with metrics"""
         return {
             "name": self.name,
             "model": self.model,
@@ -384,5 +522,4 @@ class BaseAgent(ABC):
         }
     
     def reset_metrics(self):
-        """Reset performance metrics"""
         self.metrics = AgentMetrics()

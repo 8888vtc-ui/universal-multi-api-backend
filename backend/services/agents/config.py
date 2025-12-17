@@ -1,14 +1,15 @@
 """
-🤖 AGENT DEFINITIONS - FULL EDITION (11 AGENTS)
-Each agent has a specific role and uses the best AI model for that task.
+🤖 AGENT DEFINITIONS - ULTRA EDITION (13 AGENTS)
+All free-tier AI models used as fallbacks.
+Redis caching enabled for speed.
 """
 
 AGENTS = {
     "architect": {
         "name": "🏗️ Architect Agent",
         "model": "gpt-4o",
-        "fallbacks": ["groq-llama3", "deepseek-coder"],
-        "role": "Analyse les projets, crée les specs, planifie les tâches",
+        "fallbacks": ["gpt-4o-mini", "groq", "gemini", "mistral", "deepseek", "cohere"],
+        "role": "Analyse projets, specs, planning",
         "capabilities": ["analyze_codebase", "create_specs", "plan_tasks", "review_architecture", "estimate_effort"],
         "priority": 1,
         "cost_tier": "premium"
@@ -16,8 +17,8 @@ AGENTS = {
     "developer": {
         "name": "👨‍💻 Developer Agent", 
         "model": "claude-3.5-sonnet",
-        "fallbacks": ["gpt-4o", "deepseek-coder"],
-        "role": "Écrit le code, implémente les features, refactore",
+        "fallbacks": ["groq", "gemini", "mistral", "deepseek", "gpt-4o-mini", "cohere"],
+        "role": "Code, features, refactoring",
         "capabilities": ["write_code", "implement_feature", "refactor", "fix_bugs", "code_review"],
         "priority": 2,
         "cost_tier": "premium"
@@ -25,8 +26,8 @@ AGENTS = {
     "debugger": {
         "name": "🐛 Debugger Agent",
         "model": "deepseek-coder",
-        "fallbacks": ["groq-llama3", "gpt-4o-mini"],
-        "role": "Analyse les erreurs, trouve les bugs, propose des corrections",
+        "fallbacks": ["groq", "gemini", "mistral", "gpt-4o-mini", "cohere"],
+        "role": "Debug, bugs, corrections",
         "capabilities": ["analyze_errors", "find_bugs", "suggest_fixes", "trace_issues", "root_cause_analysis"],
         "priority": 2,
         "cost_tier": "standard"
@@ -34,8 +35,8 @@ AGENTS = {
     "tester": {
         "name": "🧪 Tester Agent",
         "model": "gpt-4o",
-        "fallbacks": ["claude-3.5-sonnet", "groq-llama3"],
-        "role": "Crée et exécute les tests, vérifie la qualité",
+        "fallbacks": ["groq", "gemini", "mistral", "deepseek", "cohere"],
+        "role": "Tests, QA, coverage",
         "capabilities": ["create_tests", "run_tests", "visual_testing", "qa_review", "coverage_analysis"],
         "priority": 3,
         "cost_tier": "premium"
@@ -43,17 +44,17 @@ AGENTS = {
     "monitor": {
         "name": "📊 Monitor Agent",
         "model": "groq-llama3",
-        "fallbacks": ["gpt-4o-mini", "deepseek-coder"],
-        "role": "Surveille les logs, détecte les anomalies, alerte",
+        "fallbacks": ["gemini", "mistral", "deepseek", "cohere"],
+        "role": "Logs, anomalies, alertes",
         "capabilities": ["watch_logs", "detect_anomalies", "send_alerts", "report", "trend_analysis"],
         "priority": 1,
-        "cost_tier": "standard"
+        "cost_tier": "free"
     },
     "trader": {
         "name": "📈 Trading Agent",
         "model": "gpt-4o",
-        "fallbacks": ["claude-3.5-sonnet", "groq-llama3"],
-        "role": "Analyse les marchés, optimise les stratégies trading",
+        "fallbacks": ["groq", "gemini", "mistral", "perplexity", "cohere"],
+        "role": "Trading, marchés, risques",
         "capabilities": ["market_analysis", "strategy_optimization", "position_monitoring", "risk_management", "backtest"],
         "priority": 1,
         "cost_tier": "premium"
@@ -61,17 +62,17 @@ AGENTS = {
     "documenter": {
         "name": "📚 Documenter Agent",
         "model": "groq-llama3",
-        "fallbacks": ["gpt-4o-mini", "claude-3.5-sonnet"],
-        "role": "Génère documentation, README, guides",
+        "fallbacks": ["gemini", "mistral", "deepseek", "cohere"],
+        "role": "README, docs, guides",
         "capabilities": ["generate_readme", "api_docs", "user_guide", "changelog", "tutorials"],
         "priority": 4,
-        "cost_tier": "standard"
+        "cost_tier": "free"
     },
     "security": {
         "name": "🔐 Security Agent",
         "model": "claude-3.5-sonnet",
-        "fallbacks": ["gpt-4o", "deepseek-coder"],
-        "role": "Audits sécurité, détection vulnérabilités, compliance",
+        "fallbacks": ["groq", "gemini", "mistral", "deepseek", "gpt-4o-mini"],
+        "role": "Audits, vulnérabilités, compliance",
         "capabilities": ["security_audit", "vulnerability_scan", "dependency_check", "compliance_check", "penetration_test", "secrets_scan"],
         "priority": 1,
         "cost_tier": "premium"
@@ -79,33 +80,51 @@ AGENTS = {
     "performance": {
         "name": "⚡ Performance Agent",
         "model": "groq-llama3",
-        "fallbacks": ["deepseek-coder", "gpt-4o-mini"],
-        "role": "Analyse performances, trouve bottlenecks, optimise",
+        "fallbacks": ["gemini", "mistral", "deepseek", "cohere"],
+        "role": "Bottlenecks, optimisation",
         "capabilities": ["analyze_performance", "find_bottlenecks", "optimize_code", "benchmark", "memory_analysis", "database_optimization"],
         "priority": 2,
-        "cost_tier": "standard"
+        "cost_tier": "free"
     },
     "devops": {
         "name": "🔧 DevOps Agent",
         "model": "groq-llama3",
-        "fallbacks": ["gpt-4o-mini", "deepseek-coder"],
-        "role": "Déploiements, CI/CD, infrastructure, cloud",
+        "fallbacks": ["gemini", "mistral", "deepseek", "cohere"],
+        "role": "CI/CD, deploy, infrastructure",
         "capabilities": ["deploy", "rollback", "create_pipeline", "infrastructure_review", "docker_optimize", "kubernetes_config", "monitoring_setup", "cost_optimization"],
         "priority": 2,
-        "cost_tier": "standard"
+        "cost_tier": "free"
     },
     "data": {
         "name": "📊 Data Agent",
         "model": "gpt-4o",
-        "fallbacks": ["claude-3.5-sonnet", "groq-llama3"],
-        "role": "Analyse données, ML, feature engineering, prédictions",
+        "fallbacks": ["groq", "gemini", "mistral", "deepseek", "cohere"],
+        "role": "ML, analytics, prédictions",
         "capabilities": ["analyze_data", "create_model", "feature_engineering", "exploratory_analysis", "predict", "generate_report", "clean_data", "visualize"],
         "priority": 2,
         "cost_tier": "premium"
+    },
+    "notification": {
+        "name": "📢 Notification Agent",
+        "model": "groq-llama3",
+        "fallbacks": ["gemini", "mistral", "cohere"],
+        "role": "Alertes Telegram/Slack/Discord",
+        "capabilities": ["send_alert", "send_telegram", "send_slack", "send_discord", "send_all", "format_message"],
+        "priority": 1,
+        "cost_tier": "free"
+    },
+    "api": {
+        "name": "🌐 API Agent",
+        "model": "groq-llama3",
+        "fallbacks": ["gemini", "mistral", "deepseek", "cohere"],
+        "role": "Tests API, endpoints, intégrations",
+        "capabilities": ["test_endpoint", "test_endpoints", "validate_response", "load_test", "health_check", "generate_tests"],
+        "priority": 2,
+        "cost_tier": "free"
     }
 }
 
-# Comprehensive workflow definitions
+# 16 Comprehensive workflows
 WORKFLOWS = {
     "fix_bug": {
         "description": "Corriger un bug détecté",
@@ -115,11 +134,12 @@ WORKFLOWS = {
             {"agent": "debugger", "action": "analyze_error"},
             {"agent": "developer", "action": "fix_bug"},
             {"agent": "tester", "action": "verify_fix"},
-            {"agent": "devops", "action": "deploy"}
+            {"agent": "devops", "action": "deploy"},
+            {"agent": "notification", "action": "send_alert"}
         ]
     },
     "new_feature": {
-        "description": "Implémenter une nouvelle feature",
+        "description": "Nouvelle feature complète",
         "parallel": False,
         "steps": [
             {"agent": "architect", "action": "create_specs"},
@@ -127,69 +147,67 @@ WORKFLOWS = {
             {"agent": "security", "action": "security_audit"},
             {"agent": "tester", "action": "create_tests"},
             {"agent": "documenter", "action": "generate_docs"},
-            {"agent": "devops", "action": "deploy"}
+            {"agent": "devops", "action": "deploy"},
+            {"agent": "notification", "action": "send_alert"}
         ]
     },
     "optimize_trading": {
-        "description": "Optimiser les bots de trading",
+        "description": "Optimiser bots trading",
         "parallel": False,
         "steps": [
             {"agent": "monitor", "action": "collect_metrics"},
             {"agent": "trader", "action": "analyze_performance"},
             {"agent": "data", "action": "analyze_data"},
-            {"agent": "architect", "action": "propose_improvements"},
             {"agent": "developer", "action": "implement_changes"},
             {"agent": "performance", "action": "benchmark"},
             {"agent": "devops", "action": "deploy"}
         ]
     },
     "daily_maintenance": {
-        "description": "Maintenance quotidienne automatique",
+        "description": "Maintenance quotidienne",
         "parallel": True,
         "steps": [
             {"agent": "monitor", "action": "health_check"},
             {"agent": "security", "action": "dependency_check"},
             {"agent": "performance", "action": "analyze_performance"},
-            {"agent": "devops", "action": "monitoring_setup"}
+            {"agent": "api", "action": "health_check"}
         ]
     },
     "full_security_audit": {
-        "description": "Audit de sécurité complet",
+        "description": "Audit sécurité complet",
         "parallel": False,
         "steps": [
             {"agent": "security", "action": "security_audit"},
             {"agent": "security", "action": "vulnerability_scan"},
             {"agent": "security", "action": "dependency_check"},
             {"agent": "security", "action": "secrets_scan"},
-            {"agent": "security", "action": "compliance_check"},
-            {"agent": "documenter", "action": "generate_report"}
+            {"agent": "documenter", "action": "generate_report"},
+            {"agent": "notification", "action": "send_alert"}
         ]
     },
     "performance_optimization": {
-        "description": "Optimisation des performances",
+        "description": "Optimiser performances",
         "parallel": False,
         "steps": [
             {"agent": "performance", "action": "analyze_performance"},
             {"agent": "performance", "action": "find_bottlenecks"},
             {"agent": "performance", "action": "database_optimization"},
             {"agent": "developer", "action": "implement_changes"},
-            {"agent": "performance", "action": "benchmark"},
-            {"agent": "devops", "action": "deploy"}
+            {"agent": "performance", "action": "benchmark"}
         ]
     },
     "analyze_project": {
-        "description": "Analyser un projet complet",
+        "description": "Analyzer projet complet",
         "parallel": False,
         "steps": [
             {"agent": "architect", "action": "analyze_codebase"},
             {"agent": "security", "action": "security_audit"},
             {"agent": "performance", "action": "analyze_performance"},
-            {"agent": "tester", "action": "coverage_analysis"},
             {"agent": "documenter", "action": "generate_report"}
         ]
     },
     "data_pipeline": {
-        "description": "Créer un pipeline de données",
+        "description": "Pipeline ML/Data",
         "parallel": False,
         "steps": [
             {"agent": "data", "action": "exploratory_analysis"},
@@ -200,35 +218,61 @@ WORKFLOWS = {
         ]
     },
     "full_deploy": {
-        "description": "Déploiement complet avec checks",
+        "description": "Déploiement complet",
         "parallel": False,
         "steps": [
             {"agent": "tester", "action": "run_tests"},
             {"agent": "security", "action": "security_audit"},
             {"agent": "performance", "action": "benchmark"},
-            {"agent": "devops", "action": "create_pipeline"},
             {"agent": "devops", "action": "deploy"},
-            {"agent": "monitor", "action": "health_check"}
+            {"agent": "api", "action": "health_check"},
+            {"agent": "notification", "action": "send_alert"}
         ]
     },
     "generate_documentation": {
-        "description": "Générer documentation complète",
+        "description": "Documentation complète",
         "parallel": True,
         "steps": [
             {"agent": "documenter", "action": "generate_readme"},
             {"agent": "documenter", "action": "api_docs"},
-            {"agent": "documenter", "action": "user_guide"},
-            {"agent": "documenter", "action": "changelog"}
+            {"agent": "documenter", "action": "user_guide"}
         ]
     },
     "infrastructure_review": {
-        "description": "Review infrastructure complète",
+        "description": "Review infrastructure",
         "parallel": True,
         "steps": [
             {"agent": "devops", "action": "infrastructure_review"},
             {"agent": "devops", "action": "cost_optimization"},
             {"agent": "security", "action": "compliance_check"},
             {"agent": "performance", "action": "analyze_performance"}
+        ]
+    },
+    "api_testing": {
+        "description": "Tests API complets",
+        "parallel": False,
+        "steps": [
+            {"agent": "api", "action": "test_endpoints"},
+            {"agent": "api", "action": "load_test"},
+            {"agent": "api", "action": "generate_tests"},
+            {"agent": "documenter", "action": "generate_report"}
+        ]
+    },
+    "alert_system_test": {
+        "description": "Tester système alertes",
+        "parallel": False,
+        "steps": [
+            {"agent": "notification", "action": "check_status"},
+            {"agent": "notification", "action": "send_all"}
+        ]
+    },
+    "quick_fix": {
+        "description": "Fix rapide",
+        "parallel": False,
+        "steps": [
+            {"agent": "debugger", "action": "analyze_error"},
+            {"agent": "developer", "action": "fix_bug"},
+            {"agent": "devops", "action": "deploy"}
         ]
     },
     "ml_project": {
@@ -239,21 +283,11 @@ WORKFLOWS = {
             {"agent": "data", "action": "feature_engineering"},
             {"agent": "data", "action": "create_model"},
             {"agent": "performance", "action": "benchmark"},
-            {"agent": "documenter", "action": "generate_report"},
-            {"agent": "devops", "action": "deploy"}
-        ]
-    },
-    "quick_fix": {
-        "description": "Correction rapide (bypass review)",
-        "parallel": False,
-        "steps": [
-            {"agent": "debugger", "action": "analyze_error"},
-            {"agent": "developer", "action": "fix_bug"},
-            {"agent": "devops", "action": "deploy"}
+            {"agent": "documenter", "action": "generate_report"}
         ]
     },
     "auto_improve": {
-        "description": "Amélioration automatique continue",
+        "description": "Amélioration continue",
         "parallel": False,
         "steps": [
             {"agent": "monitor", "action": "analyze_trends"},
@@ -266,13 +300,13 @@ WORKFLOWS = {
     }
 }
 
-# Quick actions - single agent tasks
+# 17 Quick actions
 QUICK_ACTIONS = {
     "analyze_code": {"agent": "architect", "action": "analyze_codebase"},
     "review_pr": {"agent": "developer", "action": "code_review"},
     "find_bugs": {"agent": "debugger", "action": "find_bugs"},
     "write_tests": {"agent": "tester", "action": "create_tests"},
-    "deploy_now": {"agent": "devops", "action": "deploy"},
+    "deploy": {"agent": "devops", "action": "deploy"},
     "check_health": {"agent": "monitor", "action": "health_check"},
     "analyze_market": {"agent": "trader", "action": "market_analysis"},
     "generate_docs": {"agent": "documenter", "action": "generate_readme"},
@@ -282,7 +316,9 @@ QUICK_ACTIONS = {
     "analyze_data": {"agent": "data", "action": "analyze_data"},
     "create_model": {"agent": "data", "action": "create_model"},
     "cost_optimize": {"agent": "devops", "action": "cost_optimization"},
-    "compliance_check": {"agent": "security", "action": "compliance_check"},
+    "send_alert": {"agent": "notification", "action": "send_alert"},
+    "test_api": {"agent": "api", "action": "test_endpoint"},
+    "load_test": {"agent": "api", "action": "load_test"},
 }
 
 # Scheduled tasks
@@ -299,12 +335,16 @@ SCHEDULED_TASKS = {
         "cron": "0 10 * * 1",
         "workflow": "performance_optimization"
     },
-    "continuous_trading_optimization": {
+    "trading_optimization": {
         "cron": "0 */4 * * *",
         "action": {"agent": "trader", "action": "analyze_performance"}
     },
     "hourly_monitoring": {
         "cron": "0 * * * *",
         "action": {"agent": "monitor", "action": "health_check"}
+    },
+    "api_health_check": {
+        "cron": "*/30 * * * *",
+        "action": {"agent": "api", "action": "health_check"}
     }
 }
