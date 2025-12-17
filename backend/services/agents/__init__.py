@@ -1,8 +1,8 @@
 """
-🤖 AGENT TEAM - The Autonomous AI Workforce - OPTIMIZED
+🤖 AGENT TEAM - The Autonomous AI Workforce - FULL EDITION
 
 All available agents for the orchestrator.
-Each agent specializes in a specific domain.
+11 specialized agents for complete automation.
 """
 from .architect_agent import ArchitectAgent
 from .developer_agent import DeveloperAgent
@@ -11,6 +11,10 @@ from .tester_agent import TesterAgent
 from .monitor_agent import MonitorAgent
 from .trading_agent import TradingAgent
 from .documenter_agent import DocumenterAgent
+from .security_agent import SecurityAgent
+from .performance_agent import PerformanceAgent
+from .devops_agent import DevOpsAgent
+from .data_agent import DataAgent
 
 # Agent registry for dynamic loading
 AGENT_REGISTRY = {
@@ -21,6 +25,10 @@ AGENT_REGISTRY = {
     "monitor": MonitorAgent,
     "trader": TradingAgent,
     "documenter": DocumenterAgent,
+    "security": SecurityAgent,
+    "performance": PerformanceAgent,
+    "devops": DevOpsAgent,
+    "data": DataAgent,
 }
 
 __all__ = [
@@ -31,5 +39,9 @@ __all__ = [
     "MonitorAgent",
     "TradingAgent",
     "DocumenterAgent",
+    "SecurityAgent",
+    "PerformanceAgent",
+    "DevOpsAgent",
+    "DataAgent",
     "AGENT_REGISTRY"
 ]

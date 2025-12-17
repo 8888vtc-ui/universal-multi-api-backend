@@ -1,7 +1,5 @@
-# fly.toml app configuration file generated for universal-api-hub on 2025-12-09T17:28:15+01:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
+# fly.toml app configuration file for universal-api-hub
+# OPTIMIZED for always-on and better performance
 
 app = 'universal-api-hub'
 primary_region = 'cdg'
@@ -11,12 +9,27 @@ primary_region = 'cdg'
 [http_service]
   internal_port = 8000
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = 'off'       # ALWAYS ON - no auto-stop
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1         # Always keep 1 machine running
   processes = ['app']
+
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 250
+    soft_limit = 200
 
 [[vm]]
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
+
+[checks]
+  [checks.health]
+    grace_period = "30s"
+    interval = "30s"
+    method = "GET"
+    path = "/api/info"
+    port = 8000
+    timeout = "10s"
+    type = "http"

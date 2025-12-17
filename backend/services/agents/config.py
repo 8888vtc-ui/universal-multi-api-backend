@@ -1,12 +1,6 @@
 """
-🤖 AGENT DEFINITIONS - OPTIMIZED VERSION
+🤖 AGENT DEFINITIONS - FULL EDITION (11 AGENTS)
 Each agent has a specific role and uses the best AI model for that task.
-
-OPTIMIZATIONS:
-- More detailed capabilities
-- Smart model selection (cost vs quality)
-- New workflows for automation
-- Parallel workflow support
 """
 
 AGENTS = {
@@ -14,7 +8,7 @@ AGENTS = {
         "name": "🏗️ Architect Agent",
         "model": "gpt-4o",
         "fallbacks": ["groq-llama3", "deepseek-coder"],
-        "role": "Analyse les projets, crée les spécifications techniques, planifie les tâches",
+        "role": "Analyse les projets, crée les specs, planifie les tâches",
         "capabilities": ["analyze_codebase", "create_specs", "plan_tasks", "review_architecture", "estimate_effort"],
         "priority": 1,
         "cost_tier": "premium"
@@ -41,34 +35,16 @@ AGENTS = {
         "name": "🧪 Tester Agent",
         "model": "gpt-4o",
         "fallbacks": ["claude-3.5-sonnet", "groq-llama3"],
-        "role": "Crée et exécute les tests, vérifie la qualité, teste les UI",
+        "role": "Crée et exécute les tests, vérifie la qualité",
         "capabilities": ["create_tests", "run_tests", "visual_testing", "qa_review", "coverage_analysis"],
         "priority": 3,
         "cost_tier": "premium"
-    },
-    "reviewer": {
-        "name": "📝 Code Reviewer Agent",
-        "model": "claude-3.5-sonnet", 
-        "fallbacks": ["gpt-4o", "deepseek-coder"],
-        "role": "Review le code, vérifie la sécurité, suggère des améliorations",
-        "capabilities": ["code_review", "security_audit", "best_practices", "documentation", "performance_review"],
-        "priority": 3,
-        "cost_tier": "premium"
-    },
-    "deployer": {
-        "name": "🚀 Deployer Agent",
-        "model": "groq-llama3",
-        "fallbacks": ["gpt-4o-mini", "deepseek-coder"],
-        "role": "Déploie les applications, gère les environnements, monitore",
-        "capabilities": ["deploy", "rollback", "monitor", "health_check", "configure_env"],
-        "priority": 4,
-        "cost_tier": "standard"
     },
     "monitor": {
         "name": "📊 Monitor Agent",
         "model": "groq-llama3",
         "fallbacks": ["gpt-4o-mini", "deepseek-coder"],
-        "role": "Surveille les logs, détecte les anomalies, alerte en temps réel",
+        "role": "Surveille les logs, détecte les anomalies, alerte",
         "capabilities": ["watch_logs", "detect_anomalies", "send_alerts", "report", "trend_analysis"],
         "priority": 1,
         "cost_tier": "standard"
@@ -77,23 +53,59 @@ AGENTS = {
         "name": "📈 Trading Agent",
         "model": "gpt-4o",
         "fallbacks": ["claude-3.5-sonnet", "groq-llama3"],
-        "role": "Analyse les marchés, optimise les stratégies trading, surveille les positions",
+        "role": "Analyse les marchés, optimise les stratégies trading",
         "capabilities": ["market_analysis", "strategy_optimization", "position_monitoring", "risk_management", "backtest"],
         "priority": 1,
         "cost_tier": "premium"
     },
     "documenter": {
-        "name": "📚 Documentation Agent",
+        "name": "📚 Documenter Agent",
         "model": "groq-llama3",
         "fallbacks": ["gpt-4o-mini", "claude-3.5-sonnet"],
-        "role": "Génère la documentation, README, guides utilisateur",
+        "role": "Génère documentation, README, guides",
         "capabilities": ["generate_readme", "api_docs", "user_guide", "changelog", "tutorials"],
         "priority": 4,
         "cost_tier": "standard"
+    },
+    "security": {
+        "name": "🔐 Security Agent",
+        "model": "claude-3.5-sonnet",
+        "fallbacks": ["gpt-4o", "deepseek-coder"],
+        "role": "Audits sécurité, détection vulnérabilités, compliance",
+        "capabilities": ["security_audit", "vulnerability_scan", "dependency_check", "compliance_check", "penetration_test", "secrets_scan"],
+        "priority": 1,
+        "cost_tier": "premium"
+    },
+    "performance": {
+        "name": "⚡ Performance Agent",
+        "model": "groq-llama3",
+        "fallbacks": ["deepseek-coder", "gpt-4o-mini"],
+        "role": "Analyse performances, trouve bottlenecks, optimise",
+        "capabilities": ["analyze_performance", "find_bottlenecks", "optimize_code", "benchmark", "memory_analysis", "database_optimization"],
+        "priority": 2,
+        "cost_tier": "standard"
+    },
+    "devops": {
+        "name": "🔧 DevOps Agent",
+        "model": "groq-llama3",
+        "fallbacks": ["gpt-4o-mini", "deepseek-coder"],
+        "role": "Déploiements, CI/CD, infrastructure, cloud",
+        "capabilities": ["deploy", "rollback", "create_pipeline", "infrastructure_review", "docker_optimize", "kubernetes_config", "monitoring_setup", "cost_optimization"],
+        "priority": 2,
+        "cost_tier": "standard"
+    },
+    "data": {
+        "name": "📊 Data Agent",
+        "model": "gpt-4o",
+        "fallbacks": ["claude-3.5-sonnet", "groq-llama3"],
+        "role": "Analyse données, ML, feature engineering, prédictions",
+        "capabilities": ["analyze_data", "create_model", "feature_engineering", "exploratory_analysis", "predict", "generate_report", "clean_data", "visualize"],
+        "priority": 2,
+        "cost_tier": "premium"
     }
 }
 
-# Workflow definitions - how agents collaborate
+# Comprehensive workflow definitions
 WORKFLOWS = {
     "fix_bug": {
         "description": "Corriger un bug détecté",
@@ -103,8 +115,7 @@ WORKFLOWS = {
             {"agent": "debugger", "action": "analyze_error"},
             {"agent": "developer", "action": "fix_bug"},
             {"agent": "tester", "action": "verify_fix"},
-            {"agent": "reviewer", "action": "approve_fix"},
-            {"agent": "deployer", "action": "deploy_fix"}
+            {"agent": "devops", "action": "deploy"}
         ]
     },
     "new_feature": {
@@ -113,10 +124,10 @@ WORKFLOWS = {
         "steps": [
             {"agent": "architect", "action": "create_specs"},
             {"agent": "developer", "action": "implement_feature"},
+            {"agent": "security", "action": "security_audit"},
             {"agent": "tester", "action": "create_tests"},
-            {"agent": "reviewer", "action": "code_review"},
             {"agent": "documenter", "action": "generate_docs"},
-            {"agent": "deployer", "action": "deploy"}
+            {"agent": "devops", "action": "deploy"}
         ]
     },
     "optimize_trading": {
@@ -125,10 +136,11 @@ WORKFLOWS = {
         "steps": [
             {"agent": "monitor", "action": "collect_metrics"},
             {"agent": "trader", "action": "analyze_performance"},
+            {"agent": "data", "action": "analyze_data"},
             {"agent": "architect", "action": "propose_improvements"},
             {"agent": "developer", "action": "implement_changes"},
-            {"agent": "tester", "action": "backtest"},
-            {"agent": "deployer", "action": "deploy"}
+            {"agent": "performance", "action": "benchmark"},
+            {"agent": "devops", "action": "deploy"}
         ]
     },
     "daily_maintenance": {
@@ -136,9 +148,33 @@ WORKFLOWS = {
         "parallel": True,
         "steps": [
             {"agent": "monitor", "action": "health_check"},
-            {"agent": "tester", "action": "run_tests"},
-            {"agent": "reviewer", "action": "security_audit"},
-            {"agent": "deployer", "action": "report"}
+            {"agent": "security", "action": "dependency_check"},
+            {"agent": "performance", "action": "analyze_performance"},
+            {"agent": "devops", "action": "monitoring_setup"}
+        ]
+    },
+    "full_security_audit": {
+        "description": "Audit de sécurité complet",
+        "parallel": False,
+        "steps": [
+            {"agent": "security", "action": "security_audit"},
+            {"agent": "security", "action": "vulnerability_scan"},
+            {"agent": "security", "action": "dependency_check"},
+            {"agent": "security", "action": "secrets_scan"},
+            {"agent": "security", "action": "compliance_check"},
+            {"agent": "documenter", "action": "generate_report"}
+        ]
+    },
+    "performance_optimization": {
+        "description": "Optimisation des performances",
+        "parallel": False,
+        "steps": [
+            {"agent": "performance", "action": "analyze_performance"},
+            {"agent": "performance", "action": "find_bottlenecks"},
+            {"agent": "performance", "action": "database_optimization"},
+            {"agent": "developer", "action": "implement_changes"},
+            {"agent": "performance", "action": "benchmark"},
+            {"agent": "devops", "action": "deploy"}
         ]
     },
     "analyze_project": {
@@ -146,9 +182,65 @@ WORKFLOWS = {
         "parallel": False,
         "steps": [
             {"agent": "architect", "action": "analyze_codebase"},
-            {"agent": "reviewer", "action": "security_audit"},
+            {"agent": "security", "action": "security_audit"},
+            {"agent": "performance", "action": "analyze_performance"},
             {"agent": "tester", "action": "coverage_analysis"},
             {"agent": "documenter", "action": "generate_report"}
+        ]
+    },
+    "data_pipeline": {
+        "description": "Créer un pipeline de données",
+        "parallel": False,
+        "steps": [
+            {"agent": "data", "action": "exploratory_analysis"},
+            {"agent": "data", "action": "clean_data"},
+            {"agent": "data", "action": "feature_engineering"},
+            {"agent": "data", "action": "create_model"},
+            {"agent": "data", "action": "generate_report"}
+        ]
+    },
+    "full_deploy": {
+        "description": "Déploiement complet avec checks",
+        "parallel": False,
+        "steps": [
+            {"agent": "tester", "action": "run_tests"},
+            {"agent": "security", "action": "security_audit"},
+            {"agent": "performance", "action": "benchmark"},
+            {"agent": "devops", "action": "create_pipeline"},
+            {"agent": "devops", "action": "deploy"},
+            {"agent": "monitor", "action": "health_check"}
+        ]
+    },
+    "generate_documentation": {
+        "description": "Générer documentation complète",
+        "parallel": True,
+        "steps": [
+            {"agent": "documenter", "action": "generate_readme"},
+            {"agent": "documenter", "action": "api_docs"},
+            {"agent": "documenter", "action": "user_guide"},
+            {"agent": "documenter", "action": "changelog"}
+        ]
+    },
+    "infrastructure_review": {
+        "description": "Review infrastructure complète",
+        "parallel": True,
+        "steps": [
+            {"agent": "devops", "action": "infrastructure_review"},
+            {"agent": "devops", "action": "cost_optimization"},
+            {"agent": "security", "action": "compliance_check"},
+            {"agent": "performance", "action": "analyze_performance"}
+        ]
+    },
+    "ml_project": {
+        "description": "Projet ML complet",
+        "parallel": False,
+        "steps": [
+            {"agent": "data", "action": "exploratory_analysis"},
+            {"agent": "data", "action": "feature_engineering"},
+            {"agent": "data", "action": "create_model"},
+            {"agent": "performance", "action": "benchmark"},
+            {"agent": "documenter", "action": "generate_report"},
+            {"agent": "devops", "action": "deploy"}
         ]
     },
     "quick_fix": {
@@ -157,40 +249,7 @@ WORKFLOWS = {
         "steps": [
             {"agent": "debugger", "action": "analyze_error"},
             {"agent": "developer", "action": "fix_bug"},
-            {"agent": "tester", "action": "quick_test"},
-            {"agent": "deployer", "action": "deploy_hotfix"}
-        ]
-    },
-    "security_audit": {
-        "description": "Audit de sécurité complet",
-        "parallel": True,
-        "steps": [
-            {"agent": "reviewer", "action": "security_audit"},
-            {"agent": "debugger", "action": "vulnerability_scan"},
-            {"agent": "tester", "action": "penetration_test"},
-            {"agent": "architect", "action": "security_report"}
-        ]
-    },
-    "performance_optimization": {
-        "description": "Optimisation des performances",
-        "parallel": False,
-        "steps": [
-            {"agent": "monitor", "action": "collect_metrics"},
-            {"agent": "debugger", "action": "find_bottlenecks"},
-            {"agent": "architect", "action": "propose_optimizations"},
-            {"agent": "developer", "action": "implement_optimizations"},
-            {"agent": "tester", "action": "benchmark"},
-            {"agent": "deployer", "action": "deploy"}
-        ]
-    },
-    "generate_documentation": {
-        "description": "Générer la documentation complète",
-        "parallel": True,
-        "steps": [
-            {"agent": "documenter", "action": "generate_readme"},
-            {"agent": "documenter", "action": "api_docs"},
-            {"agent": "documenter", "action": "user_guide"},
-            {"agent": "architect", "action": "architecture_diagram"}
+            {"agent": "devops", "action": "deploy"}
         ]
     },
     "auto_improve": {
@@ -198,11 +257,11 @@ WORKFLOWS = {
         "parallel": False,
         "steps": [
             {"agent": "monitor", "action": "analyze_trends"},
-            {"agent": "architect", "action": "identify_improvements"},
-            {"agent": "developer", "action": "implement_improvements"},
-            {"agent": "tester", "action": "regression_test"},
-            {"agent": "reviewer", "action": "approve_changes"},
-            {"agent": "deployer", "action": "gradual_rollout"}
+            {"agent": "performance", "action": "find_bottlenecks"},
+            {"agent": "architect", "action": "propose_improvements"},
+            {"agent": "developer", "action": "implement_changes"},
+            {"agent": "tester", "action": "run_tests"},
+            {"agent": "devops", "action": "deploy"}
         ]
     }
 }
@@ -210,31 +269,42 @@ WORKFLOWS = {
 # Quick actions - single agent tasks
 QUICK_ACTIONS = {
     "analyze_code": {"agent": "architect", "action": "analyze_codebase"},
-    "review_pr": {"agent": "reviewer", "action": "code_review"},
+    "review_pr": {"agent": "developer", "action": "code_review"},
     "find_bugs": {"agent": "debugger", "action": "find_bugs"},
     "write_tests": {"agent": "tester", "action": "create_tests"},
-    "deploy_now": {"agent": "deployer", "action": "deploy"},
+    "deploy_now": {"agent": "devops", "action": "deploy"},
     "check_health": {"agent": "monitor", "action": "health_check"},
     "analyze_market": {"agent": "trader", "action": "market_analysis"},
     "generate_docs": {"agent": "documenter", "action": "generate_readme"},
+    "security_scan": {"agent": "security", "action": "vulnerability_scan"},
+    "find_bottlenecks": {"agent": "performance", "action": "find_bottlenecks"},
+    "create_pipeline": {"agent": "devops", "action": "create_pipeline"},
+    "analyze_data": {"agent": "data", "action": "analyze_data"},
+    "create_model": {"agent": "data", "action": "create_model"},
+    "cost_optimize": {"agent": "devops", "action": "cost_optimization"},
+    "compliance_check": {"agent": "security", "action": "compliance_check"},
 }
 
-# Scheduled tasks - run automatically
+# Scheduled tasks
 SCHEDULED_TASKS = {
     "morning_health_check": {
-        "cron": "0 8 * * *",  # Every day at 8 AM
+        "cron": "0 8 * * *",
         "workflow": "daily_maintenance"
     },
     "nightly_security_scan": {
-        "cron": "0 2 * * *",  # Every day at 2 AM
-        "workflow": "security_audit"
+        "cron": "0 2 * * *",
+        "workflow": "full_security_audit"
     },
     "weekly_performance_review": {
-        "cron": "0 10 * * 1",  # Every Monday at 10 AM
+        "cron": "0 10 * * 1",
         "workflow": "performance_optimization"
     },
     "continuous_trading_optimization": {
-        "cron": "0 */4 * * *",  # Every 4 hours
+        "cron": "0 */4 * * *",
         "action": {"agent": "trader", "action": "analyze_performance"}
+    },
+    "hourly_monitoring": {
+        "cron": "0 * * * *",
+        "action": {"agent": "monitor", "action": "health_check"}
     }
 }
