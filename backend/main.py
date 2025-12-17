@@ -39,6 +39,11 @@ async def lifespan(app: FastAPI):
     logger.info(f"💾 Cache: {'Redis' if cache_service.available else 'Memory (degraded)'}")
     logger.info(f"✅ Startup validation: {'Passed' if startup_results.get('overall_valid') else 'Warnings'}")
     
+    # Log all registered routes for debugging
+    for route in app.routes:
+        if hasattr(route, "path"):
+            logger.info(f"📍 Route: {route.path}")
+    
     yield
     
     # Shutdown
@@ -66,6 +71,7 @@ from routers import (
     aggregated, search, video, assistant, analytics, auth, health_check,
     flights
 )
+from routers import orchestrator
 from routers import health_deep, metrics, ai_search, expert_chat
 
 # Import routers - optional (non-critical)
@@ -212,6 +218,7 @@ app.include_router(health.router)
 app.include_router(health_check.router)
 app.include_router(health_deep.router)
 app.include_router(metrics.router)
+app.include_router(orchestrator.router)
 
 # AI & Chat
 app.include_router(chat.router)

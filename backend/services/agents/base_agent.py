@@ -1,675 +1,388 @@
 """
-Base Agent class with Quality First strategy and Conversational format
-"""
-import asyncio
-import logging
-from typing import Dict, Any, List, Optional, Tuple
-from abc import ABC, abstractmethod
+🤖 BASE AGENT CLASS - OPTIMIZED VERSION
+All agents inherit from this base class.
 
-from services.ai_router import ai_router
-from services.conversation_manager import ConversationManager
-from services.context_helpers import detect_language, get_language_instruction
-from .base_tool import BaseTool
+OPTIMIZATIONS:
+- Retry logic with exponential backoff
+- Fallback between AI models
+- Response caching
+- Performance metrics
+- Better error handling
+"""
+import os
+import logging
+import httpx
+import hashlib
+import asyncio
+from abc import ABC, abstractmethod
+from typing import Dict, Any, Optional, List
+from datetime import datetime, timedelta
+from functools import lru_cache
 
 logger = logging.getLogger(__name__)
 
 
-class ConversationalQualityAgent(ABC):
-    """
-    Base agent class implementing Quality First strategy:
-    1. Call data APIs first
-    2. AI always responds (with or without data)
-    3. Continuously re-query APIs to maximize information
-    4. Format: conversational only (no blocks unless user requests)
-    """
+class ResponseCache:
+    """Simple in-memory cache for AI responses"""
     
-    def __init__(
-        self,
-        agent_id: str,
-        name: str,
-        system_prompt: str,
-        tools: List[BaseTool],
-        sub_agents: Optional[List['ConversationalQualityAgent']] = None
-    ):
-        self.agent_id = agent_id
-        self.name = name
-        self.system_prompt = system_prompt
-        self.tools = tools
-        self.sub_agents = sub_agents or []
-        self.conversation_manager = ConversationManager()
+    def __init__(self, ttl_seconds: int = 300):
+        self.cache: Dict[str, tuple] = {}  # key -> (response, timestamp)
+        self.ttl = timedelta(seconds=ttl_seconds)
     
-    @abstractmethod
-    def select_tools(self, query: str, detected_type: Optional[str] = None) -> List[BaseTool]:
-        """
-        Select which tools to use based on the query
-        Returns list of tools to execute
-        """
-        pass
+    def _hash_key(self, prompt: str, model: str) -> str:
+        """Create a hash key from prompt and model"""
+        content = f"{model}:{prompt}"
+        return hashlib.md5(content.encode()).hexdigest()
     
-    @abstractmethod
-    def route_to_sub_agent(self, query: str) -> Optional['ConversationalQualityAgent']:  # type: ignore
-        """
-        Route query to appropriate sub-agent if needed
-        Returns sub-agent or None
-        """
-        pass
-    
-    async def execute_tools(self, tools: List[BaseTool], query: str, **kwargs) -> Dict[str, Any]:
-        """
-        Execute all tools in parallel and aggregate results
-        """
-        results = {
-            "successful": [],
-            "failed": [],
-            "all_data": []
-        }
-        
-        # Execute tools in parallel
-        tasks = [tool.execute(query, **kwargs) for tool in tools]
-        tool_results = await asyncio.gather(*tasks, return_exceptions=True)
-        
-        for i, result in enumerate(tool_results):
-            tool = tools[i]
-            if isinstance(result, Exception):
-                logger.warning(f"Tool {tool.name} failed: {result}")
-                results["failed"].append({
-                    "tool": tool.name,
-                    "error": str(result)
-                })
-            elif result.get("success"):
-                results["successful"].append({
-                    "tool": tool.name,
-                    "data": result.get("data"),
-                    "source": result.get("source", tool.name)
-                })
-                results["all_data"].append(result.get("data"))
+    def get(self, prompt: str, model: str) -> Optional[str]:
+        """Get cached response if valid"""
+        key = self._hash_key(prompt, model)
+        if key in self.cache:
+            response, timestamp = self.cache[key]
+            if datetime.now() - timestamp < self.ttl:
+                logger.debug(f"Cache HIT for {model}")
+                return response
             else:
-                results["failed"].append({
-                    "tool": tool.name,
-                    "error": result.get("error", "Unknown error")
-                })
-        
-        return results
+                del self.cache[key]  # Expired
+        return None
     
-    async def enhance_with_ai(
-        self,
-        query: str,
-        context_data: Dict[str, Any],
-        language: str,
-        conversation_history: Optional[str] = None,
-        iteration: int = 1
-    ) -> Dict[str, Any]:
-        """
-        Generate AI response with Quality First strategy:
-        - Always respond (with or without data)
-        - Enrich with data if available
-        - Re-query if needed for quality
-        """
-        # Build context string
-        context_parts = []
-        if context_data.get("successful"):
-            for item in context_data["successful"]:
-                context_parts.append(f"[{item['source']}]: {item['data']}")
-        
-        context_str = "\n\n".join(context_parts) if context_parts else "Aucune donnée disponible."
-        
-        # Add conversation history
-        if conversation_history:
-            context_str = f"{conversation_history}\n\n{context_str}"
-        
-        # Build system prompt
-        system_prompt = self.system_prompt.replace("{context}", context_str)
-        
-        # Add language instruction
-        lang_instruction = get_language_instruction(language)
-        system_prompt += f"\n\n{lang_instruction}"
-        
-        # Add conversational format instruction
-        system_prompt += """
-        
-IMPORTANT - FORMAT DE RÉPONSE:
-- Réponds UNIQUEMENT en format conversationnel naturel (comme une discussion avec un humain)
-- Évite les listes, énumérations, blocs d'information
-- Intègre les données de manière naturelle dans la conversation
-- Utilise un ton chaleureux et engageant
-- Pose des questions de suivi si pertinent
-- Ne répète JAMAIS le message d'introduction ou de bienvenue
-- Si l'utilisateur demande explicitement une liste ou un format structuré, alors tu peux utiliser ce format
-"""
-        
-        # Add quality check instruction for iteration > 1
-        if iteration > 1:
-            system_prompt += f"""
-            
-QUALITÉ - ITÉRATION {iteration}:
-- Analyse ta réponse précédente
-- Identifie les informations manquantes ou incertaines
-- Utilise les nouvelles données pour renforcer la qualité
-- Vérifie la cohérence avec les données disponibles
-"""
-        
-        # Call AI
-        try:
-            result = await ai_router.route(
-                prompt=query,
-                system_prompt=system_prompt
-            )
-            
-            return {
-                "response": result["response"],
-                "source": result["source"],
-                "confidence": 1.0,  # Will be validated
-                "iteration": iteration
-            }
-        except Exception as e:
-            logger.error(f"AI call failed: {e}", exc_info=True)
-            # Fallback response
-            return {
-                "response": f"Je comprends ta question, mais je rencontre une difficulté technique. Peux-tu reformuler ?",
-                "source": "fallback",
-                "confidence": 0.5,
-                "iteration": iteration
-            }
+    def set(self, prompt: str, model: str, response: str):
+        """Cache a response"""
+        key = self._hash_key(prompt, model)
+        self.cache[key] = (response, datetime.now())
+        # Clean old entries (max 100)
+        if len(self.cache) > 100:
+            oldest_key = min(self.cache, key=lambda k: self.cache[k][1])
+            del self.cache[oldest_key]
+
+
+class AgentMetrics:
+    """Track agent performance metrics"""
     
-    async def analyze_response_quality(
-        self,
-        response: str,
-        query: str,
-        context_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """
-        Analyze response quality and determine if re-query is needed
-        Returns: {needs_requery: bool, missing_info: List[str], confidence: float}
-        """
-        # Simple quality checks
-        missing_indicators = [
-            "je ne sais pas",
-            "je ne peux pas",
-            "aucune donnée",
-            "pas d'information",
-            "données insuffisantes"
-        ]
-        
-        has_missing = any(indicator in response.lower() for indicator in missing_indicators)
-        
-        # Check if we have data but didn't use it
-        has_data = len(context_data.get("successful", [])) > 0
-        uses_data = any(
-            source.lower() in response.lower() 
-            for source in [item["source"] for item in context_data.get("successful", [])]
-        )
-        
-        # Determine if re-query needed
-        needs_requery = False
-        missing_info = []
-        
-        if has_missing and has_data and not uses_data:
-            needs_requery = True
-            missing_info.append("Données disponibles mais non utilisées")
-        
-        if has_missing and not has_data:
-            needs_requery = True
-            missing_info.append("Données manquantes")
-        
-        # Confidence score
-        confidence = 0.9
-        if has_missing:
-            confidence -= 0.3
-        if has_data and not uses_data:
-            confidence -= 0.2
-        
+    def __init__(self):
+        self.total_requests = 0
+        self.successful_requests = 0
+        self.failed_requests = 0
+        self.total_response_time = 0.0
+        self.cache_hits = 0
+        self.fallback_count = 0
+        self.errors_by_type: Dict[str, int] = {}
+    
+    def record_request(self, success: bool, response_time: float, cached: bool = False, error_type: str = None):
+        self.total_requests += 1
+        if success:
+            self.successful_requests += 1
+        else:
+            self.failed_requests += 1
+            if error_type:
+                self.errors_by_type[error_type] = self.errors_by_type.get(error_type, 0) + 1
+        self.total_response_time += response_time
+        if cached:
+            self.cache_hits += 1
+    
+    def record_fallback(self):
+        self.fallback_count += 1
+    
+    @property
+    def avg_response_time(self) -> float:
+        if self.total_requests == 0:
+            return 0
+        return self.total_response_time / self.total_requests
+    
+    @property
+    def success_rate(self) -> float:
+        if self.total_requests == 0:
+            return 0
+        return self.successful_requests / self.total_requests * 100
+    
+    def to_dict(self) -> Dict[str, Any]:
         return {
-            "needs_requery": needs_requery,
-            "missing_info": missing_info,
-            "confidence": max(0.0, confidence)
-        }
-    
-    async def chat(
-        self,
-        query: str,
-        session_id: str,
-        user_id: Optional[str] = None,
-        language: Optional[str] = None,
-        max_iterations: int = 2
-    ) -> Dict[str, Any]:
-        """
-        Main chat method implementing Quality First strategy
-        
-        Flow:
-        1. Route to sub-agent if needed
-        2. Select and execute tools (data APIs)
-        3. Generate AI response (always)
-        4. Analyze quality
-        5. Re-query if needed (max iterations)
-        6. Return final response
-        """
-        # Auto-detect language
-        detected_lang = detect_language(query)
-        final_language = language or detected_lang
-        
-        # Check if should route to sub-agent
-        sub_agent = self.route_to_sub_agent(query)
-        if sub_agent:
-            logger.info(f"Routing to sub-agent: {sub_agent.agent_id}")
-            return await sub_agent.chat(query, session_id, user_id, final_language, max_iterations)
-        
-        # Get conversation history
-        history = self.conversation_manager.get_conversation_history(
-            session_id=session_id,
-            expert_id=self.agent_id,
-            limit=10
-        )
-        history_context = self.conversation_manager.format_history_for_prompt(history) if history else None
-        
-        # Select tools
-        tools = self.select_tools(query)
-        
-        # Execute tools (data APIs) - FIRST
-        context_data = await self.execute_tools(tools, query)
-        
-        # Generate AI response - ALWAYS (iteration 1)
-        ai_response = await self.enhance_with_ai(
-            query=query,
-            context_data=context_data,
-            language=final_language,
-            conversation_history=history_context,
-            iteration=1
-        )
-        
-        # Analyze quality
-        quality_analysis = await self.analyze_response_quality(
-            response=ai_response["response"],
-            query=query,
-            context_data=context_data
-        )
-        
-        # Re-query if needed (Quality First)
-        final_response = ai_response["response"]
-        iterations_used = 1
-        
-        if quality_analysis["needs_requery"] and max_iterations > 1:
-            logger.info(f"Quality check: re-querying for better quality (missing: {quality_analysis['missing_info']})")
-            
-            # Re-execute tools to get more data
-            context_data_requery = await self.execute_tools(tools, query)
-            
-            # Merge with previous data
-            context_data["successful"].extend(context_data_requery.get("successful", []))
-            context_data["all_data"].extend(context_data_requery.get("all_data", []))
-            
-            # Generate improved response (iteration 2)
-            ai_response_improved = await self.enhance_with_ai(
-                query=query,
-                context_data=context_data,
-                language=final_language,
-                conversation_history=history_context,
-                iteration=2
-            )
-            
-            final_response = ai_response_improved["response"]
-            iterations_used = 2
-        
-        # Save conversation
-        self.conversation_manager.add_message(
-            session_id=session_id,
-            expert_id=self.agent_id,
-            user_id=user_id,
-            role="user",
-            message=query
-        )
-        
-        self.conversation_manager.add_message(
-            session_id=session_id,
-            expert_id=self.agent_id,
-            user_id=user_id,
-            role="assistant",
-            message=final_response
-        )
-        
-        return {
-            "response": final_response,
-            "agent_id": self.agent_id,
-            "agent_name": self.name,
-            "sources": [item["source"] for item in context_data.get("successful", [])],
-            "iterations": iterations_used,
-            "confidence": quality_analysis["confidence"],
-            "language": final_language
+            "total_requests": self.total_requests,
+            "successful": self.successful_requests,
+            "failed": self.failed_requests,
+            "success_rate": f"{self.success_rate:.1f}%",
+            "avg_response_time": f"{self.avg_response_time:.2f}s",
+            "cache_hits": self.cache_hits,
+            "fallbacks": self.fallback_count,
+            "errors_by_type": self.errors_by_type
         }
 
 
-"""
-import asyncio
-import logging
-from typing import Dict, Any, List, Optional, Tuple
-from abc import ABC, abstractmethod
-
-from services.ai_router import ai_router
-from services.conversation_manager import ConversationManager
-from services.context_helpers import detect_language, get_language_instruction
-from .base_tool import BaseTool
-
-logger = logging.getLogger(__name__)
+# Global cache shared by all agents
+_global_cache = ResponseCache(ttl_seconds=300)
 
 
-class ConversationalQualityAgent(ABC):
-    """
-    Base agent class implementing Quality First strategy:
-    1. Call data APIs first
-    2. AI always responds (with or without data)
-    3. Continuously re-query APIs to maximize information
-    4. Format: conversational only (no blocks unless user requests)
-    """
+class BaseAgent(ABC):
+    """Base class for all AI agents - OPTIMIZED"""
     
-    def __init__(
-        self,
-        agent_id: str,
-        name: str,
-        system_prompt: str,
-        tools: List[BaseTool],
-        sub_agents: Optional[List['ConversationalQualityAgent']] = None
-    ):
-        self.agent_id = agent_id
+    # Fallback chain for each primary model
+    FALLBACK_MODELS = {
+        "gpt-4o": ["gpt-4o-mini", "groq", "deepseek"],
+        "claude-3.5-sonnet": ["groq", "gpt-4o-mini", "deepseek"],
+        "deepseek-coder": ["groq", "gpt-4o-mini", "claude-3.5-sonnet"],
+        "groq-llama3": ["deepseek", "gpt-4o-mini", "claude-3.5-sonnet"],
+    }
+    
+    MAX_RETRIES = 3
+    RETRY_DELAY = 1.0  # Initial delay in seconds
+    
+    def __init__(self, name: str, model: str, role: str):
         self.name = name
-        self.system_prompt = system_prompt
-        self.tools = tools
-        self.sub_agents = sub_agents or []
-        self.conversation_manager = ConversationManager()
-    
-    @abstractmethod
-    def select_tools(self, query: str, detected_type: Optional[str] = None) -> List[BaseTool]:
-        """
-        Select which tools to use based on the query
-        Returns list of tools to execute
-        """
-        pass
-    
-    @abstractmethod
-    def route_to_sub_agent(self, query: str) -> Optional['ConversationalQualityAgent']:  # type: ignore
-        """
-        Route query to appropriate sub-agent if needed
-        Returns sub-agent or None
-        """
-        pass
-    
-    async def execute_tools(self, tools: List[BaseTool], query: str, **kwargs) -> Dict[str, Any]:
-        """
-        Execute all tools in parallel and aggregate results
-        """
-        results = {
-            "successful": [],
-            "failed": [],
-            "all_data": []
-        }
+        self.model = model
+        self.role = role
+        self.status = "idle"
+        self.last_action = None
+        self.task_history: List[Dict] = []
+        self.metrics = AgentMetrics()
+        self.use_cache = True  # Enable caching by default
         
-        # Execute tools in parallel
-        tasks = [tool.execute(query, **kwargs) for tool in tools]
-        tool_results = await asyncio.gather(*tasks, return_exceptions=True)
+    async def think(self, prompt: str, context: Optional[Dict] = None, use_cache: bool = True) -> str:
+        """Use the AI model to think/reason about a task - WITH RETRY AND FALLBACK"""
+        start_time = datetime.now()
         
-        for i, result in enumerate(tool_results):
-            tool = tools[i]
-            if isinstance(result, Exception):
-                logger.warning(f"Tool {tool.name} failed: {result}")
-                results["failed"].append({
-                    "tool": tool.name,
-                    "error": str(result)
-                })
-            elif result.get("success"):
-                results["successful"].append({
-                    "tool": tool.name,
-                    "data": result.get("data"),
-                    "source": result.get("source", tool.name)
-                })
-                results["all_data"].append(result.get("data"))
-            else:
-                results["failed"].append({
-                    "tool": tool.name,
-                    "error": result.get("error", "Unknown error")
-                })
+        # Check cache first
+        if use_cache and self.use_cache:
+            cached = _global_cache.get(prompt, self.model)
+            if cached:
+                self.metrics.record_request(True, 0.01, cached=True)
+                return cached
         
-        return results
-    
-    async def enhance_with_ai(
-        self,
-        query: str,
-        context_data: Dict[str, Any],
-        language: str,
-        conversation_history: Optional[str] = None,
-        iteration: int = 1
-    ) -> Dict[str, Any]:
-        """
-        Generate AI response with Quality First strategy:
-        - Always respond (with or without data)
-        - Enrich with data if available
-        - Re-query if needed for quality
-        """
-        # Build context string
-        context_parts = []
-        if context_data.get("successful"):
-            for item in context_data["successful"]:
-                context_parts.append(f"[{item['source']}]: {item['data']}")
+        # Try primary model with retries
+        result = await self._call_with_retry(self.model, prompt, context)
         
-        context_str = "\n\n".join(context_parts) if context_parts else "Aucune donnée disponible."
-        
-        # Add conversation history
-        if conversation_history:
-            context_str = f"{conversation_history}\n\n{context_str}"
-        
-        # Build system prompt
-        system_prompt = self.system_prompt.replace("{context}", context_str)
-        
-        # Add language instruction
-        lang_instruction = get_language_instruction(language)
-        system_prompt += f"\n\n{lang_instruction}"
-        
-        # Add conversational format instruction
-        system_prompt += """
-        
-IMPORTANT - FORMAT DE RÉPONSE:
-- Réponds UNIQUEMENT en format conversationnel naturel (comme une discussion avec un humain)
-- Évite les listes, énumérations, blocs d'information
-- Intègre les données de manière naturelle dans la conversation
-- Utilise un ton chaleureux et engageant
-- Pose des questions de suivi si pertinent
-- Ne répète JAMAIS le message d'introduction ou de bienvenue
-- Si l'utilisateur demande explicitement une liste ou un format structuré, alors tu peux utiliser ce format
-"""
-        
-        # Add quality check instruction for iteration > 1
-        if iteration > 1:
-            system_prompt += f"""
+        # If failed, try fallback models
+        if result.startswith("ERROR:"):
+            self.metrics.record_fallback()
+            fallbacks = self.FALLBACK_MODELS.get(self.model, ["groq"])
             
-QUALITÉ - ITÉRATION {iteration}:
-- Analyse ta réponse précédente
-- Identifie les informations manquantes ou incertaines
-- Utilise les nouvelles données pour renforcer la qualité
-- Vérifie la cohérence avec les données disponibles
-"""
+            for fallback_model in fallbacks:
+                logger.warning(f"[{self.name}] Falling back to {fallback_model}")
+                result = await self._call_with_retry(fallback_model, prompt, context)
+                if not result.startswith("ERROR:"):
+                    break
         
-        # Call AI
+        # Record metrics
+        response_time = (datetime.now() - start_time).total_seconds()
+        success = not result.startswith("ERROR:")
+        self.metrics.record_request(success, response_time, error_type=result[:50] if not success else None)
+        
+        # Cache successful responses
+        if success and use_cache and self.use_cache:
+            _global_cache.set(prompt, self.model, result)
+        
+        return result
+    
+    async def _call_with_retry(self, model: str, prompt: str, context: Optional[Dict] = None) -> str:
+        """Call AI model with retry logic"""
+        last_error = None
+        
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                result = await self._route_to_provider(model, prompt, context)
+                if not result.startswith("ERROR:"):
+                    return result
+                last_error = result
+            except Exception as e:
+                last_error = f"ERROR: {str(e)}"
+                logger.warning(f"[{self.name}] Attempt {attempt + 1} failed: {e}")
+            
+            # Exponential backoff
+            if attempt < self.MAX_RETRIES - 1:
+                delay = self.RETRY_DELAY * (2 ** attempt)
+                await asyncio.sleep(delay)
+        
+        return last_error or "ERROR: All retries failed"
+    
+    async def _route_to_provider(self, model: str, prompt: str, context: Optional[Dict] = None) -> str:
+        """Route to the appropriate AI provider"""
+        if "gpt" in model or "openai" in model:
+            return await self._call_openai(prompt, context, model)
+        elif "claude" in model or "anthropic" in model:
+            return await self._call_anthropic(prompt, context)
+        elif "deepseek" in model:
+            return await self._call_deepseek(prompt, context)
+        elif "groq" in model or "llama" in model:
+            return await self._call_groq(prompt, context)
+        else:
+            return await self._call_groq(prompt, context)
+    
+    async def _call_openai(self, prompt: str, context: Optional[Dict] = None, model: str = "gpt-4o") -> str:
+        """Call OpenAI GPT with configurable model"""
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            return "ERROR: Missing OpenAI API key"
+        
+        actual_model = "gpt-4o-mini" if "mini" in model else "gpt-4o"
+        
         try:
-            result = await ai_router.route(
-                prompt=query,
-                system_prompt=system_prompt
-            )
-            
-            return {
-                "response": result["response"],
-                "source": result["source"],
-                "confidence": 1.0,  # Will be validated
-                "iteration": iteration
-            }
+            async with httpx.AsyncClient(timeout=90.0) as client:
+                response = await client.post(
+                    "https://api.openai.com/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                    json={
+                        "model": actual_model,
+                        "messages": [
+                            {"role": "system", "content": f"You are {self.name}. Role: {self.role}"},
+                            {"role": "user", "content": prompt}
+                        ],
+                        "max_tokens": 4000,
+                        "temperature": 0.7
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+        except httpx.TimeoutException:
+            return "ERROR: OpenAI timeout"
+        except httpx.HTTPStatusError as e:
+            return f"ERROR: OpenAI HTTP {e.response.status_code}"
         except Exception as e:
-            logger.error(f"AI call failed: {e}", exc_info=True)
-            # Fallback response
+            return f"ERROR: OpenAI {str(e)}"
+    
+    async def _call_anthropic(self, prompt: str, context: Optional[Dict] = None) -> str:
+        """Call Anthropic Claude"""
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            return "ERROR: Missing Anthropic API key"
+        
+        try:
+            async with httpx.AsyncClient(timeout=90.0) as client:
+                response = await client.post(
+                    "https://api.anthropic.com/v1/messages",
+                    headers={
+                        "x-api-key": api_key,
+                        "anthropic-version": "2023-06-01",
+                        "content-type": "application/json"
+                    },
+                    json={
+                        "model": "claude-3-5-sonnet-20241022",
+                        "max_tokens": 4000,
+                        "system": f"You are {self.name}. Role: {self.role}",
+                        "messages": [{"role": "user", "content": prompt}]
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("content", [{}])[0].get("text", "No response")
+        except httpx.TimeoutException:
+            return "ERROR: Anthropic timeout"
+        except httpx.HTTPStatusError as e:
+            return f"ERROR: Anthropic HTTP {e.response.status_code}"
+        except Exception as e:
+            return f"ERROR: Anthropic {str(e)}"
+    
+    async def _call_deepseek(self, prompt: str, context: Optional[Dict] = None) -> str:
+        """Call DeepSeek"""
+        api_key = os.getenv("DEEPSEEK_API_KEY")
+        if not api_key:
+            return "ERROR: Missing DeepSeek API key"
+        
+        try:
+            async with httpx.AsyncClient(timeout=90.0) as client:
+                response = await client.post(
+                    "https://api.deepseek.com/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                    json={
+                        "model": "deepseek-coder",
+                        "messages": [
+                            {"role": "system", "content": f"You are {self.name}. Role: {self.role}"},
+                            {"role": "user", "content": prompt}
+                        ],
+                        "max_tokens": 4000
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+        except httpx.TimeoutException:
+            return "ERROR: DeepSeek timeout"
+        except httpx.HTTPStatusError as e:
+            return f"ERROR: DeepSeek HTTP {e.response.status_code}"
+        except Exception as e:
+            return f"ERROR: DeepSeek {str(e)}"
+    
+    async def _call_groq(self, prompt: str, context: Optional[Dict] = None) -> str:
+        """Call Groq (Llama 3) - FASTEST"""
+        api_key = os.getenv("GROQ_API_KEY")
+        if not api_key:
+            return "ERROR: Missing Groq API key"
+        
+        try:
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                response = await client.post(
+                    "https://api.groq.com/openai/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                    json={
+                        "model": "llama-3.3-70b-versatile",
+                        "messages": [
+                            {"role": "system", "content": f"You are {self.name}. Role: {self.role}"},
+                            {"role": "user", "content": prompt}
+                        ],
+                        "max_tokens": 4000
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                return data.get("choices", [{}])[0].get("message", {}).get("content", "No response")
+        except httpx.TimeoutException:
+            return "ERROR: Groq timeout"
+        except httpx.HTTPStatusError as e:
+            return f"ERROR: Groq HTTP {e.response.status_code}"
+        except Exception as e:
+            return f"ERROR: Groq {str(e)}"
+    
+    async def execute(self, task: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute a task with enhanced error handling"""
+        self.status = "working"
+        self.last_action = datetime.now()
+        start_time = datetime.now()
+        
+        try:
+            result = await self._do_task(task)
+            
+            execution_time = (datetime.now() - start_time).total_seconds()
+            
+            self.task_history.append({
+                "task": task,
+                "result": result,
+                "timestamp": datetime.now().isoformat(),
+                "execution_time": execution_time
+            })
+            
+            # Keep only last 20 tasks in history
+            if len(self.task_history) > 20:
+                self.task_history = self.task_history[-20:]
+            
+            self.status = "idle"
+            result["execution_time"] = f"{execution_time:.2f}s"
+            return result
+            
+        except Exception as e:
+            self.status = "error"
+            logger.error(f"[{self.name}] Task failed: {e}")
             return {
-                "response": f"Je comprends ta question, mais je rencontre une difficulté technique. Peux-tu reformuler ?",
-                "source": "fallback",
-                "confidence": 0.5,
-                "iteration": iteration
+                "success": False, 
+                "error": str(e),
+                "agent": self.name,
+                "timestamp": datetime.now().isoformat()
             }
     
-    async def analyze_response_quality(
-        self,
-        response: str,
-        query: str,
-        context_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """
-        Analyze response quality and determine if re-query is needed
-        Returns: {needs_requery: bool, missing_info: List[str], confidence: float}
-        """
-        # Simple quality checks
-        missing_indicators = [
-            "je ne sais pas",
-            "je ne peux pas",
-            "aucune donnée",
-            "pas d'information",
-            "données insuffisantes"
-        ]
-        
-        has_missing = any(indicator in response.lower() for indicator in missing_indicators)
-        
-        # Check if we have data but didn't use it
-        has_data = len(context_data.get("successful", [])) > 0
-        uses_data = any(
-            source.lower() in response.lower() 
-            for source in [item["source"] for item in context_data.get("successful", [])]
-        )
-        
-        # Determine if re-query needed
-        needs_requery = False
-        missing_info = []
-        
-        if has_missing and has_data and not uses_data:
-            needs_requery = True
-            missing_info.append("Données disponibles mais non utilisées")
-        
-        if has_missing and not has_data:
-            needs_requery = True
-            missing_info.append("Données manquantes")
-        
-        # Confidence score
-        confidence = 0.9
-        if has_missing:
-            confidence -= 0.3
-        if has_data and not uses_data:
-            confidence -= 0.2
-        
+    @abstractmethod
+    async def _do_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
+        """Actual task implementation - override in subclasses"""
+        pass
+    
+    def get_status(self) -> Dict[str, Any]:
+        """Get agent status with metrics"""
         return {
-            "needs_requery": needs_requery,
-            "missing_info": missing_info,
-            "confidence": max(0.0, confidence)
+            "name": self.name,
+            "model": self.model,
+            "status": self.status,
+            "last_action": self.last_action.isoformat() if self.last_action else None,
+            "tasks_completed": len(self.task_history),
+            "metrics": self.metrics.to_dict()
         }
     
-    async def chat(
-        self,
-        query: str,
-        session_id: str,
-        user_id: Optional[str] = None,
-        language: Optional[str] = None,
-        max_iterations: int = 2
-    ) -> Dict[str, Any]:
-        """
-        Main chat method implementing Quality First strategy
-        
-        Flow:
-        1. Route to sub-agent if needed
-        2. Select and execute tools (data APIs)
-        3. Generate AI response (always)
-        4. Analyze quality
-        5. Re-query if needed (max iterations)
-        6. Return final response
-        """
-        # Auto-detect language
-        detected_lang = detect_language(query)
-        final_language = language or detected_lang
-        
-        # Check if should route to sub-agent
-        sub_agent = self.route_to_sub_agent(query)
-        if sub_agent:
-            logger.info(f"Routing to sub-agent: {sub_agent.agent_id}")
-            return await sub_agent.chat(query, session_id, user_id, final_language, max_iterations)
-        
-        # Get conversation history
-        history = self.conversation_manager.get_conversation_history(
-            session_id=session_id,
-            expert_id=self.agent_id,
-            limit=10
-        )
-        history_context = self.conversation_manager.format_history_for_prompt(history) if history else None
-        
-        # Select tools
-        tools = self.select_tools(query)
-        
-        # Execute tools (data APIs) - FIRST
-        context_data = await self.execute_tools(tools, query)
-        
-        # Generate AI response - ALWAYS (iteration 1)
-        ai_response = await self.enhance_with_ai(
-            query=query,
-            context_data=context_data,
-            language=final_language,
-            conversation_history=history_context,
-            iteration=1
-        )
-        
-        # Analyze quality
-        quality_analysis = await self.analyze_response_quality(
-            response=ai_response["response"],
-            query=query,
-            context_data=context_data
-        )
-        
-        # Re-query if needed (Quality First)
-        final_response = ai_response["response"]
-        iterations_used = 1
-        
-        if quality_analysis["needs_requery"] and max_iterations > 1:
-            logger.info(f"Quality check: re-querying for better quality (missing: {quality_analysis['missing_info']})")
-            
-            # Re-execute tools to get more data
-            context_data_requery = await self.execute_tools(tools, query)
-            
-            # Merge with previous data
-            context_data["successful"].extend(context_data_requery.get("successful", []))
-            context_data["all_data"].extend(context_data_requery.get("all_data", []))
-            
-            # Generate improved response (iteration 2)
-            ai_response_improved = await self.enhance_with_ai(
-                query=query,
-                context_data=context_data,
-                language=final_language,
-                conversation_history=history_context,
-                iteration=2
-            )
-            
-            final_response = ai_response_improved["response"]
-            iterations_used = 2
-        
-        # Save conversation
-        self.conversation_manager.add_message(
-            session_id=session_id,
-            expert_id=self.agent_id,
-            user_id=user_id,
-            role="user",
-            message=query
-        )
-        
-        self.conversation_manager.add_message(
-            session_id=session_id,
-            expert_id=self.agent_id,
-            user_id=user_id,
-            role="assistant",
-            message=final_response
-        )
-        
-        return {
-            "response": final_response,
-            "agent_id": self.agent_id,
-            "agent_name": self.name,
-            "sources": [item["source"] for item in context_data.get("successful", [])],
-            "iterations": iterations_used,
-            "confidence": quality_analysis["confidence"],
-            "language": final_language
-        }
-
+    def reset_metrics(self):
+        """Reset performance metrics"""
+        self.metrics = AgentMetrics()

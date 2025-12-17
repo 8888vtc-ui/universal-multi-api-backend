@@ -1,26 +1,35 @@
 """
-Agents System - Quality First with Conversational Format
-Agents indépendants par catégorie avec sous-agents spécialisés
+🤖 AGENT TEAM - The Autonomous AI Workforce - OPTIMIZED
+
+All available agents for the orchestrator.
+Each agent specializes in a specific domain.
 """
-from .base_agent import ConversationalQualityAgent
-from .base_tool import BaseTool
+from .architect_agent import ArchitectAgent
+from .developer_agent import DeveloperAgent
+from .debugger_agent import DebuggerAgent
+from .tester_agent import TesterAgent
+from .monitor_agent import MonitorAgent
+from .trading_agent import TradingAgent
+from .documenter_agent import DocumenterAgent
+
+# Agent registry for dynamic loading
+AGENT_REGISTRY = {
+    "architect": ArchitectAgent,
+    "developer": DeveloperAgent,
+    "debugger": DebuggerAgent,
+    "tester": TesterAgent,
+    "monitor": MonitorAgent,
+    "trader": TradingAgent,
+    "documenter": DocumenterAgent,
+}
 
 __all__ = [
-    "ConversationalQualityAgent",
-    "BaseTool",
+    "ArchitectAgent",
+    "DeveloperAgent", 
+    "DebuggerAgent",
+    "TesterAgent",
+    "MonitorAgent",
+    "TradingAgent",
+    "DocumenterAgent",
+    "AGENT_REGISTRY"
 ]
-
-
-Agents System - Quality First with Conversational Format
-Agents indépendants par catégorie avec sous-agents spécialisés
-"""
-from .base_agent import ConversationalQualityAgent
-from .base_tool import BaseTool
-
-__all__ = [
-    "ConversationalQualityAgent",
-    "BaseTool",
-]
-
-
-
