@@ -1,7 +1,7 @@
 """
-🤖 AGENT DEFINITIONS - ULTRA EDITION (13 AGENTS)
+🤖 AGENT DEFINITIONS - ULTIMATE EDITION (15 AGENTS)
+Includes Meta Agent (creates agents) and Builder Agent (builds apps).
 All free-tier AI models used as fallbacks.
-Redis caching enabled for speed.
 """
 
 AGENTS = {
@@ -121,11 +121,69 @@ AGENTS = {
         "capabilities": ["test_endpoint", "test_endpoints", "validate_response", "load_test", "health_check", "generate_tests"],
         "priority": 2,
         "cost_tier": "free"
+    },
+    "meta": {
+        "name": "🧬 Meta Agent",
+        "model": "gpt-4o",
+        "fallbacks": ["claude-3.5-sonnet", "groq", "gemini"],
+        "role": "Crée et optimise les autres agents",
+        "capabilities": ["create_agent", "modify_agent", "optimize_agent", "analyze_agents", "suggest_agents", "create_workflow", "generate_agent_code", "plan_agent_system"],
+        "priority": 1,
+        "cost_tier": "premium"
+    },
+    "builder": {
+        "name": "🏭 Builder Agent",
+        "model": "gpt-4o",
+        "fallbacks": ["claude-3.5-sonnet", "groq", "gemini"],
+        "role": "Pipeline de construction automatique d'applications",
+        "capabilities": ["start_build", "execute_phase", "get_build_status", "generate_plan", "create_project_structure", "full_build", "resume_build", "validate_phase"],
+        "priority": 1,
+        "cost_tier": "premium"
     }
 }
 
-# 16 Comprehensive workflows
+# 20 Comprehensive workflows
 WORKFLOWS = {
+    # === APPLICATION BUILD WORKFLOWS ===
+    "build_application": {
+        "description": "Construction automatique complète d'une application (9 phases)",
+        "parallel": False,
+        "slow_but_thorough": True,
+        "steps": [
+            {"agent": "builder", "action": "generate_plan"},
+            {"agent": "builder", "action": "execute_phase", "phase": "planning"},
+            {"agent": "builder", "action": "execute_phase", "phase": "architecture"},
+            {"agent": "builder", "action": "execute_phase", "phase": "security_review"},
+            {"agent": "builder", "action": "execute_phase", "phase": "development"},
+            {"agent": "builder", "action": "execute_phase", "phase": "testing"},
+            {"agent": "builder", "action": "execute_phase", "phase": "documentation"},
+            {"agent": "builder", "action": "execute_phase", "phase": "performance"},
+            {"agent": "builder", "action": "execute_phase", "phase": "deployment"},
+            {"agent": "builder", "action": "execute_phase", "phase": "monitoring"},
+            {"agent": "notification", "action": "send_alert"}
+        ]
+    },
+    "quick_prototype": {
+        "description": "Prototype rapide (3 phases essentielles)",
+        "parallel": False,
+        "steps": [
+            {"agent": "architect", "action": "create_specs"},
+            {"agent": "developer", "action": "implement_feature"},
+            {"agent": "documenter", "action": "generate_readme"}
+        ]
+    },
+    "create_new_agent": {
+        "description": "Créer un nouvel agent personnalisé",
+        "parallel": False,
+        "steps": [
+            {"agent": "meta", "action": "suggest_agents"},
+            {"agent": "meta", "action": "create_agent"},
+            {"agent": "meta", "action": "generate_agent_code"},
+            {"agent": "tester", "action": "create_tests"}
+        ]
+    },
+    
+    # === STANDARD WORKFLOWS ===
     "fix_bug": {
         "description": "Corriger un bug détecté",
         "parallel": False,
@@ -197,7 +255,7 @@ WORKFLOWS = {
         ]
     },
     "analyze_project": {
-        "description": "Analyzer projet complet",
+        "description": "Analyser projet complet",
         "parallel": False,
         "steps": [
             {"agent": "architect", "action": "analyze_codebase"},
@@ -258,14 +316,6 @@ WORKFLOWS = {
             {"agent": "documenter", "action": "generate_report"}
         ]
     },
-    "alert_system_test": {
-        "description": "Tester système alertes",
-        "parallel": False,
-        "steps": [
-            {"agent": "notification", "action": "check_status"},
-            {"agent": "notification", "action": "send_all"}
-        ]
-    },
     "quick_fix": {
         "description": "Fix rapide",
         "parallel": False,
@@ -297,11 +347,30 @@ WORKFLOWS = {
             {"agent": "tester", "action": "run_tests"},
             {"agent": "devops", "action": "deploy"}
         ]
+    },
+    "plan_agent_ecosystem": {
+        "description": "Planifier un écosystème d'agents",
+        "parallel": False,
+        "steps": [
+            {"agent": "meta", "action": "analyze_agents"},
+            {"agent": "meta", "action": "suggest_agents"},
+            {"agent": "meta", "action": "plan_agent_system"},
+            {"agent": "documenter", "action": "generate_report"}
+        ]
+    },
+    "alert_system_test": {
+        "description": "Tester système alertes",
+        "parallel": False,
+        "steps": [
+            {"agent": "notification", "action": "check_status"},
+            {"agent": "notification", "action": "send_all"}
+        ]
     }
 }
 
-# 17 Quick actions
+# 22 Quick actions
 QUICK_ACTIONS = {
+    # Standard actions
     "analyze_code": {"agent": "architect", "action": "analyze_codebase"},
     "review_pr": {"agent": "developer", "action": "code_review"},
     "find_bugs": {"agent": "debugger", "action": "find_bugs"},
@@ -319,6 +388,13 @@ QUICK_ACTIONS = {
     "send_alert": {"agent": "notification", "action": "send_alert"},
     "test_api": {"agent": "api", "action": "test_endpoint"},
     "load_test": {"agent": "api", "action": "load_test"},
+    
+    # Meta & Builder actions
+    "create_agent": {"agent": "meta", "action": "create_agent"},
+    "suggest_agents": {"agent": "meta", "action": "suggest_agents"},
+    "start_build": {"agent": "builder", "action": "generate_plan"},
+    "build_status": {"agent": "builder", "action": "get_build_status"},
+    "full_build": {"agent": "builder", "action": "full_build"},
 }
 
 # Scheduled tasks
@@ -346,5 +422,22 @@ SCHEDULED_TASKS = {
     "api_health_check": {
         "cron": "*/30 * * * *",
         "action": {"agent": "api", "action": "health_check"}
+    },
+    "weekly_agent_analysis": {
+        "cron": "0 9 * * 0",
+        "action": {"agent": "meta", "action": "analyze_agents"}
     }
 }
+
+# Build phases for the Builder Agent
+BUILD_PHASES = [
+    "planning",
+    "architecture", 
+    "security_review",
+    "development",
+    "testing",
+    "documentation",
+    "performance",
+    "deployment",
+    "monitoring"
+]

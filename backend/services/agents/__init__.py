@@ -1,9 +1,8 @@
 """
-🤖 AGENT TEAM - The Autonomous AI Workforce - ULTRA EDITION
+🤖 AGENT TEAM - The Autonomous AI Workforce - ULTIMATE EDITION
 
-13 specialized agents for complete automation.
-All free-tier AI models used as fallbacks.
-Redis caching enabled.
+15 specialized agents for complete automation.
+Includes Meta Agent (creates agents) and Builder Agent (builds apps).
 """
 from .architect_agent import ArchitectAgent
 from .developer_agent import DeveloperAgent
@@ -18,6 +17,8 @@ from .devops_agent import DevOpsAgent
 from .data_agent import DataAgent
 from .notification_agent import NotificationAgent
 from .api_agent import ApiAgent
+from .meta_agent import MetaAgent
+from .builder_agent import BuilderAgent
 
 # Agent registry for dynamic loading
 AGENT_REGISTRY = {
@@ -34,6 +35,8 @@ AGENT_REGISTRY = {
     "data": DataAgent,
     "notification": NotificationAgent,
     "api": ApiAgent,
+    "meta": MetaAgent,
+    "builder": BuilderAgent,
 }
 
 __all__ = [
@@ -50,5 +53,7 @@ __all__ = [
     "DataAgent",
     "NotificationAgent",
     "ApiAgent",
+    "MetaAgent",
+    "BuilderAgent",
     "AGENT_REGISTRY"
 ]
